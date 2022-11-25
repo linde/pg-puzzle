@@ -9,10 +9,11 @@ const PIECE_DIMENSION = 3
 
 type Element int64
 
+// TODO fun exercise, port this to bitsets
 const (
 	Empty Element = iota
 	Occupied
-	Block
+	Blocked
 )
 
 func (e Element) String() string {
@@ -21,7 +22,7 @@ func (e Element) String() string {
 		return "E"
 	case Occupied:
 		return "O"
-	case Block:
+	case Blocked:
 		return "B"
 	}
 	return "?"
@@ -35,14 +36,9 @@ type Piece struct {
 // is the most compact representation?
 func New(s [][]bool) *Piece {
 
-	//TODO put some sanity checks on dimensions
+	//what TODO if param matrix is wider/longer than PIECE_DIMENSION
 
-	nomalizedStruct := make([][]Element, PIECE_DIMENSION)
-
-	for i := 0; i < PIECE_DIMENSION; i++ {
-		row := make([]Element, PIECE_DIMENSION)
-		nomalizedStruct[i] = row
-	}
+	nomalizedStruct := initializeMatrix(PIECE_DIMENSION)
 
 	for rowIndex, row := range s {
 		for colIdx, col := range row {
