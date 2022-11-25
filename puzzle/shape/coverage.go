@@ -2,28 +2,25 @@ package shape
 
 func IsSafePlacement(board *Piece, piece *Piece) (bool, *Piece) {
 
-	// TODO should i be cloning the board on false
-	// TODO should we assert that pieces cannot have blocked values
+	// TODO should we assert that pieces cannot have Blocked values
 
 	// first check the case that these are empty structures
 	if len(board.structure) == 0 && len(piece.structure) == 0 {
 		return false, nil
 	}
 
-	returnBoard := initializeMatrix(len(board.structure))
+	returnBoard := initializeStructure(len(board.structure))
 
 	for boardRowIdx, boardRow := range board.structure {
 
 		if boardRowIdx >= len(piece.structure) {
-			// TODO this can be ok if the piece structure is smaller
-			return false, nil
+			continue
 		}
 		pieceRow := piece.structure[boardRowIdx]
 
 		for boardColIdx, boardCol := range boardRow {
 			if boardColIdx >= len(pieceRow) {
-				// TODO this can be ok if the piece structure is smaller
-				return false, nil
+				continue
 			}
 			pieceCol := pieceRow[boardColIdx]
 			if pieceCol == Occupied &&
