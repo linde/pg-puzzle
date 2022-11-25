@@ -28,6 +28,7 @@ func (e Element) String() string {
 	return "?"
 }
 
+// TODO should we have a structure accessor? tests reach in directly now
 type Piece struct {
 	structure [][]Element
 }
@@ -52,7 +53,7 @@ func New(s [][]bool) *Piece {
 }
 
 // TODO should this return a pointer?
-func initializeMatrix(dim int8) [][]Element {
+func initializeMatrix(dim int) [][]Element {
 
 	m := make([][]Element, dim)
 	for rowIdx := range m {

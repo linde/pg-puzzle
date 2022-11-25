@@ -16,30 +16,47 @@ func TestPieceCoverage(t *testing.T) {
 		{false, false, false},
 		{false, false, false},
 	})
-	t.Logf("\n%s", emptyBoard)
+	// t.Logf("\n%s", emptyBoard)
 
 	piece := New([][]bool{
 		{true},
 	})
 	assert.NotNil(piece)
-	t.Logf("\n%s", piece)
+	// t.Logf("\n%s", piece)
 
 	assert.NotEqualValues(emptyBoard, piece)
+	assert.Equal(emptyBoard.structure[0][0], Empty)
 
-	isSafe, _ := IsSafePlacement(emptyBoard, piece)
+	isSafe, results := IsSafePlacement(emptyBoard, piece)
 	assert.True(isSafe)
-	// assert.NotNil(results)
+	assert.NotNil(results)
+	assert.Equal(results.structure[0][0], Occupied)
 
-	nwOnly := [][]bool{
+	nwOnlyBoard := New([][]bool{
 		{true, false, false},
 		{false, false, false},
 		{false, false, false},
-	}
-	nwOnlyboard := New(nwOnly)
-	t.Logf("\n%s", nwOnlyboard)
+	})
+	// t.Logf("\n%s", nwOnlybnwOnlyBoardoard)
 
-	nwIsSafe, results := IsSafePlacement(nwOnlyboard, piece)
+	nwIsSafe, results := IsSafePlacement(nwOnlyBoard, piece)
 	assert.False(nwIsSafe)
 	assert.Nil(results)
+
+	neOnlyBoard := New([][]bool{
+		{false, false, true},
+		{false, false, false},
+		{false, false, true},
+	})
+	// t.Logf("\n%s", nwOnlyboard)
+
+	neIsSafe, results := IsSafePlacement(neOnlyBoard, piece)
+	t.Logf("\n%s", results)
+
+	assert.True(neIsSafe)
+	assert.NotNil(results)
+	assert.Equal(results.structure[0][0], Occupied)
+	assert.Equal(results.structure[0][2], Occupied)
+	assert.Equal(results.structure[2][2], Occupied)
 
 }
