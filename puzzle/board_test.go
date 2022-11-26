@@ -1,6 +1,7 @@
 package shape
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -50,12 +51,18 @@ func TestNewBoard(t *testing.T) {
 	assert.NotNil(b)
 	assert.Equal(len(*b), BOARD_DIMENSION)
 
-	// TODO make a func to test this and format messages
-	assert.Equal(b.GetLocation(0, 0), Occupied, "0,0")
-	assert.Equal(b.GetLocation(0, 1), Occupied, "0,1")
-	assert.Equal(b.GetLocation(0, 2), Empty, "0,2")
-	assert.Equal(b.GetLocation(1, 0), Occupied, "1,0")
-	assert.Equal(b.GetLocation(1, 2), Empty, "1,2")
-	assert.Equal(b.GetLocation(BOARD_DIMENSION-1, BOARD_DIMENSION-1), Empty, "last location")
+	// TODO might be more go idiomatic as a table
+	var checkLocation = func(b *Board, expected Location, r, c int) {
+		obs := b.GetLocation(r, c)
+		msg := fmt.Sprintf("for (%d,%d) expected %s, got %s", r, c, expected, obs)
+		assert.Equal(obs, expected, msg)
+	}
+
+	checkLocation(b, Occupied, 0, 0)
+	checkLocation(b, Occupied, 0, 1)
+	checkLocation(b, Empty, 0, 2)
+	checkLocation(b, Occupied, 1, 0)
+	checkLocation(b, Empty, 1, 2)
+	checkLocation(b, Empty, BOARD_DIMENSION-1, BOARD_DIMENSION-1)
 
 }
