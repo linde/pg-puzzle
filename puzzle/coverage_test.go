@@ -11,6 +11,8 @@ func TestPieceCoverage(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
+	/**
+
 	emptyBoard := NewBoard([][]bool{
 		{false, false, false},
 		{false, false, false},
@@ -27,7 +29,6 @@ func TestPieceCoverage(t *testing.T) {
 	assert.NotEqualValues(emptyBoard, nwPiece)
 	//assert.Equal(emptyBoard.structure[0][0], Empty)
 
-	/**
 
 	isSafe, results := IsSafePlacement(emptyBoard, nwPiece)
 	assert.True(isSafe)

@@ -1,5 +1,6 @@
 package shape
 
+/***
 func IsSafePlacement(board *Piece, piece *Piece) (bool, *Piece) {
 
 	// TODO should we assert that pieces cannot have Blocked values
@@ -28,7 +29,6 @@ func IsSafePlacement(board *Piece, piece *Piece) (bool, *Piece) {
 				return false, nil
 			} else {
 
-				/**
 
 				// set the value of the return board, default to the board's
 				// but if Occupied in the piece, use that
@@ -36,7 +36,6 @@ func IsSafePlacement(board *Piece, piece *Piece) (bool, *Piece) {
 				if pieceCol == Occupied {
 					returnBoard[boardRowIdx][boardColIdx] = Occupied
 				}
-				***/
 			}
 
 		}
@@ -44,3 +43,5 @@ func IsSafePlacement(board *Piece, piece *Piece) (bool, *Piece) {
 
 	return true, nil
 }
+
+***/
