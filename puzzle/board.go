@@ -7,16 +7,19 @@ import (
 
 const PIECE_DIMENSION = 3
 
-type Element int64
-
 // TODO fun exercise, port this to bitsets
+
+type Location int
+type Row []Location
+type Board []Row
+
 const (
-	Empty Element = iota
+	Empty Location = iota
 	Occupied
 	Blocked
 )
 
-func (e Element) String() string {
+func (e Location) String() string {
 	switch e {
 	case Empty:
 		return "E"
@@ -30,7 +33,7 @@ func (e Element) String() string {
 
 // TODO should we have a structure accessor? tests reach in directly now
 type Piece struct {
-	structure [][]Element
+	structure Board
 }
 
 // TODO should we remove padding (empty cols or rows) to make sure it
@@ -53,11 +56,11 @@ func New(s [][]bool) *Piece {
 }
 
 // TODO should this return a pointer?
-func initializeStructure(dim int) [][]Element {
+func initializeStructure(dim int) Board {
 
-	m := make([][]Element, dim)
+	m := make(Board, dim)
 	for rowIdx := range m {
-		row := make([]Element, dim)
+		row := make(Row, dim)
 		m[rowIdx] = row
 	}
 	return m
