@@ -39,7 +39,7 @@ func New(s [][]bool) *Piece {
 
 	//what TODO if param matrix is wider/longer than PIECE_DIMENSION
 
-	nomalizedStruct := initializeMatrix(PIECE_DIMENSION)
+	nomalizedStruct := initializeStructure(PIECE_DIMENSION)
 
 	for rowIndex, row := range s {
 		for colIdx, col := range row {
@@ -53,7 +53,7 @@ func New(s [][]bool) *Piece {
 }
 
 // TODO should this return a pointer?
-func initializeMatrix(dim int) [][]Element {
+func initializeStructure(dim int) [][]Element {
 
 	m := make([][]Element, dim)
 	for rowIdx := range m {
@@ -67,7 +67,7 @@ func initializeMatrix(dim int) [][]Element {
 // TODO is Rotate() twice the same as flip?
 func (p Piece) Rotate() *Piece {
 
-	rotated := initializeMatrix(PIECE_DIMENSION)
+	rotated := initializeStructure(PIECE_DIMENSION)
 
 	for rowIdx, row := range p.structure {
 
