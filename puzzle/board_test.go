@@ -6,56 +6,56 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPiece(t *testing.T) {
+// TODO: deal with and test for odd board sizes: 0, nil, -1, NaN, etc
+
+func TestInitBoard(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	p := [][]bool{
-		{true, true, true},
-		{true},
+	boardSize := 5
+	board := initializeBoard(boardSize)
+	assert.NotNil(board)
+	assert.Equal(len(board), boardSize)
+
+	for _, row := range board {
+		assert.Equal(len(row), boardSize)
+		for _, location := range row {
+			assert.Equal(location, Empty)
+		}
 	}
-	piece := New(p)
-	assert.NotNil(piece)
-	t.Logf("\n%s", piece)
+}
 
-	rotated := piece.Rotate()
-	t.Logf("\n%s", rotated)
-	assert.NotEqualValues(piece, rotated)
+func TestLocationStringer(t *testing.T) {
 
-	expectedRotatedElements := [][]bool{
-		{false, true, true},
-		{false, false, true},
-		{false, false, true},
-	}
-	expectedRotatedShape := New(expectedRotatedElements)
-	assert.EqualValues(expectedRotatedShape, rotated)
+	assert := assert.New(t)
+	assert.NotNil(assert)
 
-	// rotate thee more times back to the home orientation
-	for i := 1; i <= 3; i++ {
-		rotated = rotated.Rotate()
-		// TODO we should be able to assert inequality
-		t.Logf("\n%s", rotated)
-	}
+	assert.EqualValues(Occupied.String(), "O")
+	assert.EqualValues(Empty.String(), "E")
+	assert.EqualValues(Blocked.String(), "B")
 
-	assert.EqualValues(piece, rotated)
+}
 
-	ellPiece := New([][]bool{
-		{true},
+func TestNewBoard(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
+	b := NewBoard([][]bool{
 		{true, true},
-		{false, true},
+		{true},
 	})
-	t.Logf("\n%s", ellPiece)
-	assert.NotNil(ellPiece)
 
-	ellRotated := ellPiece.Rotate()
-	for i := 1; i <= 3; i++ {
-		assert.NotEqualValues(ellPiece, ellRotated)
-		ellRotated = ellRotated.Rotate()
-		t.Logf("\n%s", ellRotated)
-	}
+	assert.NotNil(b)
+	assert.Equal(len(*b), BOARD_DIMENSION)
 
-	assert.EqualValues(ellPiece, ellRotated)
-	t.Logf("\n%s", ellPiece.Rotate())
+	// TODO make a func to test this and format messages
+	assert.Equal(b.GetLocation(0, 0), Occupied, "0,0")
+	assert.Equal(b.GetLocation(0, 1), Occupied, "0,1")
+	assert.Equal(b.GetLocation(0, 2), Empty, "0,2")
+	assert.Equal(b.GetLocation(1, 0), Occupied, "1,0")
+	assert.Equal(b.GetLocation(1, 2), Empty, "1,2")
+	assert.Equal(b.GetLocation(BOARD_DIMENSION-1, BOARD_DIMENSION-1), Empty, "last location")
 
 }

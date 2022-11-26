@@ -9,7 +9,7 @@ func IsSafePlacement(board *Piece, piece *Piece) (bool, *Piece) {
 		return false, nil
 	}
 
-	returnBoard := initializeStructure(len(board.structure))
+	// returnBoard := initializeStructure(len(board.structure))
 
 	for boardRowIdx, boardRow := range board.structure {
 
@@ -27,17 +27,20 @@ func IsSafePlacement(board *Piece, piece *Piece) (bool, *Piece) {
 				(boardCol == Occupied || boardCol == Blocked) {
 				return false, nil
 			} else {
+
+				/**
+
 				// set the value of the return board, default to the board's
 				// but if Occupied in the piece, use that
 				returnBoard[boardRowIdx][boardColIdx] = boardCol
 				if pieceCol == Occupied {
 					returnBoard[boardRowIdx][boardColIdx] = Occupied
 				}
-
+				***/
 			}
 
 		}
 	}
 
-	return true, &Piece{structure: returnBoard}
+	return true, nil
 }
