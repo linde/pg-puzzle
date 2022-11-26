@@ -11,6 +11,22 @@ func TestPiece(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
+	piece := NewPiece([]Step{East, East, East})
+
+	t.Logf("got: %s", piece)
+
+	t.Logf("got: %s", South)
+	t.Logf("got: %s", South+1)
+	t.Logf("got: %s", (West+1)%West)
+
+}
+
+/**
+func TestPiece(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
 	piece := NewPiece([][]bool{
 		{true, true, true},
 		{true},
@@ -57,3 +73,6 @@ func TestPiece(t *testing.T) {
 	t.Logf("\n%s", ellPiece.Rotate())
 
 }
+
+
+***/

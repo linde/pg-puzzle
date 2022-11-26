@@ -5,85 +5,69 @@ import (
 	"strings"
 )
 
-const PIECE_DIMENSION = 3
+type Step int // are there string based enums?
 
-// TODO should we have a structure accessor? tests reach in directly now
+const (
+	North Step = iota
+	East
+	South
+	West
+)
+
 type Piece struct {
-	structure Board
+	steps []Step
 }
 
-// TODO should we remove padding (empty cols or rows) to make sure it
-// is the most compact representation?
-func NewPiece(s [][]bool) *Piece {
+func NewPiece(steps []Step) (p Piece) {
+	return Piece{steps: steps}
+}
 
-	//what TODO if param matrix is wider/longer than PIECE_DIMENSION
+func (p Piece) Rotate() (rotated Piece) {
 
-	// nomalizedStruct := initializeStructure(PIECE_DIMENSION)
+	rotated = Piece{}
 
-	/***
-	for rowIndex, row := range s {
-		for colIdx, col := range row {
-			if col {
-				nomalizedStruct[rowIndex][colIdx] = Occupied
-			}
+	for _, step := range p.steps {
+
+		// TODO is it hacky or cool to do step+1 for North, East and South?
+		switch step {
+		case North:
+			rotated.steps = append(rotated.steps, East)
+		case East:
+			rotated.steps = append(rotated.steps, South)
+		case South:
+			rotated.steps = append(rotated.steps, West)
+		case West:
+			rotated.steps = append(rotated.steps, North)
 		}
 	}
-	****/
-
-	return &Piece{}
-}
-
-// TODO should this return a pointer?
-func initialize(dim int) Piece {
-
-	/***
-	m := make(Piece, dim)
-	for rowIdx := range m {
-		row := make(Row, dim)
-		m[rowIdx] = row
-	}
-	return m
-	***/
-
-	return Piece{}
-}
-
-// this only really works for 3x3, do assertions (or friggin generalize)
-// TODO is Rotate() twice the same as flip?
-func (p Piece) Rotate() *Piece {
-
-	/**
-	rotated := initializeStructure(PIECE_DIMENSION)
-
-	for rowIdx, row := range p.structure {
-
-		for colIdx, col := range row {
-
-			switch rowIdx {
-			case 0:
-				rotated[colIdx][2] = col
-			case 1:
-				rotated[colIdx][1] = col
-			case 2:
-				rotated[colIdx][0] = col
-			}
-		}
-	}
-	**/
-
-	return &Piece{}
+	return rotated
 }
 
 func (p Piece) String() string {
 
 	var b strings.Builder
+	fmt.Fprintf(&b, "Piece[")
 
-	for _, row := range p.structure {
-		for _, col := range row {
-			fmt.Fprintf(&b, "%s ", col)
-		}
-		fmt.Fprintf(&b, "\n")
-
+	delim := "" // start blank bc it goes in front
+	for _, step := range p.steps {
+		fmt.Fprintf(&b, "%s%s", delim, step)
+		delim = " "
 	}
+	fmt.Fprintf(&b, "]")
+
 	return b.String()
+}
+
+func (s Step) String() string {
+	switch s {
+	case North:
+		return "N"
+	case East:
+		return "E"
+	case South:
+		return "S"
+	case West:
+		return "W"
+	}
+	return "?"
 }
