@@ -18,7 +18,11 @@ type Piece struct {
 	steps []Step
 }
 
-func NewPiece(steps []Step) (p *Piece) {
+func NewPieceFrameArray(steps []Step) (p *Piece) {
+	return &Piece{steps: steps}
+}
+
+func NewPiece(steps ...Step) (p *Piece) {
 	return &Piece{steps: steps}
 }
 

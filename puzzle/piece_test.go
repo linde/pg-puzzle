@@ -11,9 +11,9 @@ func TestPiece(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	threeNorthPiece := NewPiece([]Step{North, North, North})
-	threeEastPiece := NewPiece([]Step{East, East, East})
-	squarePiece := NewPiece([]Step{East, South, West, North})
+	threeNorthPiece := NewPiece(North, North, North)
+	threeEastPiece := NewPiece(East, East, East)
+	squarePiece := NewPiece(East, South, West, North)
 
 	assert.NotNil(threeNorthPiece)
 	assert.NotNil(threeEastPiece)

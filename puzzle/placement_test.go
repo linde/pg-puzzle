@@ -19,8 +19,8 @@ func TestPieceCoverage(t *testing.T) {
 		{false, false, true, false, false},
 	})
 
-	threeEastPiece := NewPiece([]Step{East, East, East})
-	threeSouthPiece := NewPiece([]Step{South, South, South})
+	threeEastPiece := NewPiece(East, East, East)
+	threeSouthPiece := NewPiece(South, South, South)
 
 	type placementTest struct {
 		p           *Piece
