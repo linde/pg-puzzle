@@ -69,6 +69,16 @@ func (p *Piece) Rotate() (rotated *Piece) {
 	return rotated
 }
 
+func (step Step) isNotSkip() bool {
+
+	switch step {
+	case SkipNorth, SkipEast, SkipSouth, SkipWest:
+		return false
+	}
+	return true
+
+}
+
 func (p Piece) String() string {
 
 	var b strings.Builder

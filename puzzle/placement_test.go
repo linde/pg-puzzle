@@ -22,15 +22,13 @@ func TestPieceCoverage(t *testing.T) {
 	threeEastPiece := NewPiece(East, East, East)
 	threeSouthPiece := NewPiece(South, South, South)
 
-	type placementTest struct {
+	tests := []struct {
 		p           *Piece
 		b           *Board
 		r           int
 		c           int
 		expectValid bool
-	}
-
-	tests := []placementTest{
+	}{
 		{threeEastPiece, nwOnlyBoard, 0, 0, false},
 		{threeEastPiece, emptyBoard, 0, 0, true},
 		{threeEastPiece, emptyBoard, 0, 3, false},
@@ -42,14 +40,14 @@ func TestPieceCoverage(t *testing.T) {
 	}
 
 	// TODO put better messages in here
-	for _, test := range tests {
+	for _, tt := range tests {
 
-		isSafe, boardAfter := IsSafePlacement(test.p, test.b, test.r, test.c)
+		isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.r, tt.c)
 
-		if test.expectValid {
+		if tt.expectValid {
 			assert.True(isSafe)
 			assert.NotNil(boardAfter)
-			assert.NotEqualValues(test.b, boardAfter)
+			assert.NotEqualValues(tt.b, boardAfter)
 		} else {
 			assert.False(isSafe)
 			assert.Nil(boardAfter)

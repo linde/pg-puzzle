@@ -10,11 +10,18 @@ func IsSafePlacement(p *Piece, b *Board, r, c int) (bool, *Board) {
 	for _, step := range p.steps {
 
 		curVal := b.GetLocation(curR, curC)
-		if curVal != Empty {
+
+		if curVal == Invalid {
 			return false, nil
 		}
 
-		retBoard.SetLocation(curR, curC, Occupied)
+		if step.isNotSkip() {
+			if curVal != Empty {
+				return false, nil
+			}
+			retBoard.SetLocation(curR, curC, Occupied)
+		}
+
 		curR, curC = doStep(curR, curC, step)
 	}
 
