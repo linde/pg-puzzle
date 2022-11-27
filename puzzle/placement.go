@@ -1,4 +1,4 @@
-package shape
+package puzzle
 
 func IsSafePlacement(p *Piece, b *Board, r, c int) (bool, *Board) {
 
