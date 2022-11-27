@@ -18,13 +18,29 @@ type Piece struct {
 	steps []Step
 }
 
-func NewPiece(steps []Step) (p Piece) {
-	return Piece{steps: steps}
+func NewPiece(steps []Step) (p *Piece) {
+	return &Piece{steps: steps}
 }
 
-func (p Piece) Rotate() (rotated Piece) {
+func doStep(r, c int, step Step) (int, int) {
 
-	rotated = Piece{}
+	switch step {
+	case North:
+		return r - 1, c
+	case East:
+		return r, c + 1
+	case South:
+		return r + 1, c
+	case West:
+		return r, c - 1
+	}
+
+	return -1, -1
+}
+
+func (p *Piece) Rotate() (rotated *Piece) {
+
+	rotated = &Piece{}
 
 	for _, step := range p.steps {
 

@@ -11,86 +11,52 @@ func TestPieceCoverage(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	/**
+	// midNorthBoard := NewBoard([][]bool{
+	// 	{false, false, true, false, false},
+	// })
+	emptyBoard := NewBoard([][]bool{})
+	assert.NotNil(emptyBoard)
 
-	emptyBoard := NewBoard([][]bool{
-		{false, false, false},
-		{false, false, false},
-		{false, false, false},
-	})
-	// t.Logf("\n%s", emptyBoard)
-
-	nwPiece := NewPiece([][]bool{
+	nwOnlyBoard := NewBoard([][]bool{
 		{true},
 	})
-	assert.NotNil(nwPiece)
-	// t.Logf("\n%s", piece)
+	threeEastPiece := NewPiece([]Step{East, East, East})
+	threeSouthPiece := NewPiece([]Step{South, South, South})
 
-	assert.NotEqualValues(emptyBoard, nwPiece)
-	//assert.Equal(emptyBoard.structure[0][0], Empty)
+	isSafe, boardAfter := IsSafePlacement(threeEastPiece, nwOnlyBoard, 0, 0)
+	assert.False(isSafe)
+	assert.Nil(boardAfter)
 
-
-	isSafe, results := IsSafePlacement(emptyBoard, nwPiece)
+	isSafe, boardAfter = IsSafePlacement(threeEastPiece, emptyBoard, 0, 0)
 	assert.True(isSafe)
-	assert.NotNil(results)
-	assert.Equal(results.structure[0][0], Occupied)
+	assert.NotNil(boardAfter)
+	assert.NotEqualValues(emptyBoard, boardAfter)
+	// t.Logf("\n%s", boardAfter)
 
-	nwOnlyBoard := New([][]bool{
-		{true, false, false},
-		{false, false, false},
-		{false, false, false},
-	})
-	// t.Logf("\n%s", nwOnlybnwOnlyBoardoard)
+	isSafe, boardAfter = IsSafePlacement(threeEastPiece, emptyBoard, 0, 1)
+	assert.True(isSafe)
+	assert.NotNil(boardAfter)
+	assert.NotEqualValues(emptyBoard, boardAfter)
+	// t.Logf("\n%s", boardAfter)
 
-	nwIsSafe, results := IsSafePlacement(nwOnlyBoard, nwPiece)
-	assert.False(nwIsSafe)
-	assert.Nil(results)
+	isSafe, boardAfter = IsSafePlacement(threeEastPiece, emptyBoard, 0, 2)
+	assert.True(isSafe)
+	assert.NotNil(boardAfter)
+	assert.NotEqualValues(emptyBoard, boardAfter)
+	// t.Logf("\n%s", boardAfter)
 
-	neOnlyBoard := New([][]bool{
-		{false, false, true},
-		{false, false, false},
-		{false, false, false},
-	})
-	// t.Logf("\n%s", nwOnlyboard)
+	isSafe, boardAfter = IsSafePlacement(threeEastPiece, emptyBoard, 0, 3)
+	assert.False(isSafe)
+	assert.Nil(boardAfter)
 
-	neIsSafe, results := IsSafePlacement(neOnlyBoard, nwPiece)
-	// t.Logf("\n%s", results)
+	isSafe, boardAfter = IsSafePlacement(threeSouthPiece, emptyBoard, 0, 0)
+	assert.True(isSafe)
+	assert.NotNil(boardAfter)
+	assert.NotEqualValues(emptyBoard, boardAfter)
+	// t.Logf("\n%s", boardAfter)
 
-	assert.True(neIsSafe)
-	assert.NotNil(results)
-	assert.Equal(results.structure[0][0], Occupied)
-	assert.Equal(results.structure[0][2], Occupied)
-
-	northPiece := New([][]bool{
-		{true, true, true},
-	})
-
-	northIsSafeNE, results := IsSafePlacement(neOnlyBoard, northPiece)
-	assert.False(northIsSafeNE)
-	assert.Nil(results)
-
-	northIsSafeNW, results := IsSafePlacement(nwOnlyBoard, northPiece)
-	assert.False(northIsSafeNW)
-	assert.Nil(results)
-
-	westPiece := New([][]bool{
-		{true},
-		{true},
-		{true},
-	})
-
-	westIsSafeNW, results := IsSafePlacement(nwOnlyBoard, westPiece)
-	assert.False(westIsSafeNW)
-	assert.Nil(results)
-
-	westIsSafeNE, results := IsSafePlacement(neOnlyBoard, westPiece)
-	assert.True(westIsSafeNE)
-	assert.NotNil(results)
-
-	t.Logf("\n%s", neOnlyBoard)
-	t.Logf("\n%s", westPiece)
-	t.Logf("\n%s", results)
-
-	***/
+	isSafe, boardAfter = IsSafePlacement(threeSouthPiece, emptyBoard, 3, 0)
+	assert.False(isSafe)
+	assert.Nil(boardAfter)
 
 }

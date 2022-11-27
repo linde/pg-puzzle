@@ -17,6 +17,7 @@ const (
 	Empty Location = iota
 	Occupied
 	Blocked
+	Invalid
 )
 
 // TODO should this return a pointer?
@@ -46,9 +47,33 @@ func NewBoard(s [][]bool) *Board {
 	return &board
 }
 
+func (orig *Board) Clone() *Board {
+
+	// TODO sanity check orig cols dimensions?
+	board := initializeBoard(len(*orig))
+
+	for rowIndex, row := range *orig {
+		copy(board[rowIndex], row)
+	}
+	return &board
+}
+
 func (b Board) GetLocation(row, col int) Location {
-	// TODO sanity checking maybs?
+
+	if row < 0 || row >= len(b) {
+		return Invalid
+	}
+	if col < 0 || col >= len(b[row]) {
+		return Invalid
+	}
+
 	return b[row][col]
+}
+
+func (b Board) SetLocation(row, col int, val Location) {
+
+	// TODO need tests for the setters and getters
+	b[row][col] = val
 }
 
 func (p Board) String() string {

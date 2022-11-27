@@ -66,3 +66,6 @@ func TestNewBoard(t *testing.T) {
 	checkLocation(b, Empty, BOARD_DIMENSION-1, BOARD_DIMENSION-1)
 
 }
+
+// TODO check bad locations too, should be INVALID
+// TODO test clone!

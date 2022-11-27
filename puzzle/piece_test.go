@@ -20,8 +20,8 @@ func TestPiece(t *testing.T) {
 	assert.NotNil(squarePiece)
 
 	rotatedThreeNorthPiece := threeNorthPiece.Rotate()
-	assert.NotEqualValues(threeNorthPiece, rotatedThreeNorthPiece)
-	assert.EqualValues(rotatedThreeNorthPiece, threeEastPiece)
+	assert.NotEqualValues(*threeNorthPiece, *rotatedThreeNorthPiece)
+	assert.EqualValues(*rotatedThreeNorthPiece, *threeEastPiece)
 
 	// do we care that we cant tell a rotated square is the same thing?
 	// rotatedSquarePiece := squarePiece.Rotate()
