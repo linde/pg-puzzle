@@ -41,6 +41,7 @@ func TestPieceCoverage(t *testing.T) {
 		{threeSouthPiece, midNorthBoard, 0, 2, false},
 	}
 
+	// TODO put better messages in here
 	for _, test := range tests {
 
 		isSafe, boardAfter := IsSafePlacement(test.p, test.b, test.r, test.c)

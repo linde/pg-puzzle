@@ -51,19 +51,27 @@ func TestNewBoard(t *testing.T) {
 	assert.NotNil(b)
 	assert.Equal(len(*b), BOARD_DIMENSION)
 
-	// TODO might be more go idiomatic as a table
-	var checkLocation = func(b *Board, expected Location, r, c int) {
-		obs := b.GetLocation(r, c)
-		msg := fmt.Sprintf("for (%d,%d) expected %s, got %s", r, c, expected, obs)
-		assert.Equal(obs, expected, msg)
+	type LocationTest struct {
+		b        *Board
+		expected Location
+		r, c     int
+	}
+	tests := []LocationTest{
+		{b, Occupied, 0, 0},
+		{b, Occupied, 0, 1},
+		{b, Empty, 0, 2},
+		{b, Occupied, 1, 0},
+		{b, Empty, 1, 2},
+		{b, Empty, BOARD_DIMENSION - 1, BOARD_DIMENSION - 1},
 	}
 
-	checkLocation(b, Occupied, 0, 0)
-	checkLocation(b, Occupied, 0, 1)
-	checkLocation(b, Empty, 0, 2)
-	checkLocation(b, Occupied, 1, 0)
-	checkLocation(b, Empty, 1, 2)
-	checkLocation(b, Empty, BOARD_DIMENSION-1, BOARD_DIMENSION-1)
+	for _, test := range tests {
+		obs := test.b.GetLocation(test.r, test.c)
+		const msgFmt = "for (%d,%d) expected %s, got %s"
+		msg := fmt.Sprintf(msgFmt, test.r, test.c, test.expected, obs)
+		assert.Equal(obs, test.expected, msg)
+
+	}
 
 }
 
