@@ -32,6 +32,7 @@ func doSolveRun(cmd *cobra.Command, args []string) {
 		pz.NewPiece(pz.South, pz.South, pz.East),
 		pz.NewPiece(pz.East, pz.South, pz.West, pz.North),
 		pz.NewPiece(pz.South, pz.East, pz.South),
+		pz.NewPiece(pz.South, pz.South, pz.South, pz.SkipNorth, pz.East),
 	}
 
 	for _, p := range pieces {

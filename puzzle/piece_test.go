@@ -15,6 +15,8 @@ func TestPiece(t *testing.T) {
 	threeEastPiece := NewPiece(East, East, East)
 	squarePiece := NewPiece(East, South, West, North)
 
+	// TODO add tests with skip directions too
+
 	assert.NotNil(threeNorthPiece)
 	assert.NotNil(threeEastPiece)
 	assert.NotNil(squarePiece)
