@@ -42,7 +42,7 @@ func TestPieceCoverage(t *testing.T) {
 	// TODO put better messages in here
 	for _, tt := range tests {
 
-		isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.r, tt.c)
+		isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.r, tt.c, Occupied)
 
 		if tt.expectValid {
 			assert.True(isSafe)

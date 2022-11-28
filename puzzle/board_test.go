@@ -15,7 +15,7 @@ func TestInitBoard(t *testing.T) {
 	assert.NotNil(assert)
 
 	boardSize := 5
-	board := initializeBoard(boardSize)
+	board := NewEmptyBoard(boardSize)
 	assert.NotNil(board)
 	assert.Equal(len(board), boardSize)
 
@@ -47,9 +47,12 @@ func TestNewBoard(t *testing.T) {
 		{true, true},
 		{true},
 	})
-
 	assert.NotNil(b)
 	assert.Equal(len(*b), BOARD_DIMENSION)
+
+	bViaSet := NewEmptyBoard(BOARD_DIMENSION)
+	bViaSet.Set(Occupied, Rowcol{0, 0}, Rowcol{0, 1}, Rowcol{1, 0})
+	assert.EqualValues(b, &bViaSet, "expected:\n%s\nnot equal:\n%s", b, bViaSet)
 
 	tests := []struct {
 		b        *Board
@@ -73,5 +76,21 @@ func TestNewBoard(t *testing.T) {
 
 }
 
+func DontTestParallelBoardPrinter(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
+	northWest := NewBoard([][]bool{
+		{true, true},
+		{true},
+	})
+
+	empty := NewEmptyBoard(BOARD_DIMENSION)
+
+	fmt.Printf("%s", ParallelBoardsString(northWest, &empty, &empty))
+}
+
 // TODO check bad locations too, should be INVALID
 // TODO test clone!
+// TODO board.Set() tests

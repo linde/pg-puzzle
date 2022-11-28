@@ -1,6 +1,6 @@
 package puzzle
 
-func IsSafePlacement(p *Piece, b *Board, r, c int) (bool, *Board) {
+func IsSafePlacement(p *Piece, b *Board, r, c int, val Location) (bool, *Board) {
 
 	retBoard := b.Clone()
 
@@ -19,7 +19,7 @@ func IsSafePlacement(p *Piece, b *Board, r, c int) (bool, *Board) {
 			if curVal != Empty {
 				return false, nil
 			}
-			retBoard.SetLocation(curR, curC, Occupied)
+			retBoard.SetLocation(curR, curC, val)
 		}
 
 		curR, curC = doStep(curR, curC, step)
