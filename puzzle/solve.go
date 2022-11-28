@@ -1,15 +1,15 @@
 package puzzle
 
-func Solve(board *Board, pieces map[Location]*Piece) (bool, *Board) {
+func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
 
 	if len(pieces) == 0 {
 		return true, board
 	}
 
-	var curLoc Location
+	var curLoc State
 	var curPiece *Piece
 
-	remainingPieces := make(map[Location]*Piece)
+	remainingPieces := make(map[State]*Piece)
 
 	curValuesAssiged := false
 	for l, p := range pieces {

@@ -21,13 +21,13 @@ func TestInitBoard(t *testing.T) {
 
 	for _, row := range board {
 		assert.Equal(len(row), boardSize)
-		for _, location := range row {
-			assert.Equal(location, Empty)
+		for _, state := range row {
+			assert.Equal(state, Empty)
 		}
 	}
 }
 
-func TestLocationStringer(t *testing.T) {
+func TestStateStringer(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NotNil(assert)
@@ -51,12 +51,12 @@ func TestNewBoard(t *testing.T) {
 	assert.Equal(len(*b), BOARD_DIMENSION)
 
 	bViaSet := NewEmptyBoard(BOARD_DIMENSION)
-	bViaSet.Set(Occupied, Rowcol{0, 0}, Rowcol{0, 1}, Rowcol{1, 0})
+	bViaSet.SetN(Occupied, Loc{0, 0}, Loc{0, 1}, Loc{1, 0})
 	assert.EqualValues(b, &bViaSet, "expected:\n%s\nnot equal:\n%s", b, bViaSet)
 
 	tests := []struct {
 		b        *Board
-		expected Location
+		expected State
 		r, c     int
 	}{
 		{b, Occupied, 0, 0},
@@ -68,7 +68,7 @@ func TestNewBoard(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		obs := tt.b.GetLocation(tt.r, tt.c)
+		obs := tt.b.Get(tt.r, tt.c)
 		const msgFmt = "for (%d,%d) expected %s, got %s"
 		msg := fmt.Sprintf(msgFmt, tt.r, tt.c, tt.expected, obs)
 		assert.Equal(obs, tt.expected, msg)

@@ -11,7 +11,7 @@ func TestSolving(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	pieces := map[Location]*Piece{
+	pieces := map[State]*Piece{
 		Piece1: NewPiece(East, South),
 		Piece2: NewPiece(South, South, South),
 		Piece3: NewPiece(South, South, East),

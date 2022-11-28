@@ -9,13 +9,12 @@ const BOARD_DIMENSION = 5
 
 // TODO fun exercise, port this to bitsets
 
-type Location int
-type Row []Location
+type State int
+type Row []State
 type Board []Row
 
-// TODO rename this to LocationState so Rowcol can be Location
 const (
-	Empty Location = iota
+	Empty State = iota
 	Occupied
 	Blocked
 	Invalid
@@ -27,7 +26,7 @@ const (
 	Piece6
 )
 
-type Rowcol struct {
+type Loc struct {
 	r int
 	c int
 }
@@ -43,9 +42,9 @@ func NewEmptyBoard(dim int) Board {
 	return board
 }
 
-func (b *Board) Set(val Location, locs ...Rowcol) {
+func (b *Board) SetN(val State, locs ...Loc) {
 	for _, loc := range locs {
-		b.SetLocation(loc.r, loc.c, val)
+		b.Set(loc.r, loc.c, val)
 	}
 }
 
@@ -76,7 +75,7 @@ func (orig *Board) Clone() *Board {
 	return &board
 }
 
-func (b Board) GetLocation(row, col int) Location {
+func (b Board) Get(row, col int) State {
 
 	if row < 0 || row >= len(b) {
 		return Invalid
@@ -88,7 +87,7 @@ func (b Board) GetLocation(row, col int) Location {
 	return b[row][col]
 }
 
-func (b Board) SetLocation(row, col int, val Location) {
+func (b Board) Set(row, col int, val State) {
 
 	// TODO need tests for the setters and getters
 	b[row][col] = val
@@ -136,7 +135,7 @@ func ParallelBoardsString(boards ...*Board) string {
 	return b.String()
 }
 
-func (e Location) String() string {
+func (e State) String() string {
 	switch e {
 	case Empty:
 		return "E"
