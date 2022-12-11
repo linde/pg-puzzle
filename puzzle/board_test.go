@@ -89,6 +89,13 @@ func DontTestParallelBoardPrinter(t *testing.T) {
 	empty := NewEmptyBoard(BOARD_DIMENSION)
 
 	fmt.Printf("%s", ParallelBoardsString(northWest, &empty, &empty))
+
+	fmt.Printf("%s", ParallelBoardsString(nil))
+	fmt.Printf("%s", ParallelBoardsString(nil, nil))
+
+	fmt.Printf("%s", ParallelBoardsString(northWest, nil))
+	fmt.Printf("%s", ParallelBoardsString(nil, northWest))
+
 }
 
 // TODO check bad locations too, should be INVALID

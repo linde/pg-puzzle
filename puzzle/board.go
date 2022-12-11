@@ -114,18 +114,31 @@ func ParallelBoardsString(boards ...*Board) string {
 
 	maxRows := 0
 	for _, board := range boards {
-		if len(*board) > maxRows {
+		if board != nil && len(*board) > maxRows {
 			maxRows = len(*board)
 		}
+	}
+
+	if maxRows == 0 {
+		fmt.Fprintf(&b, "%d nil boards\n", len(boards))
 	}
 
 	for i := 0; i < maxRows; i++ {
 		fmt.Fprintf(&b, "|")
 		for _, board := range boards {
-			delim := ""
-			for _, col := range (*board)[i] {
-				fmt.Fprintf(&b, "%s%s", delim, col)
-				delim = " "
+			if board == nil {
+				nilBoardRow := "         "
+				if i == 2 {
+					// TODO prob should make sure there is a 2nd row or this wont print
+					nilBoardRow = "   nil   "
+				}
+				fmt.Fprintf(&b, "%s", nilBoardRow)
+			} else {
+				delim := ""
+				for _, col := range (*board)[i] {
+					fmt.Fprintf(&b, "%s%s", delim, col)
+					delim = " "
+				}
 			}
 			fmt.Fprintf(&b, "|")
 		}
