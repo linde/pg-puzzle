@@ -17,7 +17,7 @@ func TestSolving(t *testing.T) {
 		Piece3: NewPiece(South, South, East),
 		Piece4: NewPiece(East, South, West, North),
 		Piece5: NewPiece(South, East, South),
-		Piece6: NewPiece(South, South, South, SkipNorth, East), // TODO no workie
+		Piece6: NewPiece(South, South, South, North, East),
 	}
 
 	assert.NotNil(pieces)

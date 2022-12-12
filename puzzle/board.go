@@ -89,7 +89,7 @@ func (b Board) Get(row, col int) State {
 
 func (b Board) Set(row, col int, val State) {
 
-	// TODO need tests for the setters and getters
+	// TODO need tests and sanity checks for the setters and getters
 	b[row][col] = val
 }
 

@@ -24,8 +24,9 @@ func TestPieceCoverage(t *testing.T) {
 
 	threeEastPiece := NewPiece(East, East, East)
 	threeSouthPiece := NewPiece(South, South, South)
-
-	//potBellyPiece := NewPiece(South, South, South, SkipNorth, East)
+	threeNorthPiece := NewPiece(North, North, North)
+	// TODO test west moves  threeWestPiece := NewPiece(West, West, West)
+	potBellyPiece := NewPiece(South, South, North, East)
 
 	tests := []struct {
 		p           *Piece
@@ -34,7 +35,7 @@ func TestPieceCoverage(t *testing.T) {
 		c           int
 		expectValid bool
 	}{
-		//{potBellyPiece, &midEastBoard, 1, 3, false},
+
 		{threeEastPiece, nwOnlyBoard, 0, 0, false},
 		{threeEastPiece, emptyBoard, 0, 0, true},
 		{threeEastPiece, emptyBoard, 0, 3, false},
@@ -43,16 +44,21 @@ func TestPieceCoverage(t *testing.T) {
 		{threeSouthPiece, emptyBoard, 3, 0, false},
 		{threeEastPiece, midNorthBoard, 0, 2, false},
 		{threeSouthPiece, midNorthBoard, 0, 2, false},
-		// {potBellyPiece, &midEastBoard, 0, 3, false},
+
+		{threeNorthPiece, nwOnlyBoard, 3, 0, false},
+
+		{potBellyPiece, &midEastBoard, 1, 3, false},
+		{potBellyPiece, &midEastBoard, 0, 3, true},
 	}
 
-	// TODO put better messages in here
-	for _, tt := range tests {
+	for testIdx, tt := range tests {
 
-		isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.r, tt.c, Occupied)
+		isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.r, tt.c, Piece1)
 
-		errorMsg := fmt.Sprintf("%v @ %d,%d\nisSafe: %v\n  Before  |  After   \n%s",
-			tt.p, tt.r, tt.c, isSafe, ParallelBoardsString(tt.b, boardAfter))
+		errorMsg := fmt.Sprintf("Test index: %d\n%v @ %d,%d\nisSafe: %v\n  Before  |  After   \n%s",
+			testIdx, tt.p, tt.r, tt.c, isSafe, ParallelBoardsString(tt.b, boardAfter))
+
+		// fmt.Println(errorMsg)
 
 		if tt.expectValid {
 			assert.True(isSafe, errorMsg)
