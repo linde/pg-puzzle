@@ -1,6 +1,7 @@
 package puzzle
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,17 +18,22 @@ func TestSolving(t *testing.T) {
 		Piece3: NewPiece(South, South, East),
 		Piece4: NewPiece(East, South, West, North),
 		Piece5: NewPiece(South, East, South),
-		Piece6: NewPiece(South, South, South, North, East),
+		Piece6: NewPiece(South, South, North, East),
 	}
 
-	assert.NotNil(pieces)
+	nwswBoard := NewEmptyBoard(BOARD_DIMENSION)
+	nwswBoard.SetN(Blocked, Loc{0, 0}, Loc{4, 0})
+	nwswSolved, nwswSolution := Solve(&nwswBoard, pieces)
+	nwswErrorMesg := fmt.Sprintf("Couldnt solve:\n%s", nwswBoard)
+	assert.True(nwswSolved, nwswErrorMesg)
+	t.Logf("Solved: %v\n%s", nwswSolved, nwswSolution)
 
-	board := NewEmptyBoard(BOARD_DIMENSION)
-	//board.Set(Blocked, Rowcol{0, 0}, Rowcol{0, 1}, Rowcol{1, 0})
-
-	isSolved, resultingBoard := Solve(&board, pieces)
-	if isSolved {
-		t.Logf("Solved!\n%s", resultingBoard)
-	}
-
+	/*** TODO this one doesnt work right yet but a lot do
+	nwneBoard := NewEmptyBoard(BOARD_DIMENSION)
+	nwneBoard.SetN(Blocked, Loc{0, 0}, Loc{0, 4})
+	nwneSolved, nwneSolution := Solve(&nwneBoard, pieces)
+	nwneErrorMesg := fmt.Sprintf("Couldnt solve:\n%s", nwneBoard)
+	assert.True(nwneSolved, nwneErrorMesg)
+	t.Logf("Solved: %v\n%s", nwneSolved, nwneSolution)
+	****/
 }
