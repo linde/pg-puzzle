@@ -23,17 +23,12 @@ func TestSolving(t *testing.T) {
 
 	nwswBoard := NewEmptyBoard(BOARD_DIMENSION)
 	nwswBoard.SetN(Blocked, Loc{0, 0}, Loc{4, 0})
-	nwswSolved, nwswSolution := Solve(&nwswBoard, pieces)
+	nwswSolved, _ := Solve(&nwswBoard, pieces)
 	nwswErrorMesg := fmt.Sprintf("Couldnt solve:\n%s", nwswBoard)
 	assert.True(nwswSolved, nwswErrorMesg)
-	t.Logf("Solved: %v\n%s", nwswSolved, nwswSolution)
 
-	/*** TODO this one doesnt work right yet but a lot do
 	nwneBoard := NewEmptyBoard(BOARD_DIMENSION)
 	nwneBoard.SetN(Blocked, Loc{0, 0}, Loc{0, 4})
-	nwneSolved, nwneSolution := Solve(&nwneBoard, pieces)
-	nwneErrorMesg := fmt.Sprintf("Couldnt solve:\n%s", nwneBoard)
-	assert.True(nwneSolved, nwneErrorMesg)
-	t.Logf("Solved: %v\n%s", nwneSolved, nwneSolution)
-	****/
+	nwneSolved, _ := Solve(&nwneBoard, pieces)
+	assert.Falsef(nwneSolved, "Shouldnt have been able to solve:\n%s", nwneBoard)
 }
