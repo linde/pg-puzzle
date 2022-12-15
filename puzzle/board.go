@@ -31,6 +31,10 @@ type Loc struct {
 	c int
 }
 
+func NewLoc(r, c int) Loc {
+	return Loc{r, c}
+}
+
 // TODO should this return a pointer?
 func NewEmptyBoard(dim int) Board {
 

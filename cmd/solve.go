@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
-
-	pz "pgpuzzle/puzzle"
+	"pgpuzzle/puzzle"
 
 	"github.com/spf13/cobra"
 )
@@ -18,25 +18,31 @@ func NewSolveCmd() *cobra.Command {
 }
 
 var solveCmd = NewSolveCmd()
+var stops string
 
 func init() {
 	RootCmd.AddCommand(solveCmd)
+
+	solveCmd.Flags().StringVarP(&stops, "stops", "s", "0,0;4,0", "board stops to solve")
 
 }
 
 func doSolveRun(cmd *cobra.Command, args []string) {
 
-	pieces := []*pz.Piece{
-		pz.NewPiece(pz.East, pz.South),
-		pz.NewPiece(pz.South, pz.South, pz.South),
-		pz.NewPiece(pz.South, pz.South, pz.East),
-		pz.NewPiece(pz.East, pz.South, pz.West, pz.North),
-		pz.NewPiece(pz.South, pz.East, pz.South),
-		pz.NewPiece(pz.South, pz.South, pz.North, pz.East),
-	}
+	var r1, c1, r2, c2 int
 
-	for _, p := range pieces {
-		log.Printf("Got: %s", p)
-	}
+	fmt.Sscanf(stops, "%d,%d;%d,%d", &r1, &c1, &r2, &c2)
 
+	loc1 := puzzle.NewLoc(r1, c1)
+	loc2 := puzzle.NewLoc(r2, c2)
+
+	log.Printf("solving for: %v %v", loc1, loc2)
+
+	pieces := puzzle.GetGamePieces()
+
+	boardToSolve := puzzle.NewEmptyBoard(puzzle.BOARD_DIMENSION)
+	boardToSolve.SetN(puzzle.Blocked, loc1, loc2)
+	boardSolved, resultBoard := puzzle.Solve(&boardToSolve, pieces)
+
+	log.Printf("Solved: %v\n%s", boardSolved, resultBoard)
 }

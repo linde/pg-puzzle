@@ -12,14 +12,7 @@ func TestSolving(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	pieces := map[State]*Piece{
-		Piece1: NewPiece(East, South),
-		Piece2: NewPiece(South, South, South),
-		Piece3: NewPiece(South, South, East),
-		Piece4: NewPiece(East, South, West, North),
-		Piece5: NewPiece(South, East, South),
-		Piece6: NewPiece(South, South, North, East),
-	}
+	pieces := GetGamePieces()
 
 	nwswBoard := NewEmptyBoard(BOARD_DIMENSION)
 	nwswBoard.SetN(Blocked, Loc{0, 0}, Loc{4, 0})
