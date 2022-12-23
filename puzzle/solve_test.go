@@ -25,3 +25,5 @@ func TestSolving(t *testing.T) {
 	nwneSolved, _ := Solve(&nwneBoard, pieces)
 	assert.Falsef(nwneSolved, "Shouldnt have been able to solve:\n%s", nwneBoard)
 }
+
+// TODO test SolveLocations()

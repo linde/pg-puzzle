@@ -29,6 +29,8 @@ func init() {
 
 }
 
+// TODO the Loc's returned are pointers because otherwise we cant return nil
+// is there a more idiomatic golang way to do this?
 func parseStop(stops string) (*puzzle.Loc, *puzzle.Loc, error) {
 
 	var r1, c1, r2, c2 int
@@ -57,12 +59,7 @@ func doSolveRun(cmd *cobra.Command, args []string) error {
 
 	log.Printf("solving for: %v %v", loc1, loc2)
 
-	pieces := puzzle.GetGamePieces()
-
-	boardToSolve := puzzle.NewEmptyBoard(puzzle.BOARD_DIMENSION)
-	boardToSolve.SetN(puzzle.Blocked, *loc1, *loc2)
-	boardSolved, resultBoard := puzzle.Solve(&boardToSolve, pieces)
-
+	boardSolved, resultBoard := puzzle.SolveLocations(*loc1, *loc2)
 	log.Printf("Solved: %v\n%s", boardSolved, resultBoard)
 	return nil
 }

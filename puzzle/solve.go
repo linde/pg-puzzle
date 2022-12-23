@@ -1,5 +1,20 @@
 package puzzle
 
+func SolveLocations(locs ...Loc) (bool, *Board) {
+
+	pieces := GetGamePieces()
+
+	boardToSolve := NewEmptyBoard(BOARD_DIMENSION)
+	for _, loc := range locs {
+		// TODO is there a way to pass an array as a variable length arg?
+		boardToSolve.SetN(Blocked, loc)
+	}
+	boardSolved, resultBoard := Solve(&boardToSolve, pieces)
+
+	return boardSolved, resultBoard
+
+}
+
 // TODO move to something more useful for slicing than a map, maybe an array of
 // struct with both State and Piece
 func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
