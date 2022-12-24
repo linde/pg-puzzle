@@ -76,6 +76,38 @@ func TestNewBoard(t *testing.T) {
 
 }
 
+func TestNormalizedStopPair(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
+	lowLoc := Loc{0, 0}
+	highLoc := Loc{4, 4}
+	assert.NotEqual(lowLoc, highLoc)
+
+	lowHighPair := StopPair{lowLoc, highLoc}
+	normedPair := NormalizedStopPair(highLoc, lowLoc)
+	assert.Equal(lowHighPair, normedPair)
+
+	equalPair := StopPair{highLoc, highLoc}
+	normedEqualPair := NormalizedStopPair(highLoc, highLoc)
+	assert.Equal(equalPair, normedEqualPair)
+
+}
+
+/**
+func NormalizedStopPair(loc1, loc2 Loc) stopPair {
+
+	// TODO unit test this quite a bit!
+	if loc1.r < loc2.r {
+		return stopPair{loc1, loc2}
+	} else if loc1.r == loc2.r && loc1.c <= loc2.c {
+		return stopPair{loc1, loc2}
+	}
+	return stopPair{loc2, loc1}
+}
+**/
+
 func DontTestParallelBoardPrinter(t *testing.T) {
 
 	assert := assert.New(t)

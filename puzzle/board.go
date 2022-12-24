@@ -35,6 +35,18 @@ func NewLoc(r, c int) Loc {
 	return Loc{r, c}
 }
 
+type StopPair [2]Loc
+
+func NormalizedStopPair(loc1, loc2 Loc) StopPair {
+
+	if loc1.r < loc2.r {
+		return StopPair{loc1, loc2}
+	} else if loc1.r == loc2.r && loc1.c <= loc2.c {
+		return StopPair{loc1, loc2}
+	}
+	return StopPair{loc2, loc1}
+}
+
 // TODO should this return a pointer?
 func NewEmptyBoard(dim int) Board {
 
