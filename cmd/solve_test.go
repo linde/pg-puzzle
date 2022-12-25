@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"io/ioutil"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,11 +21,13 @@ func Test_SolveCommand(t *testing.T) {
 	b := bytes.NewBufferString("")
 
 	cmd.SetOut(b) // TODO figure out why this isnt  working
+	cmd.SetErr(b)
 	cmd.Execute()
+
 	out, err := ioutil.ReadAll(b)
 	assert.NotNil(out)
 	assert.Nil(err)
 
-	//assert.Contains(strings.ToLower(string(out)), "solved")
+	assert.Contains(strings.ToLower(string(out)), "solved")
 
 }

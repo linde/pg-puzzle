@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"pgpuzzle/puzzle"
 	pz "pgpuzzle/puzzle"
 
@@ -16,17 +15,17 @@ func NewSolveCmd() *cobra.Command {
 		RunE:  doSolveRun,
 	}
 
-	// these are here for tests.
-	cmd.Flags().StringVarP(&stops, "stops", "s", "{0 0} {4 0}", "board stops to solve, '{[0-4] [0-4]} {[0-4] [0-4]}'")
-	cmd.Flags().BoolVarP(&allStops, "all", "a", false, "try every stop combination")
+	// these are here for tests vs in init
+	cmd.Flags().StringVarP(&stopsArg, "stops", "s", "{0 0} {4 0}", "board stops to solve, '{[0-4] [0-4]} {[0-4] [0-4]}'")
+	cmd.Flags().BoolVarP(&allStopsArg, "all", "a", false, "try every stop combination")
 
 	return cmd
 
 }
 
 var solveCmd = NewSolveCmd()
-var stops string
-var allStops bool
+var stopsArg string
+var allStopsArg bool
 
 func init() {
 	RootCmd.AddCommand(solveCmd)
@@ -52,24 +51,24 @@ func parseStop(stops string) (pz.StopPair, error) {
 
 func doSolveRun(cmd *cobra.Command, args []string) error {
 
-	if allStops {
+	if allStopsArg {
 		pz.SolveAllStops()
 
 		return nil
 	}
 
-	stops, stopsParseError := parseStop(stops)
-
+	stops, stopsParseError := parseStop(stopsArg)
 	if stopsParseError != nil {
 		return stopsParseError
 	}
 
-	fmt.Printf("solving for: %v", stops)
+	fmt.Fprintf(cmd.OutOrStdout(), "solving for: %v", stops)
 
 	boardSolved, resultBoard := puzzle.SolveStopPair(stops)
-	log.Printf("Solved: %v", boardSolved)
+
+	fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v", boardSolved)
 	if boardSolved {
-		fmt.Printf("\n%s", resultBoard)
+		fmt.Fprintf(cmd.OutOrStdout(), "\n%s", resultBoard)
 	}
 	return nil
 }

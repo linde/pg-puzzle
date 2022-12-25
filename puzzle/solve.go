@@ -11,11 +11,7 @@ func SolveStopPair(stops StopPair) (bool, *Board) {
 	pieces := GetGamePieces()
 
 	boardToSolve := NewEmptyBoard(BOARD_DIMENSION)
-	for _, loc := range stops {
-		// TODO is there a way to pass an array as a variable length arg?
-		boardToSolve.SetN(Blocked, loc)
-	}
-
+	boardToSolve.SetStopPair(Blocked, stops)
 	boardSolved, resultBoard := Solve(&boardToSolve, pieces)
 
 	return boardSolved, resultBoard
@@ -74,7 +70,7 @@ func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
 
 func SolveAllStops() {
 
-	// TODO move print output to calling client
+	// TODO move print output to calling
 	solutions := make(map[StopPair]*Board)
 	noSolutionsSet := make(map[StopPair]struct{})
 	var EXISTS = struct{}{} // TODO make this a const

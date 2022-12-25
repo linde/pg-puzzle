@@ -58,6 +58,13 @@ func NewEmptyBoard(dim int) Board {
 	return board
 }
 
+func (b *Board) SetStopPair(val State, stops StopPair) {
+	for _, loc := range stops {
+		b.Set(loc.r, loc.c, val)
+	}
+}
+
+// TODO stop pairs usually work for all these, right?
 func (b *Board) SetN(val State, locs ...Loc) {
 	for _, loc := range locs {
 		b.Set(loc.r, loc.c, val)
