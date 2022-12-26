@@ -21,11 +21,12 @@ type Piece struct {
 func GetGamePieces() map[State]*Piece {
 
 	return map[State]*Piece{
-		Piece1: NewPiece(East, South),
-		Piece2: NewPiece(South, South, South),
-		Piece3: NewPiece(South, South, East),
+
+		Piece1: NewPiece(South, South, South, East),
+		Piece2: NewPiece(South, South, East),
+		Piece3: NewPiece(South, East, South),
 		Piece4: NewPiece(East, South, West, North),
-		Piece5: NewPiece(South, East, South),
+		Piece5: NewPiece(South, South, South),
 		Piece6: NewPiece(South, South, North, East),
 	}
 }

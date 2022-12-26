@@ -7,7 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSolving(t *testing.T) {
+func DontTestSolving(t *testing.T) {
+
+	// TODO uncomment and solve!
 
 	assert := assert.New(t)
 	assert.NotNil(assert)

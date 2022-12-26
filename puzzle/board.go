@@ -35,16 +35,12 @@ func NewLoc(r, c int) Loc {
 	return Loc{r, c}
 }
 
-type StopPair [2]Loc
+type StopSet [3]Loc
 
-func NormalizedStopPair(loc1, loc2 Loc) StopPair {
+func NormalizedStopSet(loc1, loc2, loc3 Loc) StopSet {
 
-	if loc1.r < loc2.r {
-		return StopPair{loc1, loc2}
-	} else if loc1.r == loc2.r && loc1.c <= loc2.c {
-		return StopPair{loc1, loc2}
-	}
-	return StopPair{loc2, loc1}
+	// TODO implement this!
+	return StopSet{loc1, loc2, loc3}
 }
 
 // TODO should this return a pointer?
@@ -58,7 +54,10 @@ func NewEmptyBoard(dim int) Board {
 	return board
 }
 
-func (b *Board) SetStopPair(val State, stops StopPair) {
+func (b *Board) SetStops(val State, stops StopSet) {
+
+	// TODO should be able to use SetN() with a stops[:]..., right?
+
 	for _, loc := range stops {
 		b.Set(loc.r, loc.c, val)
 	}

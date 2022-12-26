@@ -16,7 +16,7 @@ func NewSolveCmd() *cobra.Command {
 	}
 
 	// these are here for tests vs in init
-	cmd.Flags().StringVarP(&stopsArg, "stops", "s", "{0 0} {4 0}", "board stops to solve, '{[0-4] [0-4]} {[0-4] [0-4]}'")
+	cmd.Flags().StringVarP(&stopsArg, "stops", "s", "0,0 0,4 4,2", "board stops to solve, '[0-4],[0-4] [0-4],[0-4] [0-4],[0-4]'")
 	cmd.Flags().BoolVarP(&allStopsArg, "all", "a", false, "try every stop combination")
 
 	return cmd
@@ -31,21 +31,22 @@ func init() {
 	RootCmd.AddCommand(solveCmd)
 }
 
-func parseStop(stops string) (pz.StopPair, error) {
+func parseStop(stops string) (pz.StopSet, error) {
 
-	var r1, c1, r2, c2 int
+	var r1, c1, r2, c2, r3, c3 int
 
-	fmt.Sscanf(stops, "{%d %d} {%d %d}", &r1, &c1, &r2, &c2)
+	fmt.Sscanf(stops, "%d,%d %d,%d %d,%d", &r1, &c1, &r2, &c2, &r3, &c3)
 	for _, dim := range []int{r1, c1, r2, c2} {
 		if dim < 0 || dim >= pz.BOARD_DIMENSION {
-			return pz.StopPair{}, fmt.Errorf("invalid value for --stops: %s", stops)
+			return pz.StopSet{}, fmt.Errorf("invalid value for --stops: %s", stops)
 		}
 	}
 
 	loc1 := pz.NewLoc(r1, c1)
 	loc2 := pz.NewLoc(r2, c2)
+	loc3 := pz.NewLoc(r3, c3)
 
-	return pz.NormalizedStopPair(loc1, loc2), nil
+	return pz.NormalizedStopSet(loc1, loc2, loc3), nil
 
 }
 
@@ -53,7 +54,6 @@ func doSolveRun(cmd *cobra.Command, args []string) error {
 
 	if allStopsArg {
 		pz.SolveAllStops()
-
 		return nil
 	}
 
@@ -64,7 +64,7 @@ func doSolveRun(cmd *cobra.Command, args []string) error {
 
 	fmt.Fprintf(cmd.OutOrStdout(), "solving for: %v", stops)
 
-	boardSolved, resultBoard := puzzle.SolveStopPair(stops)
+	boardSolved, resultBoard := puzzle.SolveStopSet(stops)
 
 	fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v", boardSolved)
 	if boardSolved {

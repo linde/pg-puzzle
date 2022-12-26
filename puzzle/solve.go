@@ -6,12 +6,12 @@ import (
 	"reflect"
 )
 
-func SolveStopPair(stops StopPair) (bool, *Board) {
+func SolveStopSet(stops StopSet) (bool, *Board) {
 
 	pieces := GetGamePieces()
 
 	boardToSolve := NewEmptyBoard(BOARD_DIMENSION)
-	boardToSolve.SetStopPair(Blocked, stops)
+	boardToSolve.SetStops(Blocked, stops)
 	boardSolved, resultBoard := Solve(&boardToSolve, pieces)
 
 	return boardSolved, resultBoard
@@ -71,8 +71,8 @@ func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
 func SolveAllStops() {
 
 	// TODO move print output to calling
-	solutions := make(map[StopPair]*Board)
-	noSolutionsSet := make(map[StopPair]struct{})
+	solutions := make(map[StopSet]*Board)
+	noSolutionsSet := make(map[StopSet]struct{})
 	var EXISTS = struct{}{} // TODO make this a const
 
 	// TODO make a boardVisitor that doesnt double visit
@@ -80,34 +80,39 @@ func SolveAllStops() {
 		for c1 := 0; c1 < BOARD_DIMENSION; c1++ {
 			for r2 := 0; r2 < BOARD_DIMENSION; r2++ {
 				for c2 := 0; c2 < BOARD_DIMENSION; c2++ {
+					for r3 := 0; r3 < BOARD_DIMENSION; r3++ {
+						for c3 := 0; c3 < BOARD_DIMENSION; c3++ {
 
-					loc1 := NewLoc(r1, c1)
-					loc2 := NewLoc(r2, c2)
+							loc1 := NewLoc(r1, c1)
+							loc2 := NewLoc(r2, c2)
+							loc3 := NewLoc(r3, c3)
 
-					// skip two stops on the same spot
-					if reflect.DeepEqual(loc1, loc2) {
-						continue
+							// skip two stops on the same spot
+							if reflect.DeepEqual(loc1, loc2) || reflect.DeepEqual(loc1, loc3) || reflect.DeepEqual(loc2, loc3) {
+								continue
+							}
+
+							stops := NormalizedStopSet(loc1, loc2, loc3)
+
+							// check to make sure we havent tried this normalized pair
+							// TODO there must be a cooler way to visit the grid to avoid this
+
+							if _, ok := solutions[stops]; ok {
+								continue
+							} else if _, ok := noSolutionsSet[stops]; ok {
+								continue
+							}
+
+							log.Printf("solving for: %v ...", stops)
+							boardSolved, resultBoard := SolveStopSet(stops)
+							if boardSolved {
+								solutions[stops] = resultBoard
+							} else {
+								noSolutionsSet[stops] = EXISTS
+							}
+
+						}
 					}
-
-					stops := NormalizedStopPair(loc1, loc2)
-
-					// check to make sure we havent tried this normalized pair
-					// TODO there must be a cooler way to visit the grid to avoid this
-
-					if _, ok := solutions[stops]; ok {
-						continue
-					} else if _, ok := noSolutionsSet[stops]; ok {
-						continue
-					}
-
-					log.Printf("solving for: %v ...", stops)
-					boardSolved, resultBoard := SolveStopPair(stops)
-					if boardSolved {
-						solutions[stops] = resultBoard
-					} else {
-						noSolutionsSet[stops] = EXISTS
-					}
-
 				}
 			}
 		}
