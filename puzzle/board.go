@@ -26,23 +26,6 @@ const (
 	Piece6
 )
 
-type Loc struct {
-	r int
-	c int
-}
-
-func NewLoc(r, c int) Loc {
-	return Loc{r, c}
-}
-
-type StopSet [3]Loc
-
-func NormalizedStopSet(loc1, loc2, loc3 Loc) StopSet {
-
-	// TODO implement this!
-	return StopSet{loc1, loc2, loc3}
-}
-
 // TODO should this return a pointer?
 func NewEmptyBoard(dim int) Board {
 

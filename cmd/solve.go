@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"pgpuzzle/puzzle"
 	pz "pgpuzzle/puzzle"
 
 	"github.com/spf13/cobra"
@@ -62,13 +61,13 @@ func doSolveRun(cmd *cobra.Command, args []string) error {
 		return stopsParseError
 	}
 
-	fmt.Fprintf(cmd.OutOrStdout(), "solving for: %v", stops)
+	fmt.Fprintf(cmd.OutOrStdout(), "solving for: %v ...\n", stops)
 
-	boardSolved, resultBoard := puzzle.SolveStopSet(stops)
+	boardSolved, resultBoard := pz.SolveStopSet(stops)
 
-	fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v", boardSolved)
+	fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v\n", boardSolved)
 	if boardSolved {
-		fmt.Fprintf(cmd.OutOrStdout(), "\n%s", resultBoard)
+		fmt.Fprintf(cmd.OutOrStdout(), "%s", resultBoard)
 	}
 	return nil
 }
