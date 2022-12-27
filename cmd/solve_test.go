@@ -20,7 +20,7 @@ func Test_SolveCommand(t *testing.T) {
 
 	b := bytes.NewBufferString("")
 
-	cmd.SetOut(b) // TODO figure out why this isnt  working
+	cmd.SetOut(b)
 	cmd.SetErr(b)
 	cmd.Execute()
 
