@@ -3,7 +3,8 @@ package cmd
 import (
 	"fmt"
 	pz "pgpuzzle/puzzle"
-	"regexp"
+	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -32,33 +33,43 @@ func init() {
 }
 
 const (
-	PATTERN string = `^([0-9]),([0-9]) ([0-9]),([0-9]) ([0-9]),([0-9])$`
+	LOC_SEPARATOR    string = " "
+	ROWCOL_SEPARATOR string = ","
+	NUM_STOPS        int    = 3
 )
 
 func parseStop(stops string) (pz.StopSet, error) {
 
 	errAsNeeded := fmt.Errorf("invalid value for --stops: %s", stops)
 
-	var r1, c1, r2, c2, r3, c3 int
+	locStrings := strings.Split(stops, LOC_SEPARATOR)
 
-	match, _ := regexp.MatchString(PATTERN, stops)
-	if !match {
+	if len(locStrings) != NUM_STOPS {
 		return pz.StopSet{}, errAsNeeded
 	}
 
-	// TODO use a capture group instead of all these locals
-	fmt.Sscanf(stops, "%d,%d %d,%d %d,%d", &r1, &c1, &r2, &c2, &r3, &c3)
-	for _, dim := range []int{r1, c1, r2, c2, r3, c3} {
-		if dim < 0 || dim >= pz.BOARD_DIMENSION {
+	var locs [NUM_STOPS]pz.Loc
+
+	for i, locString := range locStrings {
+
+		rowcol := strings.Split(locString, ROWCOL_SEPARATOR)
+		if len(rowcol) != 2 {
 			return pz.StopSet{}, errAsNeeded
 		}
+
+		r, err := strconv.Atoi(rowcol[0])
+		if err != nil {
+			return pz.StopSet{}, errAsNeeded
+		}
+		c, err := strconv.Atoi(rowcol[1])
+		if err != nil {
+			return pz.StopSet{}, errAsNeeded
+		}
+
+		locs[i] = pz.NewLoc(r, c)
 	}
 
-	loc1 := pz.NewLoc(r1, c1)
-	loc2 := pz.NewLoc(r2, c2)
-	loc3 := pz.NewLoc(r3, c3)
-
-	return pz.NormalizedStopSet(loc1, loc2, loc3), nil
+	return pz.NormalizedStopSet(locs[0], locs[1], locs[2]), nil
 
 }
 

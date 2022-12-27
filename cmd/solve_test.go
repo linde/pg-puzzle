@@ -31,7 +31,7 @@ func Test_SolveCommand(t *testing.T) {
 
 }
 
-func Test_parseStop(t *testing.T) {
+func Test_ParseStops(t *testing.T) {
 	assert := assert.New(t)
 
 	tests := []struct {
