@@ -15,8 +15,7 @@ func Test_SolveCommand(t *testing.T) {
 	cmd := NewSolveCmd()
 	assert.NotNil(cmd)
 
-	cmd.SetArgs([]string{"--stops", "'{0 0} {4 0}'"})
-	//cmd.SetArgs([]string{"--all", "true"})
+	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--all=false"})
 
 	b := bytes.NewBufferString("")
 
@@ -28,6 +27,6 @@ func Test_SolveCommand(t *testing.T) {
 	assert.NotNil(out)
 	assert.Nil(err)
 
-	assert.Contains(strings.ToLower(string(out)), "solved")
+	assert.Contains(strings.ToLower(string(out)), "solved: true")
 
 }

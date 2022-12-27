@@ -34,8 +34,9 @@ func parseStop(stops string) (pz.StopSet, error) {
 
 	var r1, c1, r2, c2, r3, c3 int
 
+	// TODO use a regex and capture group instead of all these locals
 	fmt.Sscanf(stops, "%d,%d %d,%d %d,%d", &r1, &c1, &r2, &c2, &r3, &c3)
-	for _, dim := range []int{r1, c1, r2, c2} {
+	for _, dim := range []int{r1, c1, r2, c2, r3, c3} {
 		if dim < 0 || dim >= pz.BOARD_DIMENSION {
 			return pz.StopSet{}, fmt.Errorf("invalid value for --stops: %s", stops)
 		}

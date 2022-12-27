@@ -1,5 +1,11 @@
 package puzzle
 
+import (
+	"fmt"
+	"log"
+	"reflect"
+)
+
 func SolveStopSet(stops StopSet) (bool, *Board) {
 
 	pieces := GetGamePieces()
@@ -64,7 +70,6 @@ func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
 
 func SolveAllStops() {
 
-	/***
 	// TODO move print output to calling
 	solutions := make(map[StopSet]*Board)
 	noSolutionsSet := make(map[StopSet]struct{})
@@ -118,5 +123,4 @@ func SolveAllStops() {
 	}
 	fmt.Printf("Unsolvable stops: %d\n", len(noSolutionsSet))
 
-	***/
 }
