@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"strings"
 	"testing"
 
@@ -26,7 +26,7 @@ func GenericCommandRunner(t *testing.T, cmd *cobra.Command, outputAssertions ...
 
 	cmd.SetOut(b)
 	cmd.Execute()
-	out, err := ioutil.ReadAll(b)
+	out, err := io.ReadAll(b)
 	assert.Nil(err)
 	for _, oa := range outputAssertions {
 		assert.Contains(strings.ToLower(string(out)), oa)
