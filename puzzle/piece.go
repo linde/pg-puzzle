@@ -39,20 +39,20 @@ func NewPiece(steps ...Step) (p *Piece) {
 	return &Piece{steps: steps}
 }
 
-func doStep(r, c int, step Step) (int, int) {
+func doStep(loc Loc, step Step) Loc {
 
 	switch step {
 	case North:
-		return r - 1, c
+		return Loc{loc.r - 1, loc.c}
 	case East:
-		return r, c + 1
+		return Loc{loc.r, loc.c + 1}
 	case South:
-		return r + 1, c
+		return Loc{loc.r + 1, loc.c}
 	case West:
-		return r, c - 1
+		return Loc{loc.r, loc.c - 1}
 	}
 
-	return -1, -1
+	return Loc{-1, -1}
 }
 
 func (p *Piece) Rotate() (rotated *Piece) {
@@ -61,7 +61,7 @@ func (p *Piece) Rotate() (rotated *Piece) {
 
 	for _, step := range p.steps {
 
-		// TODO is it hacky or cool to do step+1 for North, East and South?
+		// TODO is it hacky or cool to do (step+1)%West?
 		switch step {
 		case North:
 			rotated.steps = append(rotated.steps, East)

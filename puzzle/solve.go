@@ -27,20 +27,20 @@ func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
 	}
 
 	// first step, inialize the remaining pieces array which is a copy
-	// of pieces with curLoc assigned and removed from it
-	var curLoc State
+	// of pieces with curLoc assigned and skip from the copying
+	var curState State
 	var curPiece *Piece
 
 	remainingPieces := make(map[State]*Piece)
 
 	curInitialized := false
-	for l, p := range pieces {
+	for s, p := range pieces {
 		if !curInitialized {
-			curLoc = l
+			curState = s
 			curPiece = p
 			curInitialized = true
 		} else {
-			remainingPieces[l] = p
+			remainingPieces[s] = p
 		}
 	}
 
@@ -50,7 +50,7 @@ func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
 
 				for rotationCount := 0; rotationCount < 3; rotationCount++ {
 
-					isSafe, resultBoard := IsSafePlacement(curPiece, board, rowIdx, colIdx, curLoc)
+					isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx}, curState)
 					if isSafe {
 						// fmt.Printf("success!\n%s", resultBoard)
 						restSafe, restBoard := Solve(resultBoard, remainingPieces)

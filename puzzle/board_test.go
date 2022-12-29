@@ -57,20 +57,20 @@ func TestNewBoard(t *testing.T) {
 	tests := []struct {
 		b        *Board
 		expected State
-		r, c     int
+		loc      Loc
 	}{
-		{b, Occupied, 0, 0},
-		{b, Occupied, 0, 1},
-		{b, Empty, 0, 2},
-		{b, Occupied, 1, 0},
-		{b, Empty, 1, 2},
-		{b, Empty, BOARD_DIMENSION - 1, BOARD_DIMENSION - 1},
+		{b, Occupied, Loc{0, 0}},
+		{b, Occupied, Loc{0, 1}},
+		{b, Empty, Loc{0, 2}},
+		{b, Occupied, Loc{1, 0}},
+		{b, Empty, Loc{1, 2}},
+		{b, Empty, Loc{BOARD_DIMENSION - 1, BOARD_DIMENSION - 1}},
 	}
 
 	for _, tt := range tests {
-		obs := tt.b.Get(tt.r, tt.c)
-		const msgFmt = "for (%d,%d) expected %s, got %s"
-		msg := fmt.Sprintf(msgFmt, tt.r, tt.c, tt.expected, obs)
+		obs := tt.b.Get(tt.loc)
+		const msgFmt = "for %v expected %s, got %s"
+		msg := fmt.Sprintf(msgFmt, tt.loc, tt.expected, obs)
 		assert.Equal(obs, tt.expected, msg)
 	}
 

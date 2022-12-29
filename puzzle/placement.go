@@ -3,23 +3,22 @@ package puzzle
 // TODO consider other loop arrangements to make the logic cleaner to remove
 // duplication of curVal checks and step increments
 
-func IsSafePlacement(p *Piece, b *Board, r, c int, val State) (bool, *Board) {
+func IsSafePlacement(p *Piece, b *Board, loc Loc, val State) (bool, *Board) {
 
 	// TODO -- check to make sure the piece isnt already present on the board.
 
 	// initialize a board we'll work with that has starts as the same as our arg
 	retBoard := b.Clone()
 
-	curR := r
-	curC := c
+	curLoc := loc
 
 	// first check the starting location to make sure it's unoccupied.
 	// if not, mark it and keep going.
-	curVal := retBoard.Get(curR, curC)
+	curVal := retBoard.Get(curLoc)
 	if curVal != Empty {
 		return false, nil
 	}
-	retBoard.Set(curR, curC, val)
+	retBoard.Set(curLoc, val)
 
 	// the check the landing spot for each subsequent step to make sure is value
 	// before moving to it.
@@ -29,8 +28,8 @@ func IsSafePlacement(p *Piece, b *Board, r, c int, val State) (bool, *Board) {
 	// makes a T shapae
 	for _, step := range p.steps {
 
-		curR, curC = doStep(curR, curC, step)
-		curVal = retBoard.Get(curR, curC)
+		curLoc = doStep(curLoc, step)
+		curVal = retBoard.Get(curLoc)
 
 		//fmt.Printf("IsSafePlacement: From %s @ %d,%d move %s \n%s", curVal, curR, curC, step, retBoard)
 
@@ -40,7 +39,7 @@ func IsSafePlacement(p *Piece, b *Board, r, c int, val State) (bool, *Board) {
 		}
 
 		// set the value for this move and check the next one
-		retBoard.Set(curR, curC, val)
+		retBoard.Set(curLoc, val)
 
 	}
 
