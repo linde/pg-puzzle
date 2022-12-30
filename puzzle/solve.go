@@ -44,12 +44,10 @@ func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
 		}
 	}
 
-	for rowIdx, row := range *board {
-		for colIdx, cell := range row {
-			if cell == Empty {
-
-				for rotationCount := 0; rotationCount < 3; rotationCount++ {
-
+	for rotationCount := 0; rotationCount < 4; rotationCount++ {
+		for rowIdx, row := range *board {
+			for colIdx, cell := range row {
+				if cell == Empty {
 					isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx}, curState)
 					if isSafe {
 						// fmt.Printf("success!\n%s", resultBoard)
@@ -58,11 +56,11 @@ func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
 							return true, restBoard
 						}
 					}
-					curPiece.Rotate()
 				}
 
 			}
 		}
+		curPiece.Rotate()
 	}
 
 	return false, nil
