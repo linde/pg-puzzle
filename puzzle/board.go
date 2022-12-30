@@ -15,6 +15,7 @@ type Board []Row
 
 const (
 	Empty State = iota
+	Unspecified
 	Occupied
 	Blocked
 	Invalid

@@ -15,28 +15,38 @@ const (
 )
 
 type Piece struct {
+	state State
 	steps []Step
 }
 
-func GetGamePieces() map[State]*Piece {
-
-	return map[State]*Piece{
-
-		Piece1: NewPiece(South, South, South, East),
-		Piece2: NewPiece(South, South, East),
-		Piece3: NewPiece(South, East, South),
-		Piece4: NewPiece(East, South, West, North),
-		Piece5: NewPiece(South, South, South),
-		Piece6: NewPiece(South, South, North, East),
+func DefaultPieces() []Piece {
+	pieces := []Piece{
+		Piece{Piece1, []Step{South, South, South, East}},
+		Piece{Piece2, []Step{South, South, East}},
+		Piece{Piece3, []Step{South, East, South}},
+		Piece{Piece4, []Step{East, South, West, North}},
+		Piece{Piece5, []Step{South, South, South}},
+		Piece{Piece6, []Step{South, South, North, East}},
 	}
+	return pieces
+}
+
+func PieceForState(pieces []Piece, state State) (matches []Piece) {
+
+	for _, p := range pieces {
+		if p.state == state {
+			matches = append(matches, p)
+		}
+	}
+	return
 }
 
 func NewPieceFrameArray(steps []Step) (p *Piece) {
-	return &Piece{steps: steps}
+	return &Piece{state: Unspecified, steps: steps}
 }
 
 func NewPiece(steps ...Step) (p *Piece) {
-	return &Piece{steps: steps}
+	return &Piece{state: Unspecified, steps: steps}
 }
 
 func doStep(loc Loc, step Step) Loc {
@@ -55,9 +65,11 @@ func doStep(loc Loc, step Step) Loc {
 	return Loc{-1, -1}
 }
 
+// TODO should this return a Piece not a *Piece
 func (p *Piece) Rotate() (rotated *Piece) {
 
 	rotated = &Piece{}
+	rotated.state = p.state
 
 	for _, step := range p.steps {
 

@@ -3,7 +3,7 @@ package puzzle
 // TODO consider other loop arrangements to make the logic cleaner to remove
 // duplication of curVal checks and step increments
 
-func IsSafePlacement(p *Piece, b *Board, loc Loc, val State) (bool, *Board) {
+func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 
 	// TODO -- check to make sure the piece isnt already present on the board.
 
@@ -18,7 +18,7 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc, val State) (bool, *Board) {
 	if curVal != Empty {
 		return false, nil
 	}
-	retBoard.Set(curLoc, val)
+	retBoard.Set(curLoc, p.state)
 
 	// the check the landing spot for each subsequent step to make sure is value
 	// before moving to it.
@@ -34,12 +34,12 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc, val State) (bool, *Board) {
 		//fmt.Printf("IsSafePlacement: From %s @ %d,%d move %s \n%s", curVal, curR, curC, step, retBoard)
 
 		// the current value needs to be either equal to the arg val or empty, otw error
-		if !(curVal == val || curVal == Empty) {
+		if !(curVal == p.state || curVal == Empty) {
 			return false, nil
 		}
 
 		// set the value for this move and check the next one
-		retBoard.Set(curLoc, val)
+		retBoard.Set(curLoc, p.state)
 
 	}
 

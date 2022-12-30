@@ -8,7 +8,7 @@ import (
 
 func SolveStopSet(stops StopSet) (bool, *Board) {
 
-	pieces := GetGamePieces()
+	pieces := DefaultPieces()
 
 	boardToSolve := NewEmptyBoard(BOARD_DIMENSION)
 	boardToSolve.SetStops(Blocked, stops)
@@ -20,47 +20,29 @@ func SolveStopSet(stops StopSet) (bool, *Board) {
 
 // TODO move to something more useful for slicing than a map, maybe an array of
 // struct with both State and Piece
-func Solve(board *Board, pieces map[State]*Piece) (bool, *Board) {
+func Solve(board *Board, pieces []Piece) (bool, *Board) {
 
 	if len(pieces) == 0 {
 		return true, board
 	}
 
-	// first step, inialize the remaining pieces array which is a copy
-	// of pieces with curLoc assigned and skip from the copying
-	var curState State
-	var curPiece *Piece
-
-	remainingPieces := make(map[State]*Piece)
-
-	curInitialized := false
-	for s, p := range pieces {
-		if !curInitialized {
-			curState = s
-			curPiece = p
-			curInitialized = true
-		} else {
-			remainingPieces[s] = p
-		}
-	}
-
+	curPiece := &pieces[0]
 	for rotationCount := 0; rotationCount < 4; rotationCount++ {
 		for rowIdx, row := range *board {
 			for colIdx, cell := range row {
 				if cell == Empty {
-					isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx}, curState)
+					isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx})
 					if isSafe {
 						// fmt.Printf("success!\n%s", resultBoard)
-						restSafe, restBoard := Solve(resultBoard, remainingPieces)
+						restSafe, restBoard := Solve(resultBoard, pieces[1:])
 						if restSafe {
 							return true, restBoard
 						}
 					}
 				}
-
 			}
 		}
-		curPiece.Rotate()
+		curPiece = curPiece.Rotate()
 	}
 
 	return false, nil

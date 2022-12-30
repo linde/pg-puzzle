@@ -32,16 +32,19 @@ func TestPieceRotation(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	pieces := GetGamePieces()
+	pieces := DefaultPieces()
 	assert.NotNil(pieces)
 
-	assert.Contains(pieces, Piece6)
-	p6potbelly := pieces[Piece6]
-	assert.Equal(p6potbelly.Rotate(), NewPiece(West, West, East, South))
+	matches := PieceForState(pieces, Piece6)
+	assert.NotNil(matches)
+	assert.Len(matches, 1)
+	p6potbelly := matches[0]
+	assert.Equal(p6potbelly.Rotate().steps, NewPiece(West, West, East, South).steps)
 
-	assert.Contains(pieces, Piece4)
-
-	p4square := pieces[Piece4]
+	matches = PieceForState(pieces, Piece4)
+	assert.NotNil(matches)
+	assert.Len(matches, 1)
+	p4square := matches[0]
 	p4squareRotated := p4square.Rotate()
 	assert.Equal(len(p4squareRotated.steps), len(p4squareRotated.steps))
 
@@ -50,7 +53,7 @@ func TestPieceRotation(t *testing.T) {
 		assert.Contains(p4squareRotated.steps, step)
 	}
 
-	assert.EqualValues(p6potbelly, p6potbelly.Rotate().Rotate().Rotate().Rotate())
-	assert.EqualValues(p4square, p4square.Rotate().Rotate().Rotate().Rotate())
+	assert.EqualValues(p6potbelly.steps, p6potbelly.Rotate().Rotate().Rotate().Rotate().steps)
+	assert.EqualValues(p4square.steps, p4square.Rotate().Rotate().Rotate().Rotate().steps)
 
 }

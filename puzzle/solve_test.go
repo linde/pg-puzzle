@@ -14,7 +14,7 @@ func DontTestSolving(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	pieces := GetGamePieces()
+	pieces := DefaultPieces()
 
 	nwswBoard := NewEmptyBoard(BOARD_DIMENSION)
 	nwswBoard.SetN(Blocked, Loc{0, 0}, Loc{4, 0})

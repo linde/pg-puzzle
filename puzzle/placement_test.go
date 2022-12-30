@@ -56,7 +56,7 @@ func TestPieceCoverage(t *testing.T) {
 
 	for testIdx, tt := range tests {
 
-		isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.loc, Piece1)
+		isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.loc)
 
 		errorMsg := fmt.Sprintf("Test index: %d\n%v @ %v\nisSafe: %v\n  Before  |  After   \n%s",
 			testIdx, tt.p, tt.loc, isSafe, ParallelBoardsString(tt.b, boardAfter))
