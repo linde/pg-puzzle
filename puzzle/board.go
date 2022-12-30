@@ -13,6 +13,7 @@ type State int
 type Row []State
 type Board []Row
 
+// TODO should Unspecified be the 0 value? we'd need to explicitly write empty in NewEmptyBoard
 const (
 	Empty State = iota
 	Unspecified
@@ -28,6 +29,7 @@ const (
 )
 
 // TODO should this return a pointer?
+// TODO if we change Unspecified to be the zero State, we need to copy Empty in the cells
 func NewEmptyBoard(dim int) Board {
 
 	board := make(Board, dim)

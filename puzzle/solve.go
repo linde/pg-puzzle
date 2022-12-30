@@ -26,7 +26,7 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 		return true, board
 	}
 
-	curPiece := &pieces[0]
+	curPiece := &(pieces[0])
 	for rotationCount := 0; rotationCount < 4; rotationCount++ {
 		for rowIdx, row := range *board {
 			for colIdx, cell := range row {
