@@ -5,9 +5,9 @@ package puzzle
 
 func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 
-	// TODO -- check to make sure the piece isnt already present on the board.
+	// TODO -- check to make sure the piece isnt already present on the board elsewhere
 
-	// initialize a board we'll work with that has starts as the same as our arg
+	// initialize a board we'll use to follow steps and which we'll return, if placement is safe
 	retBoard := b.Clone()
 
 	curLoc := loc
@@ -20,12 +20,11 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 	}
 	retBoard.Set(curLoc, p.state)
 
-	// the check the landing spot for each subsequent step to make sure is value
-	// before moving to it.
+	// now check each subsequent step's loc to make sure is value
+	// is Empty or our own piece's state before moving to it.
 	//
-	// it is ok in this case for the piece val to exist because we
-	// express shapes by backtracing. for example,  E E E W S S
-	// makes a T shapae
+	// it is ok for it to be our piece's state because some shapes
+	// backtrack. for example,  {E E E W S S} makes a T shape
 	for _, step := range p.steps {
 
 		curLoc = doStep(curLoc, step)
@@ -35,6 +34,7 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 
 		// the current value needs to be either equal to the arg val or empty, otw error
 		if !(curVal == p.state || curVal == Empty) {
+			// fmt.Printf("IsSafePlacement false: Piece %v @ %v, curLoc: %v\n%v\n", p, loc, curLoc, b)
 			return false, nil
 		}
 

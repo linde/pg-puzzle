@@ -76,42 +76,23 @@ func TestNewBoard(t *testing.T) {
 
 }
 
-func TestNormalizedStopPair(t *testing.T) {
+func TestCloneBoard(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	lowLoc := Loc{0, 0}
-	midLoc := Loc{0, 4}
-	highLoc := Loc{4, 2}
-	assert.NotEqual(lowLoc, midLoc, highLoc)
+	neb := NewEmptyBoard(BOARD_DIMENSION)
+	assert.NotNil(neb)
 
-	// TODO fix this after normalize works again.
+	nebClonePtr := neb.Clone()
+	assert.NotNil(nebClonePtr)
+	assert.Equal(neb, *nebClonePtr)
 
-	/**
+	// make sure the clone doesnt have refs to the orig
+	neb.Set(NewLoc(4, 4), Occupied)
+	assert.NotEqual(neb, *nebClonePtr)
 
-	lowHighPair := StopSet{lowLoc, midLoc, highLoc}
-	normedPair := NormalizedStopPair(highLoc, lowLoc)
-	assert.Equal(lowHighPair, normedPair)
-
-	equalPair := StopPair{highLoc, highLoc}
-	normedEqualPair := NormalizedStopPair(highLoc, highLoc)
-	assert.Equal(equalPair, normedEqualPair)
-	***/
 }
-
-/**
-func NormalizedStopPair(loc1, loc2 Loc) stopPair {
-
-	// TODO unit test this quite a bit!
-	if loc1.r < loc2.r {
-		return stopPair{loc1, loc2}
-	} else if loc1.r == loc2.r && loc1.c <= loc2.c {
-		return stopPair{loc1, loc2}
-	}
-	return stopPair{loc2, loc1}
-}
-**/
 
 func DontTestParallelBoardPrinter(t *testing.T) {
 

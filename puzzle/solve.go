@@ -33,7 +33,6 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 				if cell == Empty {
 					isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx})
 					if isSafe {
-						// fmt.Printf("success!\n%s", resultBoard)
 						restSafe, restBoard := Solve(resultBoard, pieces[1:])
 						if restSafe {
 							return true, restBoard
@@ -44,7 +43,6 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 		}
 		curPiece = curPiece.Rotate()
 	}
-
 	return false, nil
 }
 

@@ -21,11 +21,11 @@ type Piece struct {
 
 func DefaultPieces() []Piece {
 	pieces := []Piece{
-		Piece{Piece1, []Step{South, South, South, East}},
-		Piece{Piece2, []Step{South, South, East}},
+		Piece{Piece1, []Step{South, South, East}},
+		Piece{Piece2, []Step{South, East}},
 		Piece{Piece3, []Step{South, East, South}},
 		Piece{Piece4, []Step{East, South, West, North}},
-		Piece{Piece5, []Step{South, South, South}},
+		Piece{Piece5, []Step{South, South}},
 		Piece{Piece6, []Step{South, South, North, East}},
 	}
 	return pieces
@@ -91,7 +91,7 @@ func (p *Piece) Rotate() (rotated *Piece) {
 func (p Piece) String() string {
 
 	var b strings.Builder
-	fmt.Fprintf(&b, "Piece[")
+	fmt.Fprintf(&b, "Piece[%s, ", p.state)
 
 	delim := "" // start blank bc it goes in front
 	for _, step := range p.steps {

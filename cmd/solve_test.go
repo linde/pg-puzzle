@@ -14,8 +14,7 @@ func Test_SolveCommand(t *testing.T) {
 
 	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--all=false"})
 
-	// TODO this should really solve: true
-	GenericCommandRunner(t, cmd, "solving for: [{0 0} {0 4} {4 2}]", "solved: false")
+	GenericCommandRunner(t, cmd, "solving for: [{0 0} {0 4} {4 2}]", "solved: true")
 
 }
 
