@@ -25,15 +25,32 @@ func TestPiece(t *testing.T) {
 	assert.NotEqualValues(*threeNorthPiece, *rotatedThreeNorthPiece)
 	assert.EqualValues(*rotatedThreeNorthPiece, *threeEastPiece)
 
-	// do we care we think a square is different from its rotated self?
-	// that is, do we care the follow fails but ideally shouldnt?
-	// rotatedSquarePiece := squarePiece.Rotate()
-	// assert.EqualValues(squarePiece, rotatedSquarePiece)
+}
 
-	// rotate thee more times back to the home orientation
-	for i := 1; i <= 3; i++ {
-		rotatedThreeNorthPiece = rotatedThreeNorthPiece.Rotate()
+func TestPieceRotation(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
+	pieces := GetGamePieces()
+	assert.NotNil(pieces)
+
+	assert.Contains(pieces, Piece6)
+	p6potbelly := pieces[Piece6]
+	assert.Equal(p6potbelly.Rotate(), NewPiece(West, West, East, South))
+
+	assert.Contains(pieces, Piece4)
+
+	p4square := pieces[Piece4]
+	p4squareRotated := p4square.Rotate()
+	assert.Equal(len(p4squareRotated.steps), len(p4squareRotated.steps))
+
+	for _, step := range []Step{North, South, East, West} {
+		assert.Contains(p4square.steps, step)
+		assert.Contains(p4squareRotated.steps, step)
 	}
-	assert.EqualValues(rotatedThreeNorthPiece, threeNorthPiece)
+
+	assert.EqualValues(p6potbelly, p6potbelly.Rotate().Rotate().Rotate().Rotate())
+	assert.EqualValues(p4square, p4square.Rotate().Rotate().Rotate().Rotate())
 
 }
