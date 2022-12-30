@@ -37,6 +37,7 @@ func NewEmptyBoard(dim int) Board {
 	return board
 }
 
+// TODO return the board so we can chain with NewEmptyBoard()
 func (b *Board) SetStops(val State, stops StopSet) {
 
 	// TODO should be able to use SetN() with a stops[:]..., right?
