@@ -11,9 +11,9 @@ func TestPiece(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	threeNorthPiece := NewPiece(North, North, North)
-	threeEastPiece := NewPiece(East, East, East)
-	squarePiece := NewPiece(East, South, West, North)
+	threeNorthPiece := NewPiece(Unspecified, North, North, North)
+	threeEastPiece := NewPiece(Unspecified, East, East, East)
+	squarePiece := NewPiece(Unspecified, East, South, West, North)
 
 	// TODO add tests with skip directions too
 
@@ -35,13 +35,13 @@ func TestPieceRotation(t *testing.T) {
 	pieces := DefaultPieces()
 	assert.NotNil(pieces)
 
-	matches := FindPieceForState(pieces, Piece6)
+	matches := FindPieceByState(pieces, Piece6)
 	assert.NotNil(matches)
 	assert.Len(matches, 1)
 	p6potbelly := matches[0]
-	assert.Equal(p6potbelly.Rotate().steps, NewPiece(West, West, East, South).steps)
+	assert.Equal(p6potbelly.Rotate().steps, NewPiece(Unspecified, West, West, East, South).steps)
 
-	matches = FindPieceForState(pieces, Piece4)
+	matches = FindPieceByState(pieces, Piece4)
 	assert.NotNil(matches)
 	assert.Len(matches, 1)
 	p4square := matches[0]

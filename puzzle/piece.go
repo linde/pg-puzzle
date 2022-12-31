@@ -31,7 +31,7 @@ func DefaultPieces() []Piece {
 	return pieces
 }
 
-func FindPieceForState(pieces []Piece, state State) (matches []Piece) {
+func FindPieceByState(pieces []Piece, state State) (matches []Piece) {
 
 	for _, p := range pieces {
 		if p.state == state {
@@ -41,9 +41,8 @@ func FindPieceForState(pieces []Piece, state State) (matches []Piece) {
 	return
 }
 
-// TODO allow passing State as the first param
-func NewPiece(steps ...Step) (p *Piece) {
-	return &Piece{state: Unspecified, steps: steps}
+func NewPiece(state State, steps ...Step) (p *Piece) {
+	return &Piece{state, steps}
 }
 
 func doStep(loc Loc, step Step) Loc {
@@ -62,8 +61,7 @@ func doStep(loc Loc, step Step) Loc {
 	return Loc{-1, -1}
 }
 
-// TODO should this return a Piece not a *Piece
-func (p *Piece) Flip() (rotated *Piece) {
+func (p Piece) Flip() (rotated *Piece) {
 
 	rotated = &Piece{}
 	rotated.state = p.state
@@ -82,8 +80,7 @@ func (p *Piece) Flip() (rotated *Piece) {
 	return rotated
 }
 
-// TODO should this return a Piece not a *Piece
-func (p *Piece) Rotate() (rotated *Piece) {
+func (p Piece) Rotate() (rotated *Piece) {
 
 	rotated = &Piece{}
 	rotated.state = p.state
