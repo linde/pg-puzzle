@@ -45,6 +45,7 @@ func NewPieceFrameArray(steps []Step) (p *Piece) {
 	return &Piece{state: Unspecified, steps: steps}
 }
 
+// TODO allow passing State as the first param
 func NewPiece(steps ...Step) (p *Piece) {
 	return &Piece{state: Unspecified, steps: steps}
 }

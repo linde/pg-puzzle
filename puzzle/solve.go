@@ -80,7 +80,7 @@ func SolveAllStops() {
 		}
 	}
 
-	fmt.Printf("Solved: %d", len(solutions))
+	fmt.Printf("Solved: %d\n", len(solutions))
 	fmt.Printf("Unsolvable stops: %d\n", len(noSolutionsSet))
 
 	for noSolveStop := range noSolutionsSet {
