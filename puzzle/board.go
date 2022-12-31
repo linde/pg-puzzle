@@ -28,11 +28,11 @@ const (
 	Piece6
 )
 
-func NewEmptyBoard(dim int) *Board {
+func NewEmptyBoard() *Board {
 
-	board := make(Board, dim)
+	board := make(Board, BOARD_DIMENSION)
 	for rowIdx := range board {
-		row := make(Row, dim)
+		row := make(Row, BOARD_DIMENSION)
 		board[rowIdx] = row
 	}
 	return &board
@@ -60,7 +60,7 @@ func (b Board) Set(val State, locs ...Loc) *Board {
 func (orig Board) Clone() (neb *Board) {
 
 	// TODO sanity check orig cols dimensions?
-	neb = NewEmptyBoard(len(orig))
+	neb = NewEmptyBoard()
 
 	for rowIdx, row := range orig {
 		for colIdx, val := range row {
