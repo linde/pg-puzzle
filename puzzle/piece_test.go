@@ -35,13 +35,13 @@ func TestPieceRotation(t *testing.T) {
 	pieces := DefaultPieces()
 	assert.NotNil(pieces)
 
-	matches := PieceForState(pieces, Piece6)
+	matches := FindPieceForState(pieces, Piece6)
 	assert.NotNil(matches)
 	assert.Len(matches, 1)
 	p6potbelly := matches[0]
 	assert.Equal(p6potbelly.Rotate().steps, NewPiece(West, West, East, South).steps)
 
-	matches = PieceForState(pieces, Piece4)
+	matches = FindPieceForState(pieces, Piece4)
 	assert.NotNil(matches)
 	assert.Len(matches, 1)
 	p4square := matches[0]

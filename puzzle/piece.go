@@ -31,7 +31,7 @@ func DefaultPieces() []Piece {
 	return pieces
 }
 
-func PieceForState(pieces []Piece, state State) (matches []Piece) {
+func FindPieceForState(pieces []Piece, state State) (matches []Piece) {
 
 	for _, p := range pieces {
 		if p.state == state {
