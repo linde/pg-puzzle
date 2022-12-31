@@ -117,5 +117,4 @@ func DontTestParallelBoardPrinter(t *testing.T) {
 }
 
 // TODO check bad locations too, should be INVALID
-// TODO test clone!
 // TODO board.Set() tests

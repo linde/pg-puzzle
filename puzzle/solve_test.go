@@ -1,31 +1,21 @@
 package puzzle
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func DontTestSolving(t *testing.T) {
-
-	// TODO uncomment and solve!
+func TestSolving(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
 	pieces := DefaultPieces()
 
-	nwswBoard := NewEmptyBoard(BOARD_DIMENSION)
-	nwswBoard.SetN(Blocked, Loc{0, 0}, Loc{4, 0})
-	nwswSolved, _ := Solve(&nwswBoard, pieces)
-	nwswErrorMesg := fmt.Sprintf("Couldnt solve:\n%s", nwswBoard)
-	assert.True(nwswSolved, nwswErrorMesg)
+	vShapedBoard := NewEmptyBoard(BOARD_DIMENSION)
+	vShapedBoard.SetN(Blocked, Loc{0, 0}, Loc{0, 4}, Loc{4, 2})
+	vShapreSolved, _ := Solve(&vShapedBoard, pieces)
+	assert.True(vShapreSolved, "Couldnt solve:\n%s\n", vShapedBoard)
 
-	nwneBoard := NewEmptyBoard(BOARD_DIMENSION)
-	nwneBoard.SetN(Blocked, Loc{0, 0}, Loc{0, 4})
-	nwneSolved, _ := Solve(&nwneBoard, pieces)
-	assert.Falsef(nwneSolved, "Shouldnt have been able to solve:\n%s", nwneBoard)
 }
-
-// TODO test SolveLocations()
