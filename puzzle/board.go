@@ -50,26 +50,11 @@ func (b Board) SetStops(val State, stops StopSet) *Board {
 }
 
 // TODO stop pairs usually work for all these, right?
-func (b Board) SetN(val State, locs ...Loc) {
+func (b Board) SetN(val State, locs ...Loc) *Board {
 	for _, loc := range locs {
 		b.Set(loc, val)
 	}
-}
-
-func NewBoard(s [][]bool) *Board {
-
-	board := NewEmptyBoard(BOARD_DIMENSION)
-
-	// TODO: should we assert that s < BOARD_DIMENSION?
-	for rowIndex, row := range s {
-		for colIdx, col := range row {
-			if col {
-				(*board)[rowIndex][colIdx] = Occupied
-			}
-		}
-	}
-
-	return board
+	return &b
 }
 
 func (orig Board) Clone() (neb *Board) {
@@ -97,10 +82,11 @@ func (b Board) Get(loc Loc) State {
 	return b[loc.r][loc.c]
 }
 
-func (b Board) Set(loc Loc, val State) {
+func (b Board) Set(loc Loc, val State) *Board {
 
 	// TODO need tests and sanity checks for the setters and getters
 	b[loc.r][loc.c] = val
+	return &b
 }
 
 // TODO make a stringer that prints multiple boards side by side via ...Board

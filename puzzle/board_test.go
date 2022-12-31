@@ -43,10 +43,11 @@ func TestNewBoard(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	b := NewBoard([][]bool{
+	bLocs := BoardToLocArray([][]bool{
 		{true, true},
 		{true},
 	})
+	b := NewEmptyBoard(BOARD_DIMENSION).SetN(Occupied, bLocs...)
 	assert.NotNil(b)
 	assert.Equal(len(*b), BOARD_DIMENSION)
 
@@ -99,10 +100,11 @@ func DontTestParallelBoardPrinter(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	northWest := NewBoard([][]bool{
+	nwLocs := BoardToLocArray([][]bool{
 		{true, true},
 		{true},
 	})
+	northWest := NewEmptyBoard(BOARD_DIMENSION).SetN(Blocked, nwLocs...)
 
 	empty := NewEmptyBoard(BOARD_DIMENSION)
 
