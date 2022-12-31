@@ -17,8 +17,6 @@ func SolveStopSet(stops StopSet) (bool, *Board) {
 
 }
 
-// TODO move to something more useful for slicing than a map, maybe an array of
-// struct with both State and Piece
 func Solve(board *Board, pieces []Piece) (bool, *Board) {
 
 	if len(pieces) == 0 {
@@ -26,21 +24,26 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 	}
 
 	curPiece := &(pieces[0])
-	for rotationCount := 0; rotationCount < 4; rotationCount++ {
-		for rowIdx, row := range *board {
-			for colIdx, cell := range row {
-				if cell == Empty {
-					isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx})
-					if isSafe {
-						restSafe, restBoard := Solve(resultBoard, pieces[1:])
-						if restSafe {
-							return true, restBoard
+
+	for flipCount := 0; flipCount < 2; flipCount++ {
+		for rotationCount := 0; rotationCount < 4; rotationCount++ {
+			for rowIdx, row := range *board {
+				for colIdx, cell := range row {
+					if cell == Empty {
+						isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx})
+						if isSafe {
+							restSafe, restBoard := Solve(resultBoard, pieces[1:])
+							if restSafe {
+								return true, restBoard
+							}
 						}
 					}
 				}
 			}
+			curPiece = curPiece.Rotate()
 		}
-		curPiece = curPiece.Rotate()
+		// TODO figure out which pieces benefit from flipping
+		curPiece = curPiece.Flip()
 	}
 	return false, nil
 }

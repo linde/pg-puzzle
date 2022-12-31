@@ -67,6 +67,26 @@ func doStep(loc Loc, step Step) Loc {
 }
 
 // TODO should this return a Piece not a *Piece
+func (p *Piece) Flip() (rotated *Piece) {
+
+	rotated = &Piece{}
+	rotated.state = p.state
+
+	for _, step := range p.steps {
+
+		switch step {
+		case East:
+			rotated.steps = append(rotated.steps, West)
+		case West:
+			rotated.steps = append(rotated.steps, East)
+		default:
+			rotated.steps = append(rotated.steps, step)
+		}
+	}
+	return rotated
+}
+
+// TODO should this return a Piece not a *Piece
 func (p *Piece) Rotate() (rotated *Piece) {
 
 	rotated = &Piece{}

@@ -12,9 +12,13 @@ func Test_SolveCommand(t *testing.T) {
 	cmd := NewSolveCmd()
 	assert.NotNil(cmd)
 
+	// this is the default one
 	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--all=false"})
-
 	GenericCommandRunner(t, cmd, "solving for: [{0 0} {0 4} {4 2}]", "solved: true")
+
+	// This one requires flipping
+	cmd.SetArgs([]string{"--stops=0,3 1,2 3,2", "--all=false"})
+	GenericCommandRunner(t, cmd, "solved: true")
 
 }
 
