@@ -28,7 +28,6 @@ const (
 	Piece6
 )
 
-// TODO if we change Unspecified to be the zero State, we need to copy Empty in the cells
 func NewEmptyBoard(dim int) *Board {
 
 	board := make(Board, dim)
@@ -83,7 +82,6 @@ func (b Board) Get(loc Loc) State {
 	return b[loc.r][loc.c]
 }
 
-// TODO make a stringer that prints multiple boards side by side via ...Board
 func (p Board) String() string {
 
 	var b strings.Builder

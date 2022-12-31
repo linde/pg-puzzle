@@ -67,14 +67,11 @@ func SolveAllStops(workers int) (solved, unsolved []SolveResult) {
 		go solveWorker(workerId, stopSetJobs, stopSetJobResults)
 	}
 
-	//TODO we explicitly counting queued jobs, but shouldnt we just be
-	// able to range from stopSetJobResults? i guess this way we know
-	// we're fully done
-	jobsChecked := 0
+	stopSetsChecked := 0
 	for _, loc1 := range path1 {
 		for _, loc2 := range path2 {
 			for _, loc3 := range path3 {
-				jobsChecked++
+				stopSetsChecked++
 				stops := NormalizedStopSet(loc1, loc2, loc3)
 				stopSetJobs <- stops
 			}
@@ -82,7 +79,7 @@ func SolveAllStops(workers int) (solved, unsolved []SolveResult) {
 	}
 	close(stopSetJobs)
 
-	for resultCount := 0; resultCount < jobsChecked; resultCount++ {
+	for resultCount := 0; resultCount < stopSetsChecked; resultCount++ {
 		jobResult := <-stopSetJobResults
 		if jobResult.solved {
 			solved = append(solved, jobResult)
