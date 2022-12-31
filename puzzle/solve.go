@@ -48,45 +48,64 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 	return false, nil
 }
 
-func SolveAllStops() {
+type SolveResult struct {
+	stopSet  StopSet
+	solved   bool
+	solution *Board
+}
+
+func SolveAllStops(workers int) {
 
 	path1, path2, path3 := DefaultStopPaths()
 
-	// TODO move print output to calling
-	solutions := make(map[StopSet]*Board)
-	noSolutionsSet := make(map[StopSet]struct{})
-	var EXISTS = struct{}{} // TODO make this a const
+	jobsPossible := len(path1) * len(path2) * len(path3)
 
+	// TODO feels like the channel sizes are pretty big
+	stopSetJobs := make(chan StopSet, jobsPossible)
+	stopSetJobResults := make(chan SolveResult, jobsPossible)
+
+	for workerId := 0; workerId < workers; workerId++ {
+		go solveWorker(workerId, stopSetJobs, stopSetJobResults)
+	}
+
+	//TODO would should be able to just range from the results
+	jobsChecked := 0
 	for _, loc1 := range path1 {
 		for _, loc2 := range path2 {
 			for _, loc3 := range path3 {
-
+				jobsChecked++
 				stops := NormalizedStopSet(loc1, loc2, loc3)
-
-				// check to make sure we havent tried this normalized pair
-				// TODO there must be a cooler way to visit the grid to avoid this
-
-				if _, ok := solutions[stops]; ok {
-					continue
-				} else if _, ok := noSolutionsSet[stops]; ok {
-					continue
-				}
-
-				log.Printf("solving for: %v ...", stops)
-				boardSolved, resultBoard := SolveStopSet(stops)
-				if boardSolved {
-					solutions[stops] = resultBoard
-				} else {
-					noSolutionsSet[stops] = EXISTS
-				}
+				stopSetJobs <- stops
 			}
 		}
 	}
+	close(stopSetJobs)
 
-	fmt.Printf("Solved: %d\n", len(solutions))
-	fmt.Printf("Unsolvable stops: %d\n", len(noSolutionsSet))
-
-	for noSolveStop := range noSolutionsSet {
-		fmt.Printf("%v\n", noSolveStop)
+	solved, unsolved := []SolveResult{}, []SolveResult{}
+	for resultCount := 0; resultCount < jobsChecked; resultCount++ {
+		jobResult := <-stopSetJobResults
+		if jobResult.solved {
+			solved = append(solved, jobResult)
+		} else {
+			unsolved = append(unsolved, jobResult)
+		}
 	}
+	close(stopSetJobResults)
+
+	// TODO move print output to calling
+	fmt.Printf("Solved: %d, Unsolved: %d\n", len(solved), len(unsolved))
+	for _, unsolvedResult := range unsolved {
+		fmt.Printf("%v\n", unsolvedResult.stopSet)
+	}
+}
+
+func solveWorker(id int, stopSetJobs <-chan StopSet, stopSetJobResults chan<- SolveResult) {
+
+	for stopSet := range stopSetJobs {
+		log.Printf("worker %d: solving for: %v ...", id, stopSet)
+		boardSolved, resultBoard := SolveStopSet(stopSet)
+		result := SolveResult{stopSet, boardSolved, resultBoard}
+		stopSetJobResults <- result
+	}
+
 }

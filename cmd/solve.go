@@ -19,6 +19,7 @@ func NewSolveCmd() *cobra.Command {
 	// these are here for tests vs in init
 	cmd.Flags().StringVarP(&stopsArg, "stops", "s", "0,0 0,4 4,2", "board stops to solve, '[0-4],[0-4] [0-4],[0-4] [0-4],[0-4]'")
 	cmd.Flags().BoolVarP(&allStopsArg, "all", "a", false, "try every stop combination")
+	cmd.Flags().IntVarP(&workers, "workers", "n", 4, "number of workers for --all")
 
 	return cmd
 
@@ -27,6 +28,7 @@ func NewSolveCmd() *cobra.Command {
 var solveCmd = NewSolveCmd()
 var stopsArg string
 var allStopsArg bool
+var workers int
 
 func init() {
 	RootCmd.AddCommand(solveCmd)
@@ -76,7 +78,7 @@ func parseStop(stops string) (pz.StopSet, error) {
 func doSolveRun(cmd *cobra.Command, args []string) error {
 
 	if allStopsArg {
-		pz.SolveAllStops()
+		pz.SolveAllStops(workers)
 		return nil
 	}
 
