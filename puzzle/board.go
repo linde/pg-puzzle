@@ -28,30 +28,29 @@ const (
 	Piece6
 )
 
-// TODO should this return a pointer?
 // TODO if we change Unspecified to be the zero State, we need to copy Empty in the cells
-func NewEmptyBoard(dim int) Board {
+func NewEmptyBoard(dim int) *Board {
 
 	board := make(Board, dim)
 	for rowIdx := range board {
 		row := make(Row, dim)
 		board[rowIdx] = row
 	}
-	return board
+	return &board
 }
 
-// TODO return the board so we can chain with NewEmptyBoard()
-func (b *Board) SetStops(val State, stops StopSet) {
+func (b Board) SetStops(val State, stops StopSet) *Board {
 
 	// TODO should be able to use SetN() with a stops[:]..., right?
 
 	for _, loc := range stops {
 		b.Set(loc, val)
 	}
+	return &b
 }
 
 // TODO stop pairs usually work for all these, right?
-func (b *Board) SetN(val State, locs ...Loc) {
+func (b Board) SetN(val State, locs ...Loc) {
 	for _, loc := range locs {
 		b.Set(loc, val)
 	}
@@ -65,23 +64,25 @@ func NewBoard(s [][]bool) *Board {
 	for rowIndex, row := range s {
 		for colIdx, col := range row {
 			if col {
-				board[rowIndex][colIdx] = Occupied
+				(*board)[rowIndex][colIdx] = Occupied
 			}
 		}
 	}
 
-	return &board
+	return board
 }
 
-func (orig *Board) Clone() *Board {
+func (orig Board) Clone() (neb *Board) {
 
 	// TODO sanity check orig cols dimensions?
-	board := NewEmptyBoard(len(*orig))
+	neb = NewEmptyBoard(len(orig))
 
-	for rowIndex, row := range *orig {
-		copy(board[rowIndex], row)
+	for rowIdx, row := range orig {
+		for colIdx, val := range row {
+			neb.SetN(val, Loc{rowIdx, colIdx})
+		}
 	}
-	return &board
+	return
 }
 
 func (b Board) Get(loc Loc) State {

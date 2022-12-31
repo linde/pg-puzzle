@@ -50,8 +50,8 @@ func TestPieceCoverage(t *testing.T) {
 
 		{threeNorthPiece, nwOnlyBoard, loc0_3, false},
 
-		{potBellyPiece, &midEastBoard, NewLoc(1, 3), false},
-		{potBellyPiece, &midEastBoard, loc0_3, true},
+		{potBellyPiece, midEastBoard, NewLoc(1, 3), false},
+		{potBellyPiece, midEastBoard, loc0_3, true},
 	}
 
 	for testIdx, tt := range tests {

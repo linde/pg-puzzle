@@ -15,7 +15,7 @@ func TestSolving(t *testing.T) {
 
 	vShapedBoard := NewEmptyBoard(BOARD_DIMENSION)
 	vShapedBoard.SetN(Blocked, Loc{0, 0}, Loc{0, 4}, Loc{4, 2})
-	vShapreSolved, _ := Solve(&vShapedBoard, pieces)
+	vShapreSolved, _ := Solve(vShapedBoard, pieces)
 	assert.True(vShapreSolved, "Couldnt solve:\n%s\n", vShapedBoard)
 
 }

@@ -17,9 +17,9 @@ func TestInitBoard(t *testing.T) {
 	boardSize := 5
 	board := NewEmptyBoard(boardSize)
 	assert.NotNil(board)
-	assert.Equal(len(board), boardSize)
+	assert.Equal(len(*board), boardSize)
 
-	for _, row := range board {
+	for _, row := range *board {
 		assert.Equal(len(row), boardSize)
 		for _, state := range row {
 			assert.Equal(state, Empty)
@@ -52,7 +52,7 @@ func TestNewBoard(t *testing.T) {
 
 	bViaSet := NewEmptyBoard(BOARD_DIMENSION)
 	bViaSet.SetN(Occupied, Loc{0, 0}, Loc{0, 1}, Loc{1, 0})
-	assert.EqualValues(b, &bViaSet, "expected:\n%s\nnot equal:\n%s", b, bViaSet)
+	assert.EqualValues(b, bViaSet, "expected:\n%s\nnot equal:\n%s", b, bViaSet)
 
 	tests := []struct {
 		b        *Board
@@ -86,7 +86,7 @@ func TestCloneBoard(t *testing.T) {
 
 	nebClonePtr := neb.Clone()
 	assert.NotNil(nebClonePtr)
-	assert.Equal(neb, *nebClonePtr)
+	assert.Equal(*neb, *nebClonePtr)
 
 	// make sure the clone doesnt have refs to the orig
 	neb.Set(NewLoc(4, 4), Occupied)
@@ -106,7 +106,7 @@ func DontTestParallelBoardPrinter(t *testing.T) {
 
 	empty := NewEmptyBoard(BOARD_DIMENSION)
 
-	fmt.Printf("%s", ParallelBoardsString(northWest, &empty, &empty))
+	fmt.Printf("%s", ParallelBoardsString(northWest, empty, empty))
 
 	fmt.Printf("%s", ParallelBoardsString(nil))
 	fmt.Printf("%s", ParallelBoardsString(nil, nil))
