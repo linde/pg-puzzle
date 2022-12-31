@@ -6,7 +6,6 @@ import (
 
 type StopSet [3]Loc
 
-// TODO consider maybe making this varidic?
 func NormalizedStopSet(loc1, loc2, loc3 Loc) StopSet {
 
 	ss := []Loc{loc1, loc2, loc3}
