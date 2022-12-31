@@ -30,4 +30,6 @@ func Execute() {
 func init() {
 
 	// TODO do ENV and file config support too
+	// TODO add a flag to start pprof as in
+	// https://medium.com/@openmohan/profiling-in-golang-3e51c68eb6a8
 }
