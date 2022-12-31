@@ -13,9 +13,9 @@ func TestPieceCoverage(t *testing.T) {
 	assert.NotNil(assert)
 
 	emptyBoard := NewEmptyBoard(BOARD_DIMENSION)
-	nwOnlyBoard := NewEmptyBoard(BOARD_DIMENSION).SetN(Blocked, NewLoc(0, 0))
-	midNorthBoard := NewEmptyBoard(BOARD_DIMENSION).SetN(Blocked, NewLoc(0, 2))
-	midEastBoard := NewEmptyBoard(BOARD_DIMENSION).SetN(Blocked, NewLoc(2, 4))
+	nwOnlyBoard := NewEmptyBoard(BOARD_DIMENSION).Set(Blocked, NewLoc(0, 0))
+	midNorthBoard := NewEmptyBoard(BOARD_DIMENSION).Set(Blocked, NewLoc(0, 2))
+	midEastBoard := NewEmptyBoard(BOARD_DIMENSION).Set(Blocked, NewLoc(2, 4))
 
 	threeEastPiece := NewPiece(Unspecified, East, East, East)
 	threeSouthPiece := NewPiece(Unspecified, South, South, South)

@@ -42,17 +42,18 @@ func NewEmptyBoard(dim int) *Board {
 func (b Board) SetStops(val State, stops StopSet) *Board {
 
 	// TODO should be able to use SetN() with a stops[:]..., right?
-
 	for _, loc := range stops {
-		b.Set(loc, val)
+		b.Set(val, loc)
 	}
 	return &b
 }
 
 // TODO stop pairs usually work for all these, right?
-func (b Board) SetN(val State, locs ...Loc) *Board {
+func (b Board) Set(val State, locs ...Loc) *Board {
+
+	// TODO have sanity checks
 	for _, loc := range locs {
-		b.Set(loc, val)
+		b[loc.r][loc.c] = val
 	}
 	return &b
 }
@@ -64,7 +65,7 @@ func (orig Board) Clone() (neb *Board) {
 
 	for rowIdx, row := range orig {
 		for colIdx, val := range row {
-			neb.SetN(val, Loc{rowIdx, colIdx})
+			neb.Set(val, Loc{rowIdx, colIdx})
 		}
 	}
 	return
@@ -80,13 +81,6 @@ func (b Board) Get(loc Loc) State {
 	}
 
 	return b[loc.r][loc.c]
-}
-
-func (b Board) Set(loc Loc, val State) *Board {
-
-	// TODO need tests and sanity checks for the setters and getters
-	b[loc.r][loc.c] = val
-	return &b
 }
 
 // TODO make a stringer that prints multiple boards side by side via ...Board

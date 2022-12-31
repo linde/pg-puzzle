@@ -18,7 +18,7 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 	if curVal != Empty {
 		return false, nil
 	}
-	retBoard.Set(curLoc, p.state)
+	retBoard.Set(p.state, curLoc)
 
 	// now check each subsequent step's loc to make sure is value
 	// is Empty or our own piece's state before moving to it.
@@ -39,7 +39,7 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 		}
 
 		// set the value for this move and check the next one
-		retBoard.Set(curLoc, p.state)
+		retBoard.Set(p.state, curLoc)
 
 	}
 
