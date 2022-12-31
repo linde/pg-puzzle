@@ -1,7 +1,6 @@
 package puzzle
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -54,7 +53,7 @@ type SolveResult struct {
 	solution *Board
 }
 
-func SolveAllStops(workers int) {
+func SolveAllStops(workers int) (solved, unsolved []SolveResult) {
 
 	path1, path2, path3 := DefaultStopPaths()
 
@@ -62,13 +61,16 @@ func SolveAllStops(workers int) {
 
 	// TODO feels like the channel sizes are pretty big
 	stopSetJobs := make(chan StopSet, jobsPossible)
-	stopSetJobResults := make(chan SolveResult, jobsPossible)
+	stopSetJobResults := make(chan SolveResult, workers)
 
-	for workerId := 0; workerId < workers; workerId++ {
+	// launch our workers ensuring there is at least one
+	for workerId := 1; workerId < workers; workerId++ {
 		go solveWorker(workerId, stopSetJobs, stopSetJobResults)
 	}
 
-	//TODO would should be able to just range from the results
+	//TODO we explicitly counting queued jobs, but shouldnt we just be
+	// able to range from stopSetJobResults? i guess this way we know
+	// we're fully done
 	jobsChecked := 0
 	for _, loc1 := range path1 {
 		for _, loc2 := range path2 {
@@ -81,7 +83,6 @@ func SolveAllStops(workers int) {
 	}
 	close(stopSetJobs)
 
-	solved, unsolved := []SolveResult{}, []SolveResult{}
 	for resultCount := 0; resultCount < jobsChecked; resultCount++ {
 		jobResult := <-stopSetJobResults
 		if jobResult.solved {
@@ -92,11 +93,7 @@ func SolveAllStops(workers int) {
 	}
 	close(stopSetJobResults)
 
-	// TODO move print output to calling
-	fmt.Printf("Solved: %d, Unsolved: %d\n", len(solved), len(unsolved))
-	for _, unsolvedResult := range unsolved {
-		fmt.Printf("%v\n", unsolvedResult.stopSet)
-	}
+	return
 }
 
 func solveWorker(id int, stopSetJobs <-chan StopSet, stopSetJobResults chan<- SolveResult) {
@@ -107,5 +104,4 @@ func solveWorker(id int, stopSetJobs <-chan StopSet, stopSetJobResults chan<- So
 		result := SolveResult{stopSet, boardSolved, resultBoard}
 		stopSetJobResults <- result
 	}
-
 }

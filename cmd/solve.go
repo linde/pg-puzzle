@@ -78,7 +78,13 @@ func parseStop(stops string) (pz.StopSet, error) {
 func doSolveRun(cmd *cobra.Command, args []string) error {
 
 	if allStopsArg {
-		pz.SolveAllStops(workers)
+		solved, unsolved := pz.SolveAllStops(workers)
+
+		fmt.Printf("Solved: %d, Unsolved: %d\n", len(solved), len(unsolved))
+		for _, unsolvedResult := range unsolved {
+			fmt.Printf("%v\n", unsolvedResult)
+		}
+
 		return nil
 	}
 
