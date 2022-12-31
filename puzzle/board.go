@@ -38,16 +38,7 @@ func NewEmptyBoard() *Board {
 	return &board
 }
 
-func (b Board) SetStops(val State, stops StopSet) *Board {
-
-	// TODO should be able to use SetN() with a stops[:]..., right?
-	for _, loc := range stops {
-		b.Set(val, loc)
-	}
-	return &b
-}
-
-// TODO stop pairs usually work for all these, right?
+// this also works for StopSets slices
 func (b Board) Set(val State, locs ...Loc) *Board {
 
 	// TODO have sanity checks
@@ -59,7 +50,6 @@ func (b Board) Set(val State, locs ...Loc) *Board {
 
 func (orig Board) Clone() (neb *Board) {
 
-	// TODO sanity check orig cols dimensions?
 	neb = NewEmptyBoard()
 
 	for rowIdx, row := range orig {

@@ -8,7 +8,7 @@ func SolveStopSet(stops StopSet) (bool, *Board) {
 
 	pieces := DefaultPieces()
 
-	boardToSolve := NewEmptyBoard().SetStops(Blocked, stops)
+	boardToSolve := NewEmptyBoard().Set(Blocked, (stops[:])...)
 	boardSolved, resultBoard := Solve(boardToSolve, pieces)
 
 	return boardSolved, resultBoard
