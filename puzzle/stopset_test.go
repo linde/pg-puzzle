@@ -23,3 +23,20 @@ func TestNormalizedStopSet(t *testing.T) {
 	}
 
 }
+
+func TestDefaultStopPaths(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
+	path1, path2, path3 := DefaultStopPaths()
+
+	// these stops arent reacable to be set in the puzzle
+	unavailableStops := []Loc{Loc{0, 2}, Loc{2, 0}, Loc{3, 3}}
+
+	for _, stop := range unavailableStops {
+		assert.NotContains(path1, stop)
+		assert.NotContains(path2, stop)
+		assert.NotContains(path3, stop)
+	}
+}
