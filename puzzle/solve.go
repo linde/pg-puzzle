@@ -52,6 +52,7 @@ type SolveResult struct {
 	solution *Board
 }
 
+// TODO figure out why --workers=1 hangs
 func SolveAllStops(workers int) (solved, unsolved []SolveResult) {
 
 	path1, path2, path3 := DefaultStopPaths()

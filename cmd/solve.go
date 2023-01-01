@@ -19,7 +19,7 @@ func NewSolveCmd() *cobra.Command {
 	// these are here for tests vs in init
 	cmd.Flags().StringVarP(&stopsArg, "stops", "s", "0,0 0,4 4,2", "board stops to solve, '[0-4],[0-4] [0-4],[0-4] [0-4],[0-4]'")
 	cmd.Flags().BoolVarP(&allStopsArg, "all", "a", false, "try every stop combination, not allowed with --stops")
-	cmd.Flags().IntVarP(&workers, "workers", "n", 1, "number of workers for --all")
+	cmd.Flags().IntVarP(&workers, "workers", "n", 8, "number of workers for --all")
 
 	cmd.MarkFlagsMutuallyExclusive("stops", "all")
 
