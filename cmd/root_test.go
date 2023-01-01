@@ -25,11 +25,12 @@ func GenericCommandRunner(t *testing.T, cmd *cobra.Command, outputAssertions ...
 	b := bytes.NewBufferString("")
 
 	cmd.SetOut(b)
+	cmd.SetErr(b)
 	cmd.Execute()
-	out, err := io.ReadAll(b)
-	assert.Nil(err)
+	out, _ := io.ReadAll(b)
+
 	for _, oa := range outputAssertions {
-		assert.Contains(strings.ToLower(string(out)), oa)
+		assert.Contains(strings.ToLower(string(out)), strings.ToLower(oa))
 	}
 
 }

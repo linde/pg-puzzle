@@ -13,12 +13,16 @@ func Test_SolveCommand(t *testing.T) {
 	assert.NotNil(cmd)
 
 	// this is the default one
-	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--all=false"})
+	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2"})
 	GenericCommandRunner(t, cmd, "solving for: [{0 0} {0 4} {4 2}]", "solved: true")
 
 	// This one requires flipping
-	cmd.SetArgs([]string{"--stops=0,3 1,2 3,2", "--all=false"})
+	cmd.SetArgs([]string{"--stops=0,3 1,2 3,2"})
 	GenericCommandRunner(t, cmd, "solved: true")
+
+	bothFlagsError := "Error: if any flags in the group [stops all] are set none of the others can be"
+	cmd.SetArgs([]string{"--all", "--stops=0,3 1,2 3,2"})
+	GenericCommandRunner(t, cmd, bothFlagsError)
 
 }
 
