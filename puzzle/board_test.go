@@ -65,6 +65,9 @@ func TestNewBoard(t *testing.T) {
 		{b, Occupied, Loc{1, 0}},
 		{b, Empty, Loc{1, 2}},
 		{b, Empty, Loc{BOARD_DIMENSION - 1, BOARD_DIMENSION - 1}},
+		{b, Invalid, Loc{-99, -99}},
+		{b, Invalid, Loc{0, -99}},
+		{b, Invalid, Loc{-99, 0}},
 	}
 
 	for _, tt := range tests {
@@ -94,7 +97,7 @@ func TestCloneBoard(t *testing.T) {
 
 }
 
-func DontTestParallelBoardPrinter(t *testing.T) {
+func TestParallelBoardPrinter(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NotNil(assert)
@@ -104,18 +107,19 @@ func DontTestParallelBoardPrinter(t *testing.T) {
 		{true},
 	})
 	northWest := NewEmptyBoard().Set(Blocked, nwLocs...)
-
 	empty := NewEmptyBoard()
 
-	fmt.Printf("%s", ParallelBoardsString(northWest, empty, empty))
+	nwEmptyEmptyMatch := "|B B E E E|E E E E E|E E E E E|"
+	assert.Contains(ParallelBoardsString(northWest, empty, empty), nwEmptyEmptyMatch)
 
-	fmt.Printf("%s", ParallelBoardsString(nil))
-	fmt.Printf("%s", ParallelBoardsString(nil, nil))
+	assert.Contains(ParallelBoardsString(nil), "1 nil boards")
+	assert.Contains(ParallelBoardsString(nil, nil), "2 nil boards")
 
-	fmt.Printf("%s", ParallelBoardsString(northWest, nil))
-	fmt.Printf("%s", ParallelBoardsString(nil, northWest))
+	leftNilMatch := "|   nil   |E E E E E|"
+	assert.Contains(ParallelBoardsString(nil, northWest), leftNilMatch)
+	rightNilMatch := "|E E E E E|   nil   |"
+	assert.Contains(ParallelBoardsString(northWest, nil), rightNilMatch)
 
 }
 
-// TODO check bad locations too, should be INVALID
 // TODO board.Set() tests
