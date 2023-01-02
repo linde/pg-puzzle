@@ -48,16 +48,16 @@ func (b Board) Set(val State, locs ...Loc) *Board {
 	return &b
 }
 
-func (orig Board) Clone() (neb *Board) {
+func (orig Board) Clone() *Board {
 
-	neb = NewEmptyBoard()
-
-	for rowIdx, row := range orig {
-		for colIdx, val := range row {
-			neb.Set(val, Loc{rowIdx, colIdx})
-		}
+	neb := make([]Row, len(orig))
+	for i := range orig {
+		neb[i] = make(Row, len(orig[i]))
+		copy(neb[i], orig[i])
 	}
-	return
+
+	b := Board(neb)
+	return &b
 }
 
 func (b Board) Get(loc Loc) State {

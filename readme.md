@@ -1,9 +1,14 @@
 
+
+# About
 this is a a project based on a puzzle game i was given. the point is to test if the game has any configuration which is unsolvable.
 
 <img src="doc/puzzle.jpg" width="400">
 
 Currently, it can solve a set of stops (ie the 3 pieces you move around to make a puzzle) and also roll through and try all stops.
+
+
+# Usage
 
 ```bash
 $ go run main.go solve --help
