@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	pz "pgpuzzle/puzzle"
 	"strconv"
@@ -20,17 +21,18 @@ func NewSolveCmd() *cobra.Command {
 	cmd.Flags().StringVarP(&stopsArg, "stops", "s", "0,0 0,4 4,2", "board stops to solve, '[0-4],[0-4] [0-4],[0-4] [0-4],[0-4]'")
 	cmd.Flags().BoolVarP(&allStopsArg, "all", "a", false, "try every stop combination, not allowed with --stops")
 	cmd.Flags().IntVarP(&workers, "workers", "n", 8, "number of workers for --all")
-
-	cmd.MarkFlagsMutuallyExclusive("stops", "all")
+	cmd.Flags().IntVarP(&cap, "cap", "c", 0, "a cap stops combos (per stop path), with --all")
+	cmd.Flags().StringVarP(&outFormat, "out", "o", "", "with --all, print all solutions in one of:[json]")
 
 	return cmd
-
 }
 
 var solveCmd = NewSolveCmd()
 var stopsArg string
 var allStopsArg bool
 var workers int
+var cap int
+var outFormat string
 
 func init() {
 	RootCmd.AddCommand(solveCmd)
@@ -72,19 +74,23 @@ func parseStop(stops string) (pz.StopSet, error) {
 
 		locs[i] = pz.NewLoc(r, c)
 	}
-
 	return pz.NormalizedStopSet(locs[0], locs[1], locs[2]), nil
-
 }
 
 func doSolveRun(cmd *cobra.Command, args []string) error {
 
 	if allStopsArg {
-		solved, unsolved := pz.SolveAllStops(workers)
+		solved, unsolved := pz.SolveAllStops(workers, cap)
 
-		fmt.Printf("Solved: %d, Unsolved: %d\n", len(solved), len(unsolved))
-		for _, unsolvedResult := range unsolved {
-			fmt.Printf("%v\n", unsolvedResult)
+		switch outFormat {
+		case "json":
+			resultsCombined := append(solved, unsolved...)
+			if outFormat == "json" {
+				resultsCombinedJson, _ := json.Marshal(resultsCombined)
+				fmt.Fprintln(cmd.OutOrStdout(), string(resultsCombinedJson))
+			}
+		default:
+			fmt.Fprintf(cmd.OutOrStdout(), "Solved: %d, Unsolved: %d\n", len(solved), len(unsolved))
 		}
 
 		return nil

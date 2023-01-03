@@ -1,8 +1,10 @@
 package puzzle
 
-import (
-	"log"
-)
+type SolveResult struct {
+	StopSet  StopSet
+	Solved   bool
+	Solution *Board
+}
 
 func SolveStopSet(stops StopSet) (bool, *Board) {
 
@@ -46,17 +48,16 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 	return false, nil
 }
 
-type SolveResult struct {
-	stopSet  StopSet
-	solved   bool
-	solution *Board
-}
-
 // TODO figure out why --workers=1 hangs
-func SolveAllStops(workers int) (solved, unsolved []SolveResult) {
+func SolveAllStops(workers int, cap int) (solved, unsolved []SolveResult) {
 
 	path1, path2, path3 := DefaultStopPaths()
 
+	if cap > 0 {
+		path1 = path1[0:cap]
+		path2 = path2[0:cap]
+		path3 = path3[0:cap]
+	}
 	jobsPossible := len(path1) * len(path2) * len(path3)
 
 	// TODO feels like the channel sizes are pretty big
@@ -82,7 +83,7 @@ func SolveAllStops(workers int) (solved, unsolved []SolveResult) {
 
 	for resultCount := 0; resultCount < stopSetsChecked; resultCount++ {
 		jobResult := <-stopSetJobResults
-		if jobResult.solved {
+		if jobResult.Solved {
 			solved = append(solved, jobResult)
 		} else {
 			unsolved = append(unsolved, jobResult)
@@ -96,7 +97,6 @@ func SolveAllStops(workers int) (solved, unsolved []SolveResult) {
 func solveWorker(id int, stopSetJobs <-chan StopSet, stopSetJobResults chan<- SolveResult) {
 
 	for stopSet := range stopSetJobs {
-		log.Printf("worker %d: solving for: %v ...", id, stopSet)
 		boardSolved, resultBoard := SolveStopSet(stopSet)
 		result := SolveResult{stopSet, boardSolved, resultBoard}
 		stopSetJobResults <- result

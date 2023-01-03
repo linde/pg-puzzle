@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	"math"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,10 +22,13 @@ func Test_SolveCommand(t *testing.T) {
 	cmd.SetArgs([]string{"--stops=0,3 1,2 3,2"})
 	GenericCommandRunner(t, cmd, "solved: true")
 
-	bothFlagsError := "Error: if any flags in the group [stops all] are set none of the others can be"
-	cmd.SetArgs([]string{"--all", "--stops=0,3 1,2 3,2"})
-	GenericCommandRunner(t, cmd, bothFlagsError)
+	capToTest := 2 // a cap of two will have 2^^3 combos because we have 3 stop paths
+	capParam := fmt.Sprintf("--cap=%d", capToTest)
+	targetSolvedAssertion := fmt.Sprintf("solved: %d", int(math.Pow(float64(capToTest), 3)))
+	cmd.SetArgs([]string{"--all", capParam})
+	GenericCommandRunner(t, cmd, targetSolvedAssertion)
 
+	// TODO add tests for -o=json
 }
 
 func Test_ParseStops(t *testing.T) {

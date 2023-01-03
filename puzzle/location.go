@@ -1,5 +1,7 @@
 package puzzle
 
+import "encoding/json"
+
 type Loc struct {
 	r int
 	c int
@@ -22,4 +24,22 @@ func BoardToLocArray(board [][]bool) (retLocs []Loc) {
 		}
 	}
 	return
+}
+
+// made a custom marsharler to avoid exporting `r` and `c`
+// but if we ever take Locs from a file, we might need
+// func (ct *customTime) UnmarshalJSON(d []byte) error
+
+func (loc Loc) MarshalJSON() ([]byte, error) {
+	j, err := json.Marshal(struct {
+		Row int `json:"row"`
+		Col int `json:"col"`
+	}{
+		Row: loc.r,
+		Col: loc.c,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return j, nil
 }
