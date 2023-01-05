@@ -37,6 +37,30 @@ func TestStateStringer(t *testing.T) {
 
 }
 
+func TestBoardStringer(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
+	emptyBoard := NewEmptyBoard()
+	emptyBoardStr := `
+E E E E E
+E E E E E
+E E E E E
+E E E E E
+E E E E E`
+	assert.Equal(emptyBoard.String(), emptyBoardStr[1:]) // skip the newline first char
+
+	nwBoard := NewEmptyBoard().Set(Blocked, Loc{0, 0})
+	nwBoardStr := `
+B E E E E
+E E E E E
+E E E E E
+E E E E E
+E E E E E`
+	assert.Equal(nwBoard.String(), nwBoardStr[1:]) // skip the newline first char
+}
+
 func TestNewBoard(t *testing.T) {
 
 	assert := assert.New(t)

@@ -74,16 +74,13 @@ func (b Board) Get(loc Loc) State {
 
 func (p Board) String() string {
 
-	var b strings.Builder
-
-	for _, row := range p {
-		for _, col := range row {
-			fmt.Fprintf(&b, "%s ", col)
-		}
-		fmt.Fprintf(&b, "\n")
-
+	rowStrFunc := func(row Row) string {
+		statesValuesFromRow := Map([]State(row), func(s State) string { return s.String() })
+		return strings.Join(statesValuesFromRow, " ")
 	}
-	return b.String()
+	rowStringsFromBoard := Map([]Row(p), rowStrFunc)
+
+	return strings.Join(rowStringsFromBoard, "\n")
 }
 
 func ParallelBoardsString(boards ...*Board) string {
