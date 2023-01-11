@@ -2,6 +2,7 @@ package puzzle
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,20 +22,9 @@ func TestInitBoard(t *testing.T) {
 	for _, row := range *board {
 		assert.Equal(len(row), BOARD_DIMENSION)
 		for _, state := range row {
-			assert.Equal(state, Empty)
+			assert.Equal(state, _Empty_)
 		}
 	}
-}
-
-func TestStateStringer(t *testing.T) {
-
-	assert := assert.New(t)
-	assert.NotNil(assert)
-
-	assert.EqualValues(Occupied.String(), "O")
-	assert.EqualValues(Empty.String(), "E")
-	assert.EqualValues(Blocked.String(), "B")
-
 }
 
 func TestNewBoard(t *testing.T) {
@@ -46,12 +36,12 @@ func TestNewBoard(t *testing.T) {
 		{true, true},
 		{true},
 	})
-	b := NewEmptyBoard().Set(Occupied, bLocs...)
+	b := NewEmptyBoard().Set(Blocked, bLocs...)
 	assert.NotNil(b)
 	assert.Equal(len(*b), BOARD_DIMENSION)
 
 	bViaSet := NewEmptyBoard()
-	bViaSet.Set(Occupied, Loc{0, 0}, Loc{0, 1}, Loc{1, 0})
+	bViaSet.Set(Blocked, Loc{0, 0}, Loc{0, 1}, Loc{1, 0})
 	assert.EqualValues(b, bViaSet, "expected:\n%s\nnot equal:\n%s", b, bViaSet)
 
 	tests := []struct {
@@ -59,12 +49,12 @@ func TestNewBoard(t *testing.T) {
 		expected State
 		loc      Loc
 	}{
-		{b, Occupied, Loc{0, 0}},
-		{b, Occupied, Loc{0, 1}},
-		{b, Empty, Loc{0, 2}},
-		{b, Occupied, Loc{1, 0}},
-		{b, Empty, Loc{1, 2}},
-		{b, Empty, Loc{BOARD_DIMENSION - 1, BOARD_DIMENSION - 1}},
+		{b, Blocked, Loc{0, 0}},
+		{b, Blocked, Loc{0, 1}},
+		{b, _Empty_, Loc{0, 2}},
+		{b, Blocked, Loc{1, 0}},
+		{b, _Empty_, Loc{1, 2}},
+		{b, _Empty_, Loc{BOARD_DIMENSION - 1, BOARD_DIMENSION - 1}},
 		{b, Invalid, Loc{-99, -99}},
 		{b, Invalid, Loc{0, -99}},
 		{b, Invalid, Loc{-99, 0}},
@@ -92,9 +82,21 @@ func TestCloneBoard(t *testing.T) {
 	assert.Equal(*neb, *nebClonePtr)
 
 	// make sure the clone doesnt have refs to the orig
-	neb.Set(Occupied, NewLoc(4, 4))
+	neb.Set(Blocked, NewLoc(4, 4))
 	assert.NotEqual(neb, *nebClonePtr)
 
+}
+
+// TODO move this to a utility location
+func ReplaceAll(base string, replacements map[string]string) string {
+
+	returnStr := base
+
+	for pattern, replacement := range replacements {
+		returnStr = strings.ReplaceAll(returnStr, pattern, replacement)
+	}
+
+	return returnStr
 }
 
 func TestParallelBoardPrinter(t *testing.T) {
@@ -109,15 +111,19 @@ func TestParallelBoardPrinter(t *testing.T) {
 	northWest := NewEmptyBoard().Set(Blocked, nwLocs...)
 	empty := NewEmptyBoard()
 
-	nwEmptyEmptyMatch := "|B B E E E|E E E E E|E E E E E|"
+	replacements := map[string]string{
+		"B": Blocked.String(),
+		"E": _Empty_.String(),
+	}
+	nwEmptyEmptyMatch := ReplaceAll("|B B E E E|E E E E E|E E E E E|", replacements)
 	assert.Contains(ParallelBoardsString(northWest, empty, empty), nwEmptyEmptyMatch)
 
 	assert.Contains(ParallelBoardsString(nil), "1 nil boards")
 	assert.Contains(ParallelBoardsString(nil, nil), "2 nil boards")
 
-	leftNilMatch := "|   nil   |E E E E E|"
+	leftNilMatch := ReplaceAll("|   nil   |E E E E E|", replacements)
 	assert.Contains(ParallelBoardsString(nil, northWest), leftNilMatch)
-	rightNilMatch := "|E E E E E|   nil   |"
+	rightNilMatch := ReplaceAll("|E E E E E|   nil   |", replacements)
 	assert.Contains(ParallelBoardsString(northWest, nil), rightNilMatch)
 
 }

@@ -1,3 +1,5 @@
+//go:generate stringer --type=State
+
 package puzzle
 
 import (
@@ -15,17 +17,16 @@ type Board []Row
 
 // TODO should Unspecified be the 0 value? we'd need to explicitly write empty in NewEmptyBoard
 const (
-	Empty State = iota
-	Unspecified
-	Occupied
+	_Empty_ State = iota
+	Unknown
 	Blocked
 	Invalid
-	Piece1
-	Piece2
-	Piece3
-	Piece4
-	Piece5
-	Piece6
+	Piece_1
+	Piece_2
+	Piece_3
+	Piece_4
+	Piece_5
+	Piece_6
 )
 
 func NewEmptyBoard() *Board {
@@ -124,28 +125,4 @@ func ParallelBoardsString(boards ...*Board) string {
 	}
 
 	return b.String()
-}
-
-func (e State) String() string {
-	switch e {
-	case Empty:
-		return "E"
-	case Occupied:
-		return "O"
-	case Blocked:
-		return "B"
-	case Piece1:
-		return "1"
-	case Piece2:
-		return "2"
-	case Piece3:
-		return "3"
-	case Piece4:
-		return "4"
-	case Piece5:
-		return "5"
-	case Piece6:
-		return "6"
-	}
-	return "?"
 }
