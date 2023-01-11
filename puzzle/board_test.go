@@ -2,7 +2,6 @@ package puzzle
 
 import (
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -85,18 +84,6 @@ func TestCloneBoard(t *testing.T) {
 	neb.Set(Blocked, NewLoc(4, 4))
 	assert.NotEqual(neb, *nebClonePtr)
 
-}
-
-// TODO move this to a utility location
-func ReplaceAll(base string, replacements map[string]string) string {
-
-	returnStr := base
-
-	for pattern, replacement := range replacements {
-		returnStr = strings.ReplaceAll(returnStr, pattern, replacement)
-	}
-
-	return returnStr
 }
 
 func TestParallelBoardPrinter(t *testing.T) {
