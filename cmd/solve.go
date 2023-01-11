@@ -107,7 +107,7 @@ func doSolveRun(cmd *cobra.Command, args []string) error {
 
 	fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v\n", boardSolved)
 	if boardSolved {
-		fmt.Fprintf(cmd.OutOrStdout(), "%s", resultBoard)
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", resultBoard)
 	}
 	return nil
 }

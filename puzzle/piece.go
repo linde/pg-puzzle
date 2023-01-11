@@ -4,7 +4,6 @@ package puzzle
 
 import (
 	"fmt"
-	"strings"
 )
 
 type Step int
@@ -106,15 +105,7 @@ func (p Piece) Rotate() (rotated *Piece) {
 
 func (p Piece) String() string {
 
-	var b strings.Builder
-	fmt.Fprintf(&b, "Piece[%s, ", p.state)
-
-	delim := "" // start blank bc it goes in front
-	for _, step := range p.steps {
-		fmt.Fprintf(&b, "%s%s", delim, step)
-		delim = " "
-	}
-	fmt.Fprintf(&b, "]")
-
-	return b.String()
+	stepStr := Map(p.steps, func(s Step) string { return s.String() })
+	retStr := fmt.Sprintf("Piece[%s:%s]", p.state, stepStr)
+	return retStr
 }
