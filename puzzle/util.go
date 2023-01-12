@@ -5,6 +5,15 @@ import (
 	"strings"
 )
 
+func ReplaceAll(base string, replacements map[string]string) string {
+
+	returnStr := base
+	for pattern, replacement := range replacements {
+		returnStr = strings.ReplaceAll(returnStr, pattern, replacement)
+	}
+	return returnStr
+}
+
 // This is overkill but i wanted a map function for pieces, etc
 func Map[E, R any](slice []E, mapFunc func(E) R) []R {
 
@@ -13,17 +22,6 @@ func Map[E, R any](slice []E, mapFunc func(E) R) []R {
 		retArray[idx] = mapFunc(s)
 	}
 	return retArray
-}
-
-func ReplaceAll(base string, replacements map[string]string) string {
-
-	returnStr := base
-
-	for pattern, replacement := range replacements {
-		returnStr = strings.ReplaceAll(returnStr, pattern, replacement)
-	}
-
-	return returnStr
 }
 
 // this E.String is the function itself, the fmt.Stringer impl for the type E

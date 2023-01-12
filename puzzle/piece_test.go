@@ -66,11 +66,11 @@ func TestPieceStringer(t *testing.T) {
 	pieces := DefaultPieces()
 	assert.NotNil(pieces)
 
-	matches := FindPieceByState(pieces, Piece6)
+	matches := FindPieceByState(pieces, Piece_6)
 	p6potbelly := matches[0]
-	assert.Equal(p6potbelly.String(), "Piece{6, S S N E}")
+	assert.Equal("Piece{Piece_6, South South North East}", p6potbelly.String())
 
-	matches = FindPieceByState(pieces, Piece2)
+	matches = FindPieceByState(pieces, Piece_2)
 	p2ell := matches[0]
-	assert.Equal(p2ell.String(), "Piece{2, S E}")
+	assert.Equal("Piece{Piece_2, South East}", p2ell.String())
 }

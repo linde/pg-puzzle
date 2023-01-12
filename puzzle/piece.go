@@ -103,7 +103,7 @@ func (p Piece) Rotate() (rotated *Piece) {
 
 func (p Piece) String() string {
 
-	stepStr := "" //StringerSliceJoin(p.steps, " ")
+	stepStr := StringerSliceJoin(p.steps, " ")
 	retStr := fmt.Sprintf("Piece{%s, %s}", p.state, stepStr)
 	return retStr
 }
