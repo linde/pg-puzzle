@@ -1,6 +1,5 @@
 
-pgpuzzle
-*_string.go
+./^pgpuzzle$
 
 # Binaries for programs and plugins
 *.exe
