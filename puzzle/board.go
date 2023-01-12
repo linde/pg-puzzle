@@ -1,3 +1,5 @@
+//go:generate stringer -type=State
+
 package puzzle
 
 import (
@@ -72,15 +74,24 @@ func (b Board) Get(loc Loc) State {
 	return b[loc.r][loc.c]
 }
 
-func (p Board) String() string {
+func (board Board) String() string {
+
+	// this should be the same StringerMatrixJoin(board, " ", "\n")
 
 	rowStrFunc := func(row Row) string {
 		statesValuesFromRow := Map([]State(row), func(s State) string { return s.String() })
 		return strings.Join(statesValuesFromRow, " ")
 	}
-	rowStringsFromBoard := Map([]Row(p), rowStrFunc)
+	rowStringsFromBoard := Map([]Row(board), rowStrFunc)
 
 	return strings.Join(rowStringsFromBoard, "\n")
+
+	/**
+	var boardAsInterface any = board
+	var stateMatrix [][]State = boardAsInterface.([][]State)
+	return StringerMatrixJoin(stateMatrix, " ", "\n")
+	***/
+
 }
 
 func ParallelBoardsString(boards ...*Board) string {
@@ -121,28 +132,4 @@ func ParallelBoardsString(boards ...*Board) string {
 	}
 
 	return b.String()
-}
-
-func (e State) String() string {
-	switch e {
-	case Empty:
-		return "E"
-	case Occupied:
-		return "O"
-	case Blocked:
-		return "B"
-	case Piece1:
-		return "1"
-	case Piece2:
-		return "2"
-	case Piece3:
-		return "3"
-	case Piece4:
-		return "4"
-	case Piece5:
-		return "5"
-	case Piece6:
-		return "6"
-	}
-	return "?"
 }

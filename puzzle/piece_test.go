@@ -57,3 +57,20 @@ func TestPieceRotation(t *testing.T) {
 	assert.EqualValues(p4square.steps, p4square.Rotate().Rotate().Rotate().Rotate().steps)
 
 }
+
+func TestPieceStringer(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
+	pieces := DefaultPieces()
+	assert.NotNil(pieces)
+
+	matches := FindPieceByState(pieces, Piece6)
+	p6potbelly := matches[0]
+	assert.Equal(p6potbelly.String(), "Piece{6, S S N E}")
+
+	matches = FindPieceByState(pieces, Piece2)
+	p2ell := matches[0]
+	assert.Equal(p2ell.String(), "Piece{2, S E}")
+}

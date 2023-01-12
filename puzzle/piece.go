@@ -1,8 +1,8 @@
+//go:generate stringer -type=Step
+
 package puzzle
 
-import (
-	"fmt"
-)
+import "fmt"
 
 type Step int
 
@@ -103,11 +103,12 @@ func (p Piece) Rotate() (rotated *Piece) {
 
 func (p Piece) String() string {
 
-	stepStr := Map(p.steps, func(s Step) string { return s.String() })
-	retStr := fmt.Sprintf("Piece[%s:%s]", p.state, stepStr)
+	stepStr := "" //StringerSliceJoin(p.steps, " ")
+	retStr := fmt.Sprintf("Piece{%s, %s}", p.state, stepStr)
 	return retStr
 }
 
+/**
 func (s Step) String() string {
 	switch s {
 	case North:
@@ -121,3 +122,4 @@ func (s Step) String() string {
 	}
 	return "?"
 }
+***/
