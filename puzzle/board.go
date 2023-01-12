@@ -12,8 +12,7 @@ const BOARD_DIMENSION = 5
 // TODO fun exercise, port this to bitsets
 
 type State int
-type Row []State
-type Board []Row
+type Board [][]State
 
 // TODO should Unspecified be the 0 value? we'd need to explicitly write empty in NewEmptyBoard
 const (
@@ -33,7 +32,7 @@ func NewEmptyBoard() *Board {
 
 	board := make(Board, BOARD_DIMENSION)
 	for rowIdx := range board {
-		row := make(Row, BOARD_DIMENSION)
+		row := make([]State, BOARD_DIMENSION)
 		board[rowIdx] = row
 	}
 	return &board
@@ -51,9 +50,9 @@ func (b Board) Set(val State, locs ...Loc) *Board {
 
 func (orig Board) Clone() *Board {
 
-	neb := make([]Row, len(orig))
+	neb := make([][]State, len(orig))
 	for i := range orig {
-		neb[i] = make(Row, len(orig[i]))
+		neb[i] = make([]State, len(orig[i]))
 		copy(neb[i], orig[i])
 	}
 
@@ -77,11 +76,11 @@ func (board Board) String() string {
 
 	// this should be the same StringerMatrixJoin(board, " ", "\n")
 
-	rowStrFunc := func(row Row) string {
-		statesValuesFromRow := Map([]State(row), func(s State) string { return s.String() })
+	rowStrFunc := func(row []State) string {
+		statesValuesFromRow := Map(row, State.String)
 		return strings.Join(statesValuesFromRow, " ")
 	}
-	rowStringsFromBoard := Map([]Row(board), rowStrFunc)
+	rowStringsFromBoard := Map(board, rowStrFunc)
 
 	return strings.Join(rowStringsFromBoard, "\n")
 
