@@ -83,13 +83,6 @@ func (board Board) String() string {
 	rowStringsFromBoard := Map(board, rowStrFunc)
 
 	return strings.Join(rowStringsFromBoard, "\n")
-
-	/**
-	var boardAsInterface any = board
-	var stateMatrix [][]State = boardAsInterface.([][]State)
-	return StringerMatrixJoin(stateMatrix, " ", "\n")
-	***/
-
 }
 
 func ParallelBoardsString(boards ...*Board) string {
