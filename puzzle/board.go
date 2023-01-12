@@ -73,16 +73,7 @@ func (b Board) Get(loc Loc) State {
 }
 
 func (board Board) String() string {
-
-	// this should be the same StringerMatrixJoin(board, " ", "\n")
-
-	rowStrFunc := func(row []State) string {
-		statesValuesFromRow := Map(row, State.String)
-		return strings.Join(statesValuesFromRow, " ")
-	}
-	rowStringsFromBoard := Map(board, rowStrFunc)
-
-	return strings.Join(rowStringsFromBoard, "\n")
+	return StringerMatrixJoin(board, " ", "\n")
 }
 
 func ParallelBoardsString(boards ...*Board) string {

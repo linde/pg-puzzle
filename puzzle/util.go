@@ -30,10 +30,10 @@ func StringerSliceJoin[E fmt.Stringer](slice []E, sep string) string {
 	return strings.Join(eStrings, sep)
 }
 
-func StringerMatrixJoin(matrix [][]fmt.Stringer, colSep, rowSep string) string {
+func StringerMatrixJoin[E fmt.Stringer](matrix [][]E, colSep, rowSep string) string {
 
 	// first, make a func that joins the rows using the colSep
-	rowMapper := func(slice []fmt.Stringer) string {
+	rowMapper := func(slice []E) string {
 		return StringerSliceJoin(slice, colSep)
 	}
 
