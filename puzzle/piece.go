@@ -20,12 +20,12 @@ type Piece struct {
 
 func DefaultPieces() []Piece {
 	pieces := []Piece{
-		Piece{Piece1, []Step{South, South, East}},
-		Piece{Piece2, []Step{South, East}},
-		Piece{Piece3, []Step{South, East, South}},
-		Piece{Piece4, []Step{East, South, West, North}},
-		Piece{Piece5, []Step{South, South}},
-		Piece{Piece6, []Step{South, South, North, East}},
+		Piece{Piece_1, []Step{South, South, East}},
+		Piece{Piece_2, []Step{South, East}},
+		Piece{Piece_3, []Step{South, East, South}},
+		Piece{Piece_4, []Step{East, South, West, North}},
+		Piece{Piece_5, []Step{South, South}},
+		Piece{Piece_6, []Step{South, South, North, East}},
 	}
 	return pieces
 }
@@ -107,19 +107,3 @@ func (p Piece) String() string {
 	retStr := fmt.Sprintf("Piece{%s, %s}", p.state, stepStr)
 	return retStr
 }
-
-/**
-func (s Step) String() string {
-	switch s {
-	case North:
-		return "N"
-	case East:
-		return "E"
-	case South:
-		return "S"
-	case West:
-		return "W"
-	}
-	return "?"
-}
-***/

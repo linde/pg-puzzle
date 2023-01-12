@@ -17,11 +17,11 @@ func TestPieceCoverage(t *testing.T) {
 	midNorthBoard := NewEmptyBoard().Set(Blocked, NewLoc(0, 2))
 	midEastBoard := NewEmptyBoard().Set(Blocked, NewLoc(2, 4))
 
-	threeEastPiece := NewPiece(Unspecified, East, East, East)
-	threeSouthPiece := NewPiece(Unspecified, South, South, South)
-	threeNorthPiece := NewPiece(Unspecified, North, North, North)
+	threeEastPiece := NewPiece(Unknown, East, East, East)
+	threeSouthPiece := NewPiece(Unknown, South, South, South)
+	threeNorthPiece := NewPiece(Unknown, North, North, North)
 	// TODO test west moves  threeWestPiece := NewPiece(West, West, West)
-	potBellyPiece := NewPiece(Unspecified, South, South, North, East)
+	potBellyPiece := NewPiece(Unknown, South, South, North, East)
 
 	loc0_0 := NewLoc(0, 0)
 	loc0_3 := NewLoc(0, 3)

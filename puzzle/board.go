@@ -1,4 +1,4 @@
-//go:generate stringer -type=State
+//go:generate stringer --type=State
 
 package puzzle
 
@@ -17,17 +17,16 @@ type Board []Row
 
 // TODO should Unspecified be the 0 value? we'd need to explicitly write empty in NewEmptyBoard
 const (
-	Empty State = iota
-	Unspecified
-	Occupied
+	_Empty_ State = iota
+	Unknown
 	Blocked
 	Invalid
-	Piece1
-	Piece2
-	Piece3
-	Piece4
-	Piece5
-	Piece6
+	Piece_1
+	Piece_2
+	Piece_3
+	Piece_4
+	Piece_5
+	Piece_6
 )
 
 func NewEmptyBoard() *Board {

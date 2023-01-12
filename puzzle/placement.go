@@ -15,7 +15,7 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 	// first check the starting location to make sure it's unoccupied.
 	// if not, mark it and keep going.
 	curVal := retBoard.Get(curLoc)
-	if curVal != Empty {
+	if curVal != _Empty_ {
 		return false, nil
 	}
 	retBoard.Set(p.state, curLoc)
@@ -33,7 +33,7 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 		//fmt.Printf("IsSafePlacement: From %s @ %d,%d move %s \n%s", curVal, curR, curC, step, retBoard)
 
 		// the current value needs to be either equal to the arg val or empty, otw error
-		if !(curVal == p.state || curVal == Empty) {
+		if !(curVal == p.state || curVal == _Empty_) {
 			// fmt.Printf("IsSafePlacement false: Piece %v @ %v, curLoc: %v\n%v\n", p, loc, curLoc, b)
 			return false, nil
 		}

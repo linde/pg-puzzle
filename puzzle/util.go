@@ -15,6 +15,17 @@ func Map[E, R any](slice []E, mapFunc func(E) R) []R {
 	return retArray
 }
 
+func ReplaceAll(base string, replacements map[string]string) string {
+
+	returnStr := base
+
+	for pattern, replacement := range replacements {
+		returnStr = strings.ReplaceAll(returnStr, pattern, replacement)
+	}
+
+	return returnStr
+}
+
 // this E.String is the function itself, the fmt.Stringer impl for the type E
 func StringerSliceJoin[E fmt.Stringer](slice []E, sep string) string {
 	eStrings := Map(slice, E.String)

@@ -29,7 +29,7 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 		for rotationCount := 0; rotationCount < 4; rotationCount++ {
 			for rowIdx, row := range *board {
 				for colIdx, cell := range row {
-					if cell == Empty {
+					if cell == _Empty_ {
 						isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx})
 						if isSafe {
 							restSafe, restBoard := Solve(resultBoard, pieces[1:])
