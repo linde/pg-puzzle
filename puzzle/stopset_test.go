@@ -32,7 +32,7 @@ func TestDefaultStopPaths(t *testing.T) {
 	path1, path2, path3 := DefaultStopPaths()
 
 	// these stops arent reacable to be set in the puzzle
-	unavailableStops := []Loc{Loc{0, 2}, Loc{2, 0}, Loc{3, 3}}
+	unavailableStops := []Loc{{0, 2}, {2, 0}, {3, 3}}
 
 	for _, stop := range unavailableStops {
 		assert.NotContains(path1, stop)

@@ -20,12 +20,12 @@ type Piece struct {
 
 func DefaultPieces() []Piece {
 	pieces := []Piece{
-		Piece{Piece_1, []Step{South, South, East}},
-		Piece{Piece_2, []Step{South, East}},
-		Piece{Piece_3, []Step{South, East, South}},
-		Piece{Piece_4, []Step{East, South, West, North}},
-		Piece{Piece_5, []Step{South, South}},
-		Piece{Piece_6, []Step{South, South, North, East}},
+		{Piece_1, []Step{South, South, East}},
+		{Piece_2, []Step{South, East}},
+		{Piece_3, []Step{South, East, South}},
+		{Piece_4, []Step{East, South, West, North}},
+		{Piece_5, []Step{South, South}},
+		{Piece_6, []Step{South, South, North, East}},
 	}
 	return pieces
 }
