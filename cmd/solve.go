@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	pz "pgpuzzle/puzzle"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -23,6 +24,7 @@ func NewSolveCmd() *cobra.Command {
 	cmd.Flags().IntVarP(&workers, "workers", "n", 8, "number of workers for --all")
 	cmd.Flags().IntVarP(&cap, "cap", "c", 0, "a cap stops combos (per stop path), with --all")
 	cmd.Flags().StringVarP(&outFormat, "out", "o", "", "with --all, print all solutions in one of:[json]")
+	cmd.Flags().BoolVarP(&color, "color", "z", false, "for default output, colorize the pieces")
 
 	return cmd
 }
@@ -33,6 +35,7 @@ var allStopsArg bool
 var workers int
 var cap int
 var outFormat string
+var color bool
 
 func init() {
 	RootCmd.AddCommand(solveCmd)
@@ -107,7 +110,21 @@ func doSolveRun(cmd *cobra.Command, args []string) error {
 
 	fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v\n", boardSolved)
 	if boardSolved {
-		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", resultBoard)
+
+		boardSolvedStr := resultBoard.String()
+
+		// from https://twin.sh/articles/35/how-to-add-colors-to-your-console-terminal-output-in-go
+		if color {
+			const (
+				// ${1} is replaced with 1,2,3... and makes the colors
+				ANSICOLOR_TEMPLATE = "\033[3${1}m"
+				ANSICOLOR_RESET    = "\033[0m"
+			)
+
+			re := regexp.MustCompile(`([0-9])`)
+			boardSolvedStr = re.ReplaceAllString(boardSolvedStr, ANSICOLOR_TEMPLATE+"${1}"+ANSICOLOR_RESET)
+		}
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", boardSolvedStr)
 	}
 	return nil
 }

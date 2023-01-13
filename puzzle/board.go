@@ -73,7 +73,17 @@ func (b Board) Get(loc Loc) State {
 }
 
 func (board Board) String() string {
-	return StringerMatrixJoin(board, " ", "\n")
+
+	replacements := map[string]string{
+		Blocked.String(): "B",
+		_Empty_.String(): "E",
+		"Piece_":         "",
+		Unknown.String(): "U",
+		Invalid.String(): "X",
+	}
+	verboseStrings := StringerMatrixJoin(board, " ", "\n")
+	replacedStr := ReplaceAll(verboseStrings, replacements)
+	return replacedStr
 }
 
 func ParallelBoardsString(boards ...*Board) string {
