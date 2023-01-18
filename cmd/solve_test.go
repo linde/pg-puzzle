@@ -1,12 +1,22 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
+	"pgpuzzle/puzzle"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+// returns the numbers of combos for a give cap. for instance,
+// a cap of two will have 2^^3 combos because we have 3 stop paths
+
+func getCombosForCap(cap int) int {
+	return int(math.Pow(float64(cap), 3))
+}
 
 func Test_SolveCommand(t *testing.T) {
 	assert := assert.New(t)
@@ -14,21 +24,83 @@ func Test_SolveCommand(t *testing.T) {
 	cmd := NewSolveCmd()
 	assert.NotNil(cmd)
 
-	// this is the default one
-	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2"})
-	GenericCommandRunner(t, cmd, "solving for: [{0 0} {0 4} {4 2}]", "solved: true")
+	// this are the default stops
+	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--out=text"})
+	GenericCommandRunner(t, cmd, "solved: [{0 0} {0 4} {4 2}]", "b 1 4 4 b")
 
-	// This one requires flipping
-	cmd.SetArgs([]string{"--stops=0,3 1,2 3,2"})
-	GenericCommandRunner(t, cmd, "solved: true")
+	// These stops require flipping to solve
+	cmd.SetArgs([]string{"--stops=0,3 1,2 3,2", "--out=text"})
+	GenericCommandRunner(t, cmd, "solved: [{0 3} {1 2} {3 2}]", "1 2 2 b 6")
 
-	capToTest := 2 // a cap of two will have 2^^3 combos because we have 3 stop paths
+	capToTest := 2
 	capParam := fmt.Sprintf("--cap=%d", capToTest)
-	targetSolvedAssertion := fmt.Sprintf("solved: %d", int(math.Pow(float64(capToTest), 3)))
-	cmd.SetArgs([]string{"--all", capParam})
-	GenericCommandRunner(t, cmd, targetSolvedAssertion)
+	cmd.SetArgs([]string{"--all", capParam, "--out=text"})
+	commandOutput := GenericCommandRunner(t, cmd)
+	assert.NotNil(commandOutput)
 
-	// TODO add tests for -o=json
+	unsolvedPuzzlesInOutput := strings.Count(strings.ToLower(commandOutput), "unsolved")
+	assert.Zero(unsolvedPuzzlesInOutput)
+
+	// verify the number of solutions for the cap
+	solvedPuzzles := getCombosForCap(capToTest)
+	solvedPuzzlesInOutput := strings.Count(strings.ToLower(commandOutput), "solved")
+	assert.Equal(solvedPuzzles, solvedPuzzlesInOutput)
+}
+
+func Test_SolveCommandColor(t *testing.T) {
+	assert := assert.New(t)
+
+	cmd := NewSolveCmd()
+	assert.NotNil(cmd)
+
+	// this are the default stops
+	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--out=color"})
+	// TODO run the command and make assertions about color in the output
+	// GenericCommandRunner(t, cmd, "solved: [{0 0} {0 4} {4 2}]", "b 1 4 4 b")
+}
+
+func Test_SolveCommandJson(t *testing.T) {
+	assert := assert.New(t)
+
+	cmd := NewSolveCmd()
+	assert.NotNil(cmd)
+
+	// this are the default stops, make sure we can unmarshall
+	// something and assert correct values
+	stopStr := "0,0 0,4 4,2"
+	cmd.SetArgs([]string{"--stops=" + stopStr, "--out=json"})
+	commandOutput := GenericCommandRunner(t, cmd)
+	assert.NotZero(len(commandOutput))
+
+	var jsonResult []puzzle.SolveResult
+	err := json.Unmarshal([]byte(commandOutput), &jsonResult)
+	assert.Nil(err)
+	assert.Equal(len(jsonResult), 1)
+	assert.True(jsonResult[0].Solved)
+
+	// TODO get the defaultStopSet from somewhere authoritative
+	testStopSet, stopSetParseError := parseStop(stopStr)
+	assert.Nil(stopSetParseError)
+	assert.NotNil(testStopSet)
+	// assert what comes out is what we put in
+	// TODO this doesnt work yet --> assert.Equal(testStopSet, jsonResult[0].StopSet)
+
+	// try a run with --all and a cap and verify the length
+	capToTest := 2
+	capParam := fmt.Sprintf("--cap=%d", capToTest)
+	cmd.SetArgs([]string{"--all=true", capParam, "--out=json"})
+	allCommandOutput := GenericCommandRunner(t, cmd)
+	assert.NotZero(len(allCommandOutput))
+
+	var allCommandJsonResult []puzzle.SolveResult
+
+	err = json.Unmarshal([]byte(allCommandOutput), &allCommandJsonResult)
+	assert.Nil(err)
+	assert.Equal(len(allCommandJsonResult), getCombosForCap(capToTest))
+	for _, result := range allCommandJsonResult {
+		assert.True(result.Solved)
+	}
+
 }
 
 func Test_ParseStops(t *testing.T) {

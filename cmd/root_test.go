@@ -17,7 +17,7 @@ func Test_ExecuteCommand(t *testing.T) {
 
 }
 
-func GenericCommandRunner(t *testing.T, cmd *cobra.Command, outputAssertions ...string) {
+func GenericCommandRunner(t *testing.T, cmd *cobra.Command, outputAssertions ...string) string {
 	assert := assert.New(t)
 
 	assert.NotNil(cmd)
@@ -32,5 +32,5 @@ func GenericCommandRunner(t *testing.T, cmd *cobra.Command, outputAssertions ...
 	for _, oa := range outputAssertions {
 		assert.Contains(strings.ToLower(string(out)), strings.ToLower(oa))
 	}
-
+	return string(out)
 }

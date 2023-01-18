@@ -6,15 +6,14 @@ type SolveResult struct {
 	Solution *Board
 }
 
-func SolveStopSet(stops StopSet) (bool, *Board) {
+func SolveStopSet(stops StopSet) (solveResult SolveResult) {
 
 	pieces := DefaultPieces()
 
 	boardToSolve := NewEmptyBoard().Set(Blocked, (stops[:])...)
 	boardSolved, resultBoard := Solve(boardToSolve, pieces)
 
-	return boardSolved, resultBoard
-
+	return SolveResult{stops, boardSolved, resultBoard}
 }
 
 func Solve(board *Board, pieces []Piece) (bool, *Board) {
@@ -97,8 +96,7 @@ func SolveAllStops(workers int, cap int) (solved, unsolved []SolveResult) {
 func solveWorker(id int, stopSetJobs <-chan StopSet, stopSetJobResults chan<- SolveResult) {
 
 	for stopSet := range stopSetJobs {
-		boardSolved, resultBoard := SolveStopSet(stopSet)
-		result := SolveResult{stopSet, boardSolved, resultBoard}
-		stopSetJobResults <- result
+		solveResult := SolveStopSet(stopSet)
+		stopSetJobResults <- solveResult
 	}
 }

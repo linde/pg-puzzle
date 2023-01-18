@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"pgpuzzle/puzzle"
 	pz "pgpuzzle/puzzle"
 	"regexp"
 	"strconv"
@@ -23,8 +24,9 @@ func NewSolveCmd() *cobra.Command {
 	cmd.Flags().BoolVarP(&allStopsArg, "all", "a", false, "try every stop combination, not allowed with --stops")
 	cmd.Flags().IntVarP(&workers, "workers", "n", 8, "number of workers for --all")
 	cmd.Flags().IntVarP(&cap, "cap", "c", 0, "a cap stops combos (per stop path), with --all")
-	cmd.Flags().StringVarP(&outFormat, "out", "o", "", "with --all, print all solutions in one of:[json]")
-	cmd.Flags().BoolVarP(&color, "color", "z", false, "for default output, colorize the pieces")
+
+	// TODO validate output formats
+	cmd.Flags().StringVarP(&outFormat, "out", "o", "color", "print solutions in one of:[json,color,text]")
 
 	return cmd
 }
@@ -35,7 +37,6 @@ var allStopsArg bool
 var workers int
 var cap int
 var outFormat string
-var color bool
 
 func init() {
 	RootCmd.AddCommand(solveCmd)
@@ -47,6 +48,7 @@ const (
 	NUM_STOPS        int    = 3
 )
 
+// TODO sanity check for bounds. `go run main.go solve --stops="0,0 0,0 0,9“
 func parseStop(stops string) (pz.StopSet, error) {
 
 	errAsNeeded := fmt.Errorf("invalid value for --stops: %s", stops)
@@ -82,49 +84,56 @@ func parseStop(stops string) (pz.StopSet, error) {
 
 func doSolveRun(cmd *cobra.Command, args []string) error {
 
+	var solved, unsolved []puzzle.SolveResult
+
 	if allStopsArg {
-		solved, unsolved := pz.SolveAllStops(workers, cap)
+		solved, unsolved = pz.SolveAllStops(workers, cap)
+	} else {
 
-		switch outFormat {
-		case "json":
-			resultsCombined := append(solved, unsolved...)
-			if outFormat == "json" {
-				resultsCombinedJson, _ := json.Marshal(resultsCombined)
-				fmt.Fprintln(cmd.OutOrStdout(), string(resultsCombinedJson))
-			}
-		default:
-			fmt.Fprintf(cmd.OutOrStdout(), "Solved: %d, Unsolved: %d\n", len(solved), len(unsolved))
+		stops, stopsParseError := parseStop(stopsArg)
+		if stopsParseError != nil {
+			return stopsParseError
 		}
+		solveResult := pz.SolveStopSet(stops)
+		if solveResult.Solved {
+			solved = []puzzle.SolveResult{solveResult}
+		} else {
+			unsolved = []puzzle.SolveResult{solveResult}
+		}
+	}
 
+	if outFormat == "json" {
+		resultsCombined := append(solved, unsolved...)
+		if outFormat == "json" {
+			resultsCombinedJson, _ := json.Marshal(resultsCombined)
+			fmt.Fprintln(cmd.OutOrStdout(), string(resultsCombinedJson))
+		}
 		return nil
 	}
 
-	stops, stopsParseError := parseStop(stopsArg)
-	if stopsParseError != nil {
-		return stopsParseError
-	}
+	for _, solveResult := range solved {
 
-	fmt.Fprintf(cmd.OutOrStdout(), "solving for: %v ...\n", stops)
+		if solveResult.Solved {
 
-	boardSolved, resultBoard := pz.SolveStopSet(stops)
+			boardSolvedStr := solveResult.Solution.String()
 
-	fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v\n", boardSolved)
-	if boardSolved {
+			// from https://twin.sh/articles/35/how-to-add-colors-to-your-console-terminal-output-in-go
+			if outFormat == "color" {
+				const (
+					// ${1} is replaced with 1,2,3... and makes the colors
+					ANSICOLOR_TEMPLATE = "\033[3${1}m"
+					ANSICOLOR_RESET    = "\033[0m"
+				)
 
-		boardSolvedStr := resultBoard.String()
-
-		// from https://twin.sh/articles/35/how-to-add-colors-to-your-console-terminal-output-in-go
-		if color {
-			const (
-				// ${1} is replaced with 1,2,3... and makes the colors
-				ANSICOLOR_TEMPLATE = "\033[3${1}m"
-				ANSICOLOR_RESET    = "\033[0m"
-			)
-
-			re := regexp.MustCompile(`([0-9])`)
-			boardSolvedStr = re.ReplaceAllString(boardSolvedStr, ANSICOLOR_TEMPLATE+"${1}"+ANSICOLOR_RESET)
+				re := regexp.MustCompile(`([0-9])`)
+				boardSolvedStr = re.ReplaceAllString(boardSolvedStr, ANSICOLOR_TEMPLATE+"${1}"+ANSICOLOR_RESET)
+			}
+			fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v\n%s\n", solveResult.StopSet, boardSolvedStr)
+		} else {
+			fmt.Fprintf(cmd.OutOrStdout(), "Unsolved: %v\n", solveResult.StopSet)
 		}
-		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", boardSolvedStr)
 	}
+
 	return nil
+
 }
