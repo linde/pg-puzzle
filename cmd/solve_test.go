@@ -104,7 +104,6 @@ func Test_SolveCommandJson(t *testing.T) {
 }
 
 func Test_ParseStops(t *testing.T) {
-	assert := assert.New(t)
 
 	tests := []struct {
 		arg     string
@@ -115,15 +114,18 @@ func Test_ParseStops(t *testing.T) {
 		{"0,0,0 0,4 4,2", true},
 		{"0 1 2", true},
 	}
-	// TODO for these tests, add a new Test inside the loop via t.Run()
 	for idx, test := range tests {
 
-		ss, error := parseStop(test.arg)
-		if test.isError {
-			assert.NotNil(error, "test %d: expected error for: %s, got: %v", idx, test.arg, ss)
-		} else {
-			assert.Nil(error, "test %d: didnt expect error for: %s", idx, test.arg)
-		}
+		testName := fmt.Sprintf("Test_ParseStops_[arg:%s][isError: %v]", test.arg, test.isError)
+		t.Run(testName, func(tt *testing.T) {
+			assertNested := assert.New(tt)
+			ss, error := parseStop(test.arg)
+			if test.isError {
+				assertNested.NotNil(error, "test %d: expected error for: %s, got: %v", idx, test.arg, ss)
+			} else {
+				assertNested.Nil(error, "test %d: didnt expect error for: %s", idx, test.arg)
+			}
+		})
 	}
 
 }

@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	assertions "github.com/stretchr/testify/assert"
 )
 
 // TODO: deal with and test for odd board sizes: 0, nil, -1, NaN, etc
 
 func TestInitBoard(t *testing.T) {
 
-	assert := assert.New(t)
+	assert := assertions.New(t)
 	assert.NotNil(assert)
 
 	board := NewEmptyBoard()
@@ -28,7 +28,7 @@ func TestInitBoard(t *testing.T) {
 
 func TestNewBoard(t *testing.T) {
 
-	assert := assert.New(t)
+	assert := assertions.New(t)
 	assert.NotNil(assert)
 
 	bLocs := BoardToLocArray([][]bool{
@@ -60,17 +60,23 @@ func TestNewBoard(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		obs := tt.b.Get(tt.loc)
-		const msgFmt = "for %v expected %s, got %s"
-		msg := fmt.Sprintf(msgFmt, tt.loc, tt.expected, obs)
-		assert.Equal(obs, tt.expected, msg)
+
+		testName := fmt.Sprintf("TestNewBoardMulti_%v", tt.loc)
+		t.Run(testName, func(ttt *testing.T) {
+			assertNested := assertions.New(ttt)
+
+			obs := tt.b.Get(tt.loc)
+			const msgFmt = "for %v expected %s, got %s"
+			msg := fmt.Sprintf(msgFmt, tt.loc, tt.expected, obs)
+			assertNested.Equal(obs, tt.expected, msg)
+		})
 	}
 
 }
 
 func TestCloneBoard(t *testing.T) {
 
-	assert := assert.New(t)
+	assert := assertions.New(t)
 	assert.NotNil(assert)
 
 	neb := NewEmptyBoard()
@@ -88,7 +94,7 @@ func TestCloneBoard(t *testing.T) {
 
 func TestParallelBoardPrinter(t *testing.T) {
 
-	assert := assert.New(t)
+	assert := assertions.New(t)
 	assert.NotNil(assert)
 
 	nwLocs := BoardToLocArray([][]bool{

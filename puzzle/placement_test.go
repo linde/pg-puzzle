@@ -9,9 +9,6 @@ import (
 
 func TestPieceCoverage(t *testing.T) {
 
-	assert := assert.New(t)
-	assert.NotNil(assert)
-
 	emptyBoard := NewEmptyBoard()
 	nwOnlyBoard := NewEmptyBoard().Set(Blocked, NewLoc(0, 0))
 	midNorthBoard := NewEmptyBoard().Set(Blocked, NewLoc(0, 2))
@@ -51,22 +48,26 @@ func TestPieceCoverage(t *testing.T) {
 
 	for testIdx, tt := range tests {
 
-		isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.loc)
+		testName := fmt.Sprintf("TestPieceCoverage_%v@%v:%v", tt.p, tt.loc, tt.expectValid)
+		t.Run(testName, func(ttt *testing.T) {
+			assert := assert.New(ttt)
 
-		errorMsg := fmt.Sprintf("Test index: %d\n%v @ %v\nisSafe: %v\n  Before  |  After   \n%s",
-			testIdx, tt.p, tt.loc, isSafe, ParallelBoardsString(tt.b, boardAfter))
+			isSafe, boardAfter := IsSafePlacement(tt.p, tt.b, tt.loc)
 
-		// fmt.Println(errorMsg)
+			errorMsg := fmt.Sprintf("Test index: %d\n%v @ %v\nisSafe: %v\n  Before  |  After   \n%s",
+				testIdx, tt.p, tt.loc, isSafe, ParallelBoardsString(tt.b, boardAfter))
 
-		if tt.expectValid {
-			assert.True(isSafe, errorMsg)
-			assert.NotNil(boardAfter, errorMsg)
-			assert.NotEqualValues(tt.b, boardAfter, errorMsg)
-		} else {
-			assert.False(isSafe, errorMsg)
-			assert.Nil(boardAfter, errorMsg)
-		}
+			// fmt.Println(errorMsg)
 
+			if tt.expectValid {
+				assert.True(isSafe, errorMsg)
+				assert.NotNil(boardAfter, errorMsg)
+				assert.NotEqualValues(tt.b, boardAfter, errorMsg)
+			} else {
+				assert.False(isSafe, errorMsg)
+				assert.Nil(boardAfter, errorMsg)
+			}
+		})
 	}
 
 }
