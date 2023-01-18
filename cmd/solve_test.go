@@ -115,7 +115,7 @@ func Test_ParseStops(t *testing.T) {
 		{"0,0,0 0,4 4,2", true},
 		{"0 1 2", true},
 	}
-
+	// TODO for these tests, add a new Test inside the loop via t.Run()
 	for idx, test := range tests {
 
 		ss, error := parseStop(test.arg)
