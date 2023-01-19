@@ -62,8 +62,7 @@ func doStep(loc Loc, step Step) Loc {
 
 func (p Piece) Flip() (rotated *Piece) {
 
-	rotated = &Piece{}
-	rotated.state = p.state
+	rotated = &Piece{state: p.state}
 
 	for _, step := range p.steps {
 
@@ -79,24 +78,17 @@ func (p Piece) Flip() (rotated *Piece) {
 	return rotated
 }
 
+func (step Step) Rotate() Step {
+	stepRotated := (step + 1) % Step(West+1)
+	return stepRotated
+}
+
 func (p Piece) Rotate() (rotated *Piece) {
 
-	rotated = &Piece{}
-	rotated.state = p.state
+	rotated = &Piece{state: p.state}
 
 	for _, step := range p.steps {
-
-		// TODO is it hacky or cool to do (step+1)%West?
-		switch step {
-		case North:
-			rotated.steps = append(rotated.steps, East)
-		case East:
-			rotated.steps = append(rotated.steps, South)
-		case South:
-			rotated.steps = append(rotated.steps, West)
-		case West:
-			rotated.steps = append(rotated.steps, North)
-		}
+		rotated.steps = append(rotated.steps, step.Rotate())
 	}
 	return rotated
 }

@@ -6,6 +6,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestStepRotation(t *testing.T) {
+
+	assert := assert.New(t)
+	assert.NotNil(assert)
+
+	for _, step := range []Step{North, East, South, West} {
+		stepRotated := step.Rotate()
+
+		switch step {
+		case North:
+			assert.Equal(stepRotated, East)
+		case East:
+			assert.Equal(stepRotated, South)
+		case South:
+			assert.Equal(stepRotated, West)
+		case West:
+			assert.Equal(stepRotated, North)
+		}
+	}
+
+}
+
 func TestPiece(t *testing.T) {
 
 	assert := assert.New(t)
