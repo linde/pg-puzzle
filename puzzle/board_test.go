@@ -61,7 +61,7 @@ func TestNewBoard(t *testing.T) {
 
 	for _, tt := range tests {
 
-		testName := fmt.Sprintf("TestNewBoardMulti_%v", tt.loc)
+		testName := fmt.Sprintf("%v", tt.loc)
 		t.Run(testName, func(ttt *testing.T) {
 			assertNested := assertions.New(ttt)
 

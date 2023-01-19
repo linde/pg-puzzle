@@ -26,18 +26,12 @@ func TestLocIsLessThanOrEqual(t *testing.T) {
 		{true, NewLoc(0, -1), loc0_0}, // TODO should NewLoc() IsLessThanOrEqual() return an error?
 	}
 
-	for i, tt := range tests {
+	for _, tt := range tests {
 
-		testName := fmt.Sprintf("TestLocIsLessThanOrEqual_%v<=%v:%v", tt.l, tt.r, tt.expected)
+		testName := fmt.Sprintf("(%v<=%v)==%v", tt.l, tt.r, tt.expected)
 		t.Run(testName, func(ttt *testing.T) {
 			assertNested := assert.New(ttt)
-
-			assertFunc := assertNested.Truef
-			if !tt.expected {
-				assertFunc = assertNested.Falsef
-			}
-
-			assertFunc(tt.l.IsLessThanOrEqual(tt.r), "iteration %d: expected %v for %v <= %v", i, tt.expected, tt.l, tt.r)
+			assertNested.Equal(tt.l.IsLessThanOrEqual(tt.r), tt.expected)
 		})
 	}
 

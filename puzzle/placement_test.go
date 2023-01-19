@@ -48,7 +48,7 @@ func TestPieceCoverage(t *testing.T) {
 
 	for testIdx, tt := range tests {
 
-		testName := fmt.Sprintf("TestPieceCoverage_%v@%v:%v", tt.p, tt.loc, tt.expectValid)
+		testName := fmt.Sprintf("%v@%v:%v", tt.p, tt.loc, tt.expectValid)
 		t.Run(testName, func(ttt *testing.T) {
 			assert := assert.New(ttt)
 
