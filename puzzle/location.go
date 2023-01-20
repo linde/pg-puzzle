@@ -7,8 +7,13 @@ type Loc struct {
 	c int
 }
 
-func NewLoc(r, c int) Loc {
-	return Loc{r, c}
+func NewLoc(r, c int) (Loc, bool) {
+
+	if r < 0 || r >= BOARD_DIMENSION || c < 0 || c >= BOARD_DIMENSION {
+		return Loc{}, false
+	}
+	return Loc{r, c}, true
+
 }
 
 func (i Loc) IsLessThanOrEqual(j Loc) bool {

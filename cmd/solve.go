@@ -6,8 +6,6 @@ import (
 	"pgpuzzle/puzzle"
 	pz "pgpuzzle/puzzle"
 	"regexp"
-	"strconv"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -43,43 +41,39 @@ func init() {
 }
 
 const (
-	LOC_SEPARATOR    string = " "
-	ROWCOL_SEPARATOR string = ","
-	NUM_STOPS        int    = 3
+	STOPS_FORMAT string = "%d,%d %d,%d %d,%d"
 )
 
-// TODO sanity check for bounds. `go run main.go solve --stops="0,0 0,0 0,9“
 func parseStop(stops string) (pz.StopSet, error) {
 
-	errAsNeeded := fmt.Errorf("invalid value for --stops: %s", stops)
+	var s1r, s1c, s2r, s2c, s3r, s3c int
 
-	locStrings := strings.Split(stops, LOC_SEPARATOR)
-
-	if len(locStrings) != NUM_STOPS {
-		return pz.StopSet{}, errAsNeeded
+	fmt.Sscanf(stops, STOPS_FORMAT, &s1r, &s1c, &s2r, &s2c, &s3r, &s3c)
+	locs := []struct{ r, c int }{
+		{s1r, s1c},
+		{s2r, s2c},
+		{s3r, s3c},
 	}
 
-	var locs [NUM_STOPS]pz.Loc
+	var parsedLocs [3]pz.Loc
 
-	for i, locString := range locStrings {
-
-		rowcol := strings.Split(locString, ROWCOL_SEPARATOR)
-		if len(rowcol) != 2 {
-			return pz.StopSet{}, errAsNeeded
+	for idx, l := range locs {
+		loc, ok := pz.NewLoc(l.r, l.c)
+		if !ok {
+			err := fmt.Errorf("invalid stop #%d (%d,%d) in %s", idx, l.r, l.c, stops)
+			return pz.StopSet{}, err
 		}
-
-		r, err := strconv.Atoi(rowcol[0])
-		if err != nil {
-			return pz.StopSet{}, errAsNeeded
-		}
-		c, err := strconv.Atoi(rowcol[1])
-		if err != nil {
-			return pz.StopSet{}, errAsNeeded
-		}
-
-		locs[i] = pz.NewLoc(r, c)
+		parsedLocs[idx] = loc
 	}
-	return pz.NormalizedStopSet(locs[0], locs[1], locs[2]), nil
+
+	if parsedLocs[0] == parsedLocs[1] ||
+		parsedLocs[0] == parsedLocs[2] ||
+		parsedLocs[1] == parsedLocs[2] {
+		err := fmt.Errorf("duplicate stops in %s", stops)
+		return pz.StopSet{}, err
+	}
+
+	return pz.NormalizedStopSet(parsedLocs[0], parsedLocs[1], parsedLocs[2]), nil
 }
 
 func doSolveRun(cmd *cobra.Command, args []string) error {

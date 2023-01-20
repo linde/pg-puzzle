@@ -87,7 +87,8 @@ func TestCloneBoard(t *testing.T) {
 	assert.Equal(*neb, *nebClonePtr)
 
 	// make sure the clone doesnt have refs to the orig
-	neb.Set(Blocked, NewLoc(4, 4))
+	loc4_4, _ := NewLoc(4, 4)
+	neb.Set(Blocked, loc4_4)
 	assert.NotEqual(neb, *nebClonePtr)
 
 }
