@@ -1,5 +1,7 @@
 package puzzle
 
+import "math"
+
 type SolveResult struct {
 	StopSet  StopSet
 	Solved   bool
@@ -99,4 +101,11 @@ func solveWorker(id int, stopSetJobs <-chan StopSet, stopSetJobResults chan<- So
 		solveResult := SolveStopSet(stopSet)
 		stopSetJobResults <- solveResult
 	}
+}
+
+// returns the numbers of combos for a give cap. for instance,
+// a cap of two will have 2^^3 combos because we have 3 stop paths
+
+func GetCombosForCap(cap int) int {
+	return int(math.Pow(float64(cap), 3))
 }

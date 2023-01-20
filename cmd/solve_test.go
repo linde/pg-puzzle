@@ -3,20 +3,12 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 	"pgpuzzle/puzzle"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
-
-// returns the numbers of combos for a give cap. for instance,
-// a cap of two will have 2^^3 combos because we have 3 stop paths
-
-func getCombosForCap(cap int) int {
-	return int(math.Pow(float64(cap), 3))
-}
 
 func Test_SolveCommand(t *testing.T) {
 	assert := assert.New(t)
@@ -42,7 +34,7 @@ func Test_SolveCommand(t *testing.T) {
 	assert.Zero(unsolvedPuzzlesInOutput)
 
 	// verify the number of solutions for the cap
-	solvedPuzzles := getCombosForCap(capToTest)
+	solvedPuzzles := puzzle.GetCombosForCap(capToTest)
 	solvedPuzzlesInOutput := strings.Count(strings.ToLower(commandOutput), "solved")
 	assert.Equal(solvedPuzzles, solvedPuzzlesInOutput)
 }
@@ -96,7 +88,7 @@ func Test_SolveCommandJson(t *testing.T) {
 
 	err = json.Unmarshal([]byte(allCommandOutput), &allCommandJsonResult)
 	assert.Nil(err)
-	assert.Equal(len(allCommandJsonResult), getCombosForCap(capToTest))
+	assert.Equal(len(allCommandJsonResult), puzzle.GetCombosForCap(capToTest))
 	for _, result := range allCommandJsonResult {
 		assert.True(result.Solved)
 	}
