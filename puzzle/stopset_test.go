@@ -31,7 +31,7 @@ func TestDefaultStopPaths(t *testing.T) {
 
 	path1, path2, path3 := DefaultStopPaths()
 
-	// these stops arent reacable to be set in the puzzle
+	// these stops arent reachable to be set in the puzzle
 	unavailableStops := []Loc{{0, 2}, {2, 0}, {3, 3}}
 
 	for _, stop := range unavailableStops {
