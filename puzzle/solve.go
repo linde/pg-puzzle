@@ -49,7 +49,6 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 	return false, nil
 }
 
-// TODO figure out why --workers=1 hangs
 func SolveAllStops(workers int, cap int) (solved, unsolved []SolveResult) {
 
 	path1, path2, path3 := DefaultStopPaths()
@@ -66,7 +65,7 @@ func SolveAllStops(workers int, cap int) (solved, unsolved []SolveResult) {
 	stopSetJobResults := make(chan SolveResult, workers)
 
 	// launch our workers ensuring there is at least one
-	for workerId := 1; workerId < workers; workerId++ {
+	for workerId := 0; workerId < workers; workerId++ {
 		go solveWorker(workerId, stopSetJobs, stopSetJobResults)
 	}
 

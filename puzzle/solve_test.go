@@ -25,8 +25,13 @@ func TestSolveAllCapped(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(assert)
 
-	workers, cap := 4, 2
+	workers, cap := 8, 2
 	solved, unsolved := SolveAllStops(workers, cap)
+	assert.Len(unsolved, 0)
+	assert.Len(solved, GetCombosForCap(cap))
+
+	workers, cap = 1, 1
+	solved, unsolved = SolveAllStops(workers, cap)
 	assert.Len(unsolved, 0)
 	assert.Len(solved, GetCombosForCap(cap))
 
