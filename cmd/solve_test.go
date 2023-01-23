@@ -75,7 +75,7 @@ func Test_SolveCommandJson(t *testing.T) {
 	assert.Nil(stopSetParseError)
 	assert.NotNil(testStopSet)
 	// assert what comes out is what we put in
-	// TODO this doesnt work yet --> assert.Equal(testStopSet, jsonResult[0].StopSet)
+	assert.Equal(testStopSet, jsonResult[0].StopSet)
 
 	// try a run with --all and a cap and verify the length
 	capToTest := 2

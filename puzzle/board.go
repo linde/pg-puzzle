@@ -43,7 +43,7 @@ func (b Board) Set(val State, locs ...Loc) *Board {
 
 	// TODO have sanity checks
 	for _, loc := range locs {
-		b[loc.r][loc.c] = val
+		b[loc.R][loc.C] = val
 	}
 	return &b
 }
@@ -62,14 +62,14 @@ func (orig Board) Clone() *Board {
 
 func (b Board) Get(loc Loc) State {
 
-	if loc.r < 0 || loc.r >= len(b) {
+	if loc.R < 0 || loc.R >= len(b) {
 		return Invalid
 	}
-	if loc.c < 0 || loc.c >= len(b[loc.r]) {
+	if loc.C < 0 || loc.C >= len(b[loc.R]) {
 		return Invalid
 	}
 
-	return b[loc.r][loc.c]
+	return b[loc.R][loc.C]
 }
 
 func (board Board) String() string {

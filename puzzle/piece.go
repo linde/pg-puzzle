@@ -46,15 +46,16 @@ func NewPiece(state State, steps ...Step) (p *Piece) {
 
 func doStep(loc Loc, step Step) Loc {
 
+	// TODO should this instead be in Loc.doStep(s Step) ?
 	switch step {
 	case North:
-		return Loc{loc.r - 1, loc.c}
+		return Loc{loc.R - 1, loc.C}
 	case East:
-		return Loc{loc.r, loc.c + 1}
+		return Loc{loc.R, loc.C + 1}
 	case South:
-		return Loc{loc.r + 1, loc.c}
+		return Loc{loc.R + 1, loc.C}
 	case West:
-		return Loc{loc.r, loc.c - 1}
+		return Loc{loc.R, loc.C - 1}
 	}
 
 	return Loc{-1, -1}

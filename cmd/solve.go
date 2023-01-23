@@ -66,6 +66,7 @@ func parseStop(stops string) (pz.StopSet, error) {
 		parsedLocs[idx] = loc
 	}
 
+	// TODO is thers some cool golang idiomatic way to do this?
 	if parsedLocs[0] == parsedLocs[1] ||
 		parsedLocs[0] == parsedLocs[2] ||
 		parsedLocs[1] == parsedLocs[2] {

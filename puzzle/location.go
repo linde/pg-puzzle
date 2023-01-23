@@ -1,10 +1,8 @@
 package puzzle
 
-import "encoding/json"
-
 type Loc struct {
-	r int
-	c int
+	R int `json:"row"`
+	C int `json:"col"`
 }
 
 func NewLoc(r, c int) (Loc, bool) {
@@ -17,7 +15,7 @@ func NewLoc(r, c int) (Loc, bool) {
 }
 
 func (i Loc) IsLessThanOrEqual(j Loc) bool {
-	return i.r < j.r || i.r == j.r && i.c <= j.c
+	return i.R < j.R || i.R == j.R && i.C <= j.C
 }
 
 func BoardToLocArray(board [][]bool) (retLocs []Loc) {
@@ -31,6 +29,7 @@ func BoardToLocArray(board [][]bool) (retLocs []Loc) {
 	return
 }
 
+/***
 // made a custom marsharler to avoid exporting `r` and `c`
 // but if we ever take Locs from a file, we might need
 // func (ct *customTime) UnmarshalJSON(d []byte) error
@@ -48,3 +47,4 @@ func (loc Loc) MarshalJSON() ([]byte, error) {
 	}
 	return j, nil
 }
+***/
