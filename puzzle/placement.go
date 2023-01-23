@@ -27,7 +27,7 @@ func IsSafePlacement(p *Piece, b *Board, loc Loc) (bool, *Board) {
 	// backtrack. for example,  {E E E W S S} makes a T shape
 	for _, step := range p.steps {
 
-		curLoc = doStep(curLoc, step)
+		curLoc = curLoc.DoStep(step)
 		curVal = retBoard.Get(curLoc)
 
 		//fmt.Printf("IsSafePlacement: From %s @ %d,%d move %s \n%s", curVal, curR, curC, step, retBoard)

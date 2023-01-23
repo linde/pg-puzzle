@@ -11,7 +11,10 @@ func NewLoc(r, c int) (Loc, bool) {
 		return Loc{}, false
 	}
 	return Loc{r, c}, true
+}
 
+func (loc Loc) GetRowCol() (int, int) {
+	return loc.R, loc.C
 }
 
 func (i Loc) IsLessThanOrEqual(j Loc) bool {
@@ -27,4 +30,20 @@ func BoardToLocArray(board [][]bool) (retLocs []Loc) {
 		}
 	}
 	return
+}
+
+func (loc Loc) DoStep(step Step) Loc {
+
+	switch step {
+	case North:
+		return Loc{loc.R - 1, loc.C}
+	case East:
+		return Loc{loc.R, loc.C + 1}
+	case South:
+		return Loc{loc.R + 1, loc.C}
+	case West:
+		return Loc{loc.R, loc.C - 1}
+	}
+
+	return Loc{-1, -1}
 }

@@ -44,23 +44,6 @@ func NewPiece(state State, steps ...Step) (p *Piece) {
 	return &Piece{state, steps}
 }
 
-func doStep(loc Loc, step Step) Loc {
-
-	// TODO should this instead be in Loc.doStep(s Step) ?
-	switch step {
-	case North:
-		return Loc{loc.R - 1, loc.C}
-	case East:
-		return Loc{loc.R, loc.C + 1}
-	case South:
-		return Loc{loc.R + 1, loc.C}
-	case West:
-		return Loc{loc.R, loc.C - 1}
-	}
-
-	return Loc{-1, -1}
-}
-
 func (p Piece) Flip() (rotated *Piece) {
 
 	rotated = &Piece{state: p.state}
