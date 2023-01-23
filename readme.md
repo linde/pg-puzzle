@@ -25,7 +25,7 @@ $ go run main.go solve --help
 solve for default pieces
 
 Usage:
-  pg-puzzel solve [flags]
+  pg-puzzle solve [flags]
 
 Flags:
   -a, --all            try every stop combination, not allowed with --stops

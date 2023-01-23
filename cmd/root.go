@@ -10,7 +10,7 @@ import (
 func NewRootCmd() *cobra.Command {
 	return &cobra.Command{
 		// TODO: get the name of the CLI command used from cobra
-		Use:   "pg-puzzel",
+		Use:   "pg-puzzle",
 		Short: "cli for a program to playout puzzle configurations",
 	}
 }
