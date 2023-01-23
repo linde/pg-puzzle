@@ -15,6 +15,7 @@ func NormalizedStopSet(loc1, loc2, loc3 Loc) StopSet {
 	return StopSet{ss[0], ss[1], ss[2]}
 }
 
+// The values below describe the stop paths for the three plugs in the puzzle.
 func DefaultStopPaths() (path1, path2, path3 []Loc) {
 
 	path1 = BoardToLocArray([][]bool{
