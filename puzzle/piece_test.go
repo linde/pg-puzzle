@@ -37,8 +37,6 @@ func TestPiece(t *testing.T) {
 	threeEastPiece := NewPiece(Unknown, East, East, East)
 	squarePiece := NewPiece(Unknown, East, South, West, North)
 
-	// TODO add tests with skip directions too
-
 	assert.NotNil(threeNorthPiece)
 	assert.NotNil(threeEastPiece)
 	assert.NotNil(squarePiece)
@@ -46,6 +44,28 @@ func TestPiece(t *testing.T) {
 	rotatedThreeNorthPiece := threeNorthPiece.Rotate()
 	assert.NotEqualValues(*threeNorthPiece, *rotatedThreeNorthPiece)
 	assert.EqualValues(*rotatedThreeNorthPiece, *threeEastPiece)
+
+}
+
+func TestPieceFlip(t *testing.T) {
+
+	assert := assert.New(t)
+
+	// first N and S flipped should be the same
+	threeNorthPiece := NewPiece(Unknown, North, North, North)
+	threeNorthPieceFlipped := threeNorthPiece.Flip()
+	assert.EqualValues(*threeNorthPiece, *threeNorthPieceFlipped)
+
+	threeSouthPiece := NewPiece(Unknown, South, South, South)
+	threeSouthPieceFlipped := threeSouthPiece.Flip()
+	assert.EqualValues(*threeSouthPiece, *threeSouthPieceFlipped)
+
+	// next east/west which actually do flip
+	ellToEast := NewPiece(Unknown, South, East)
+	ellToWest := NewPiece(Unknown, South, West)
+
+	assert.EqualValues(*ellToEast.Flip(), *ellToWest)
+	assert.EqualValues(*ellToWest.Flip(), *ellToEast)
 
 }
 
