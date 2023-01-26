@@ -2,6 +2,7 @@ package puzzle
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	assertions "github.com/stretchr/testify/assert"
@@ -122,4 +123,22 @@ func TestParallelBoardPrinter(t *testing.T) {
 
 }
 
-// TODO board.Set() tests
+func TestBoardMatrixRender(t *testing.T) {
+
+	assert := assertions.New(t)
+	assert.NotNil(assert)
+
+	empty := NewEmptyBoard()
+
+	colSep, rowSep := " ", "\n"
+
+	emptyBoardString := StringerMatrixJoin(*empty, colSep, rowSep)
+
+	colDelimCount := strings.Count(emptyBoardString, colSep)
+	rowDelimCount := strings.Count(emptyBoardString, rowSep)
+
+	// row delim count is one fewer than the number of dimensions
+	assert.Equal(BOARD_DIMENSION-1, rowDelimCount, "row delim count mismatch")
+	// col delim count is one fewer than the number of cols times the number of rows
+	assert.Equal((BOARD_DIMENSION-1)*BOARD_DIMENSION, colDelimCount, "column delim count mismatch")
+}

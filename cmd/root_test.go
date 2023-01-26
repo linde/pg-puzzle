@@ -15,6 +15,9 @@ func Test_ExecuteCommand(t *testing.T) {
 	cmd := NewRootCmd()
 	GenericCommandRunner(t, cmd, "cli")
 
+	falseFlag := "--not-a-real-arg"
+	cmd.SetArgs([]string{falseFlag})
+	GenericCommandRunner(t, cmd, "unknown flag: "+falseFlag)
 }
 
 func GenericCommandRunner(t *testing.T, cmd *cobra.Command, outputAssertions ...string) string {
