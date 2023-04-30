@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"pgpuzzle/puzzle"
 	pz "pgpuzzle/puzzle"
-	"regexp"
 
 	"github.com/spf13/cobra"
 )
@@ -112,16 +111,8 @@ func doSolveRun(cmd *cobra.Command, args []string) error {
 
 			boardSolvedStr := solveResult.Solution.String()
 
-			// from https://twin.sh/articles/35/how-to-add-colors-to-your-console-terminal-output-in-go
 			if outFormat == "color" {
-				const (
-					// ${1} is replaced with 1,2,3... and makes the colors
-					ANSICOLOR_TEMPLATE = "\033[3${1}m"
-					ANSICOLOR_RESET    = "\033[0m"
-				)
-
-				re := regexp.MustCompile(`([0-9])`)
-				boardSolvedStr = re.ReplaceAllString(boardSolvedStr, ANSICOLOR_TEMPLATE+"${1}"+ANSICOLOR_RESET)
+				boardSolvedStr = puzzle.Colorify(boardSolvedStr)
 			}
 			fmt.Fprintf(cmd.OutOrStdout(), "Solved: %v\n%s\n", solveResult.StopSet, boardSolvedStr)
 		} else {
