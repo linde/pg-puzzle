@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"pgpuzzle/puzzle"
-	pz "pgpuzzle/puzzle"
 
 	"github.com/spf13/cobra"
 )
@@ -43,7 +42,7 @@ const (
 	STOPS_FORMAT string = "%d,%d %d,%d %d,%d"
 )
 
-func parseStop(stops string) (pz.StopSet, error) {
+func parseStop(stops string) (puzzle.StopSet, error) {
 
 	var s1r, s1c, s2r, s2c, s3r, s3c int
 
@@ -54,13 +53,13 @@ func parseStop(stops string) (pz.StopSet, error) {
 		{s3r, s3c},
 	}
 
-	var parsedLocs [3]pz.Loc
+	var parsedLocs [3]puzzle.Loc
 
 	for idx, l := range locs {
-		loc, ok := pz.NewLoc(l.r, l.c)
+		loc, ok := puzzle.NewLoc(l.r, l.c)
 		if !ok {
 			err := fmt.Errorf("invalid stop #%d (%d,%d) in %s", idx, l.r, l.c, stops)
-			return pz.StopSet{}, err
+			return puzzle.StopSet{}, err
 		}
 		parsedLocs[idx] = loc
 	}
@@ -70,10 +69,10 @@ func parseStop(stops string) (pz.StopSet, error) {
 		parsedLocs[0] == parsedLocs[2] ||
 		parsedLocs[1] == parsedLocs[2] {
 		err := fmt.Errorf("duplicate stops in %s", stops)
-		return pz.StopSet{}, err
+		return puzzle.StopSet{}, err
 	}
 
-	return pz.NormalizedStopSet(parsedLocs[0], parsedLocs[1], parsedLocs[2]), nil
+	return puzzle.NormalizedStopSet(parsedLocs[0], parsedLocs[1], parsedLocs[2]), nil
 }
 
 func doSolveRun(cmd *cobra.Command, args []string) error {
@@ -81,14 +80,14 @@ func doSolveRun(cmd *cobra.Command, args []string) error {
 	var solved, unsolved []puzzle.SolveResult
 
 	if allStopsArg {
-		solved, unsolved = pz.SolveAllStops(workers, cap)
+		solved, unsolved = puzzle.SolveAllStops(workers, cap)
 	} else {
 
 		stops, stopsParseError := parseStop(stopsArg)
 		if stopsParseError != nil {
 			return stopsParseError
 		}
-		solveResult := pz.SolveStopSet(stops)
+		solveResult := puzzle.SolveStopSet(stops)
 		if solveResult.Solved {
 			solved = []puzzle.SolveResult{solveResult}
 		} else {
