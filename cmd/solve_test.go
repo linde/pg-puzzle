@@ -105,6 +105,9 @@ func Test_ParseStops(t *testing.T) {
 		{"", true},
 		{"0,0,0 0,4 4,2", true},
 		{"0 1 2", true},
+		{"0 -1 2", true},
+		{"0,0 0,9 4,2", true},
+		{"0,0 9,0 4,2", true},
 	}
 	for idx, test := range tests {
 
