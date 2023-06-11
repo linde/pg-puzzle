@@ -3,14 +3,14 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
 
 func NewRootCmd() *cobra.Command {
 	return &cobra.Command{
-		// TODO: get the name of the CLI command used from cobra
-		Use:   "pg-puzzle",
+		Use:   filepath.Base(os.Args[0]),
 		Short: "cli for a program to playout puzzle configurations",
 	}
 }
