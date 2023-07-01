@@ -36,3 +36,8 @@ Flags:
 ```
 
 I used this as an excuse to learn features of golang, lots can be improved in the code and the code style.
+
+
+# TODOs
+
+* TODO change the name of some of the `solve.go` files all over
