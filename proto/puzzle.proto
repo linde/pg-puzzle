@@ -1,0 +1,42 @@
+
+syntax = "proto3";
+
+option go_package = "./proto";
+
+package proto;
+
+import "google/api/annotations.proto";
+
+
+// The greeting service definition.
+service Puzzle {
+  // Sends a greeting
+  rpc Solve (SolveRequest) returns (SolveReply) {
+    option (google.api.http) = {
+      get: "/v1/puzzle/solve"
+    };
+  }
+}
+
+message SolveRequest {
+  repeated Location stopSet = 10;
+}
+
+message Location {
+  int32 row = 10;
+  int32 col = 20;
+}
+
+
+message SolveReply {
+  bool solved = 10;
+  repeated int32 solution = 20 [packed=true];
+}
+
+
+
+
+
+
+
+

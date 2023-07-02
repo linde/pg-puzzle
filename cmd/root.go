@@ -8,6 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const DEFAULT_RPC_PORT = 10001
+
 func NewRootCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   filepath.Base(os.Args[0]),
