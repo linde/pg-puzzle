@@ -1,7 +1,13 @@
 package restserver
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 	"pgpuzzle/grpcservice"
+	"pgpuzzle/proto"
+	"pgpuzzle/puzzle"
 	"pgpuzzle/solveserver"
 	"testing"
 
@@ -36,8 +42,28 @@ func TestRestGateway(t *testing.T) {
 
 	gwAddr := rgw.GetRestGatewayAddr()
 	assert.NotNil((gwAddr))
-
 	go rgw.Serve()
 
-	// ok, we're set up to test the restgawy
+	// TODO is the URL available in the proto generated code?
+	url := fmt.Sprintf("http://%s/v1/puzzle/solve", gwAddr)
+	resp, httpErr := http.Get(url)
+	assert.Nil(httpErr)
+	assert.NotNil(resp)
+	assert.Equal(http.StatusOK, resp.StatusCode)
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		body, err := io.ReadAll(resp.Body)
+		assert.Nil(err)
+
+		bodyStr := string(body)
+
+		var jsonResult proto.SolveReply
+		jsonErr := json.Unmarshal([]byte(bodyStr), &jsonResult)
+
+		assert.Nil(jsonErr)
+		assert.True(jsonResult.Solved)
+		assert.Len(jsonResult.Solution, puzzle.BOARD_DIMENSION*puzzle.BOARD_DIMENSION)
+	}
+
 }
