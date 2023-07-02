@@ -7,8 +7,6 @@ package proto;
 
 import "google/api/annotations.proto";
 
-
-// The greeting service definition.
 service Puzzle {
   // Sends a greeting
   rpc Solve (SolveRequest) returns (SolveReply) {
@@ -30,7 +28,7 @@ message Location {
 
 message SolveReply {
   bool solved = 10;
-  repeated int32 solution = 20 [packed=true];
+  repeated int32 solution = 20 [packed=true]; // TODO can we do a better board here?
 }
 
 

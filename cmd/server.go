@@ -4,13 +4,14 @@ import (
 	"fmt"
 
 	"pgpuzzle/grpcservice"
+	"pgpuzzle/restserver"
 	"pgpuzzle/solveserver"
 
 	"github.com/spf13/cobra"
 )
 
 var serverCmd = NewServerCmd()
-var rpcPort int
+var restPort, rpcPort int
 
 func NewServerCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -19,6 +20,7 @@ func NewServerCmd() *cobra.Command {
 		RunE:  doServerRun,
 	}
 	cmd.Flags().IntVarP(&rpcPort, "port", "p", DEFAULT_RPC_PORT, "rpcserver port")
+	cmd.Flags().IntVarP(&restPort, "rest", "r", -1, "rest server port, dont set or use -1 to disable")
 
 	return cmd
 }
@@ -36,6 +38,17 @@ func doServerRun(cmd *cobra.Command, args []string) error {
 	}
 	solveServer := solveserver.NewSolveServer()
 	defer solveServer.Stop()
+
+	// if restPort is configured, add a rest gateway using the port
+	if restPort >= 0 {
+		rpcAddr, err := gs.GetServiceTCPAddr()
+		if err != nil {
+			fmt.Fprintf(cmd.ErrOrStderr(), "error getting RPC service address: %s", err)
+			return err
+		}
+		rgw := restserver.NewRestGateway(restPort, rpcAddr)
+		go rgw.Serve()
+	}
 
 	serveErr := gs.Serve(solveServer)
 	if serveErr != nil {
