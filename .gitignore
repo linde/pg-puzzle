@@ -25,3 +25,6 @@ pgpuzzle
 ## vscode workspace files
 *.code-workspace
 coverage.html
+
+# a catch-all to stash partial changes
+.ignore/
