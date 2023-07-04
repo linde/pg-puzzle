@@ -53,7 +53,6 @@ func TestRestGateway(t *testing.T) {
 		{"", http.StatusOK, true},
 		{"0,0 0,4 4,2", http.StatusOK, true},
 		{"0,4 0,0 4,2", http.StatusOK, true},
-		// TODO add failure modes.
 	}
 
 	for idx, test := range tests {
@@ -69,8 +68,8 @@ func TestRestGateway(t *testing.T) {
 
 			assert.NotNil(test.stopStr)
 			if len(test.stopStr) > 0 {
-				// TODO assert these errors are nil and stop ignoring them
-				stopSet, _ := puzzle.NewStopSet(test.stopStr)
+				stopSet, stopSetParseErr := puzzle.NewStopSet(test.stopStr)
+				assert.Nil(stopSetParseErr)
 
 				// TODO do this somehow better or document it
 				rpcRequest := struct {
