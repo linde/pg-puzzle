@@ -1,10 +1,48 @@
 package puzzle
 
 import (
+	"fmt"
 	"sort"
 )
 
 type StopSet [3]Loc
+
+const (
+	STOPS_FORMAT string = "%d,%d %d,%d %d,%d"
+)
+
+func NewStopSet(stops string) (StopSet, error) {
+
+	var s1r, s1c, s2r, s2c, s3r, s3c int
+
+	fmt.Sscanf(stops, STOPS_FORMAT, &s1r, &s1c, &s2r, &s2c, &s3r, &s3c)
+	locs := []struct{ r, c int }{
+		{s1r, s1c},
+		{s2r, s2c},
+		{s3r, s3c},
+	}
+
+	var parsedLocs [3]Loc
+
+	for idx, l := range locs {
+		loc, ok := NewLoc(l.r, l.c)
+		if !ok {
+			err := fmt.Errorf("invalid stop #%d (%d,%d) in %s", idx, l.r, l.c, stops)
+			return StopSet{}, err
+		}
+		parsedLocs[idx] = loc
+	}
+
+	// TODO is thers some cool golang idiomatic way to do this?
+	if parsedLocs[0] == parsedLocs[1] ||
+		parsedLocs[0] == parsedLocs[2] ||
+		parsedLocs[1] == parsedLocs[2] {
+		err := fmt.Errorf("duplicate stops in %s", stops)
+		return StopSet{}, err
+	}
+
+	return NormalizedStopSet(parsedLocs[0], parsedLocs[1], parsedLocs[2]), nil
+}
 
 func NormalizedStopSet(loc1, loc2, loc3 Loc) StopSet {
 

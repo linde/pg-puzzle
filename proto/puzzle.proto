@@ -11,7 +11,8 @@ service Puzzle {
   // Sends a greeting
   rpc Solve (SolveRequest) returns (SolveReply) {
     option (google.api.http) = {
-      get: "/v1/puzzle/solve"
+      post: "/v1/puzzle/solve"
+      body: "*"
     };
   }
 }

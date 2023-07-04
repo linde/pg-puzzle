@@ -6,6 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO new tests for NewStopSet()
+
 func TestNormalizedStopSet(t *testing.T) {
 
 	assert := assert.New(t)

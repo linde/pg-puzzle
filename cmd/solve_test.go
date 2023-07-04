@@ -71,7 +71,7 @@ func Test_SolveCommandJson(t *testing.T) {
 	assert.True(jsonResult[0].Solved)
 
 	// TODO get the defaultStopSet from somewhere authoritative
-	testStopSet, stopSetParseError := parseStop(stopStr)
+	testStopSet, stopSetParseError := puzzle.NewStopSet(stopStr)
 	assert.Nil(stopSetParseError)
 	assert.NotNil(testStopSet)
 	// assert what comes out is what we put in
@@ -114,7 +114,7 @@ func Test_ParseStops(t *testing.T) {
 		testName := fmt.Sprintf("  [arg:%s][isError: %v]", test.arg, test.isError)
 		t.Run(testName, func(tt *testing.T) {
 			assertNested := assert.New(tt)
-			ss, error := parseStop(test.arg)
+			ss, error := puzzle.NewStopSet(test.arg)
 			if test.isError {
 				assertNested.NotNil(error, "test %d: expected error for: %s, got: %v", idx, test.arg, ss)
 			} else {

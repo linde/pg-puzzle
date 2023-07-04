@@ -1,6 +1,7 @@
 package restserver
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -44,26 +45,68 @@ func TestRestGateway(t *testing.T) {
 	assert.NotNil((gwAddr))
 	go rgw.Serve()
 
-	// TODO is the URL available in the proto generated code?
-	url := fmt.Sprintf("http://%s/v1/puzzle/solve", gwAddr)
-	resp, httpErr := http.Get(url)
-	assert.Nil(httpErr)
-	assert.NotNil(resp)
-	assert.Equal(http.StatusOK, resp.StatusCode)
-	defer resp.Body.Close()
+	tests := []struct {
+		stopStr       string
+		respCode      int
+		solveExpected bool
+	}{
+		{"", http.StatusOK, true},
+		{"0,0 0,4 4,2", http.StatusOK, true},
+		{"0,4 0,0 4,2", http.StatusOK, true},
+		// TODO add failure modes.
+	}
 
-	if resp.StatusCode == http.StatusOK {
-		body, err := io.ReadAll(resp.Body)
-		assert.Nil(err)
+	for idx, test := range tests {
 
-		bodyStr := string(body)
+		testName := fmt.Sprintf("TestRestGateway(idx:%d){solveExpected:%v,stops:%v",
+			idx, test.solveExpected, test.stopStr)
 
-		var jsonResult proto.SolveReply
-		jsonErr := json.Unmarshal([]byte(bodyStr), &jsonResult)
+		t.Run(testName, func(tt *testing.T) {
 
-		assert.Nil(jsonErr)
-		assert.True(jsonResult.Solved)
-		assert.Len(jsonResult.Solution, puzzle.BOARD_DIMENSION*puzzle.BOARD_DIMENSION)
+			assert := a.New(tt)
+
+			stopSetBytes := []byte{}
+
+			assert.NotNil(test.stopStr)
+			if len(test.stopStr) > 0 {
+				// TODO assert these errors are nil and stop ignoring them
+				stopSet, _ := puzzle.NewStopSet(test.stopStr)
+
+				// TODO do this somehow better or document it
+				rpcRequest := struct {
+					StopSet puzzle.StopSet
+				}{
+					StopSet: stopSet,
+				}
+				stopSetBytes, _ = json.Marshal(rpcRequest)
+			}
+
+			// TODO is the URL available in the proto generated code?
+			posturl := fmt.Sprintf("http://%s/v1/puzzle/solve", gwAddr)
+
+			resp, reqErr := http.Post(posturl, "application/json", bytes.NewBuffer(stopSetBytes))
+			assert.Nil(reqErr)
+			assert.NotNil(resp)
+			assert.Equal(test.respCode, resp.StatusCode)
+			if resp.StatusCode == http.StatusOK {
+				assert.Equal(http.StatusOK, resp.StatusCode)
+				defer resp.Body.Close()
+
+				body, bodyReadErr := io.ReadAll(resp.Body)
+				assert.Nil(bodyReadErr)
+
+				bodyStr := string(body)
+
+				var jsonResult proto.SolveReply
+				jsonErr := json.Unmarshal([]byte(bodyStr), &jsonResult)
+
+				assert.Nil(jsonErr)
+				assert.Equal(test.solveExpected, jsonResult.Solved)
+				if jsonResult.Solved {
+					assert.Len(jsonResult.Solution, puzzle.BOARD_DIMENSION*puzzle.BOARD_DIMENSION)
+				}
+			}
+		})
 	}
 
 }
