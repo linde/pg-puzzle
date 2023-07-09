@@ -15,7 +15,8 @@ go install golang.org/x/tools/cmd/stringer@latest
 go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
-
+go get     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
 
 go generate ./...
 go build
@@ -39,7 +40,17 @@ Flags:
   -n, --workers int    number of workers for --all (default 8)
 ```
 
-This now also has a `server` subcommand that will stand up a grpc server and also a rest gateway to proxy to it.
+This now also has a `server` subcommand that will stand up a grpc server and also a rest gateway to proxy to it. To try out the rest gateway, do the following:
+
+```bash
+
+go run main.go server --rest=8080 &
+curl -X 'POST'   'http://localhost:8080/v1/puzzle/solve'   \
+  -H 'accept: application/json'   \
+  -H 'Content-Type: application/json'  \
+  -d '{"stopSet":[{"row":0,"col":0},{"row":0,"col":4},{"row":4,"col":2}]}'
+
+```
 
 
 # Disclaimer 

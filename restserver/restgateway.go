@@ -14,13 +14,12 @@ import (
 
 type restgatewayserver struct {
 	listener   net.Listener
-	gwmux      *runtime.ServeMux
+	gwmux      *http.ServeMux
 	grpcClient *grpcservice.Clientconn
 }
 
 // This is a rest gateway serving on restGatewayPort that proxies
-// to the rpc endpoint from rpcAddr. access it with a URL like:
-// http://0.0.0.0:{restGatewayPort}/v1/helloservice/sayhello?name=dolly&times=15
+// to the rpc endpoint from rpcAddr.
 func NewRestGateway(restGatewayPort int, rpcAddr *net.TCPAddr) restgatewayserver {
 
 	conn, err := grpcservice.NewNetClientConn(context.Background(), rpcAddr.String())
@@ -34,13 +33,22 @@ func NewRestGateway(restGatewayPort int, rpcAddr *net.TCPAddr) restgatewayserver
 		log.Fatalln("Failed to register gateway:", err)
 	}
 
+	// now bring together the gateway and swagger into a new http.ServeMux
+	mux := http.NewServeMux()
+	mux.Handle("/", gwmux)
+	mux.HandleFunc("/openapiv3.json", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "proto/puzzle.swagger.json")
+	})
+	fileServer := http.FileServer(http.Dir("www/swagger-ui"))
+	mux.Handle("/swagger-ui/", http.StripPrefix("/swagger-ui", fileServer))
+
 	gwTargetStr := fmt.Sprintf(":%d", restGatewayPort)
 	listener, err := net.Listen("tcp", gwTargetStr)
 	if err != nil {
 		log.Fatalf("could not create REST gateway listener: %v", err)
 	}
 
-	return restgatewayserver{listener, gwmux, conn}
+	return restgatewayserver{listener, mux, conn}
 
 }
 

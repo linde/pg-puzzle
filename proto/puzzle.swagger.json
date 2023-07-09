@@ -1,0 +1,124 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "puzzle.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Puzzle"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/puzzle/solve": {
+      "post": {
+        "summary": "Sends a greeting",
+        "operationId": "Puzzle_Solve",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoSolveReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/protoSolveRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Puzzle"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protoLocation": {
+      "type": "object",
+      "properties": {
+        "row": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "col": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "protoSolveReply": {
+      "type": "object",
+      "properties": {
+        "solved": {
+          "type": "boolean"
+        },
+        "solution": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": "TODO can we do a better board here?"
+        }
+      }
+    },
+    "protoSolveRequest": {
+      "type": "object",
+      "properties": {
+        "stopSet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protoLocation"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
