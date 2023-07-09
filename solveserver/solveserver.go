@@ -31,6 +31,10 @@ func (s *server) Solve(ctx context.Context, in *proto.SolveRequest) (*proto.Solv
 		ss[i] = puzzle.Loc{R: int(stop.Row), C: int(stop.Col)}
 	}
 
+	if isValid, err := ss.IsValid(); !isValid {
+		return nil, err
+	}
+
 	solveResult := puzzle.SolveStopSet(ss)
 
 	solution := getStatesFromBoard(solveResult.Solution)

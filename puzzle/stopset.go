@@ -1,6 +1,7 @@
 package puzzle
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 )
@@ -51,6 +52,19 @@ func NormalizedStopSet(loc1, loc2, loc3 Loc) StopSet {
 
 	// TODO is there a more idiomatic way to do this copy to an array from a slice?
 	return StopSet{ss[0], ss[1], ss[2]}
+}
+
+func (ss StopSet) IsValid() (bool, error) {
+
+	// TODO maybe accumulate the errors rather than fail fast?
+	for idx, loc := range ss {
+
+		if loc.R < 0 || loc.R > BOARD_DIMENSION || loc.C < 0 || loc.C > BOARD_DIMENSION {
+			errMsg := fmt.Sprintf("Location %d in StopSet %v is invalid", idx, ss)
+			return false, errors.New(errMsg)
+		}
+	}
+	return true, nil
 }
 
 // The values below describe the stop paths for the three plugs in the puzzle.
