@@ -52,8 +52,8 @@ func doServerRun(cmd *cobra.Command, args []string) error {
 
 	serveErr := gs.Serve(solveServer)
 	if serveErr != nil {
-		fmt.Fprintf(cmd.ErrOrStderr(), "error in grpc server Serve(): %v", err)
-		return err
+		fmt.Fprintf(cmd.ErrOrStderr(), "error in grpc server Serve(): %v", serveErr)
+		return serveErr
 	}
 
 	return nil
