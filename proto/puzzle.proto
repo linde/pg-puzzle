@@ -8,7 +8,6 @@ package proto;
 import "google/api/annotations.proto";
 
 service Puzzle {
-  // Sends a greeting
   rpc Solve (SolveRequest) returns (SolveReply) {
     option (google.api.http) = {
       post: "/v1/puzzle/solve"
