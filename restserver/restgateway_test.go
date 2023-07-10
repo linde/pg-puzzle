@@ -50,22 +50,25 @@ func TestRestGateway(t *testing.T) {
 	assert.NotNil((gwAddr))
 	go rgw.Serve()
 
+	// TODO we shouldnt capture these here but rather use the library to solve them and just test the rest parts
 	SOLUTION_EMPTY := []int32{2, 4, 7, 7, 8, 0, 4, 7, 7, 8, 5, 4, 4, 6, 8, 5, 5, 9, 6, 6, 0, 9, 9, 9, 6}
 	SOLUTION_00_04_42 := []int32{2, 4, 7, 7, 2, 8, 4, 7, 7, 9, 8, 4, 4, 9, 9, 8, 6, 6, 5, 9, 6, 6, 2, 5, 5}
 	SOLUTION_00_04_44 := []int32{2, 4, 7, 7, 2, 8, 4, 7, 7, 9, 8, 4, 4, 9, 9, 8, 6, 6, 5, 9, 6, 6, 5, 5, 2}
 
+	LOCATION_INVALID_STR := "Location 0 in StopSet"
+
 	tests := []struct {
-		postBody         string
-		respCode         int
-		solveExpected    bool
-		solutionExpected []int32
+		postBody            string
+		respCode            int
+		solveExpected       bool
+		solutionExpected    []int32
+		errMessageSubString string
 	}{
-
-		// TODO this always ends up as an empty array in the rpc server.
-
-		{``, http.StatusOK, true, SOLUTION_EMPTY},
-		{`{"stopSet":[{"row":0,"col":0},{"row":0,"col":4},{"row":4,"col":2}]}`, http.StatusOK, true, SOLUTION_00_04_42},
-		{`{"stopSet":[{"row":0,"col":0},{"row":0,"col":4},{"row":4,"col":4}]}`, http.StatusOK, true, SOLUTION_00_04_44},
+		{``, http.StatusOK, true, SOLUTION_EMPTY, ""},
+		{`{"stopSet":[{"row":0,"col":0},{"row":0,"col":4},{"row":4,"col":2}]}`, http.StatusOK, true, SOLUTION_00_04_42, ""},
+		{`{"stopSet":[{"row":0,"col":0},{"row":0,"col":4},{"row":4,"col":4}]}`, http.StatusOK, true, SOLUTION_00_04_44, ""},
+		{`{"stopSet":"invalid"`, http.StatusBadRequest, false, []int32{}, "unexpected EOF"},
+		{`{"stopSet":[{"row":666,"col":0},{"row":0,"col":4},{"row":4,"col":4}]}`, http.StatusInternalServerError, false, []int32{}, LOCATION_INVALID_STR},
 	}
 
 	for idx, test := range tests {
@@ -85,20 +88,19 @@ func TestRestGateway(t *testing.T) {
 			}
 
 			// TODO is the URL available in the proto generated code?
-			posturl := fmt.Sprintf("http://%s/v1/puzzle/solve", gwAddr)
+			url := fmt.Sprintf("http://%s/v1/puzzle/solve", gwAddr)
 
-			resp, reqErr := http.Post(posturl, "application/json", bytes.NewBuffer(postBodyBytes))
+			resp, reqErr := http.Post(url, "application/json", bytes.NewBuffer(postBodyBytes))
 			assert.Nil(reqErr)
 			assert.NotNil(resp)
 			assert.Equal(test.respCode, resp.StatusCode)
+
+			body, bodyReadErr := io.ReadAll(resp.Body)
+			defer resp.Body.Close()
+			assert.Nil(bodyReadErr)
+			bodyStr := string(body)
+
 			if resp.StatusCode == http.StatusOK {
-				assert.Equal(http.StatusOK, resp.StatusCode)
-				defer resp.Body.Close()
-
-				body, bodyReadErr := io.ReadAll(resp.Body)
-				assert.Nil(bodyReadErr)
-
-				bodyStr := string(body)
 
 				var jsonResult proto.SolveReply
 				jsonErr := json.Unmarshal([]byte(bodyStr), &jsonResult)
@@ -109,8 +111,9 @@ func TestRestGateway(t *testing.T) {
 					assert.Len(jsonResult.Solution, puzzle.BOARD_DIMENSION*puzzle.BOARD_DIMENSION)
 					assert.Equal(test.solutionExpected, jsonResult.Solution)
 				}
+			} else {
+				assert.Contains(bodyStr, test.errMessageSubString)
 			}
 		})
 	}
-
 }
