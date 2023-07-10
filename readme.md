@@ -40,6 +40,9 @@ Flags:
   -n, --workers int    number of workers for --all (default 8)
 ```
 
+
+# GRPC and Rest gateway
+
 This now also has a `server` subcommand that will stand up a grpc server and also a rest gateway to proxy to it. To try out the rest gateway, do the following:
 
 ```bash
@@ -51,6 +54,8 @@ curl -X 'POST'   'http://localhost:8080/v1/puzzle/solve'   \
   -d '{"stopSet":[{"row":0,"col":0},{"row":0,"col":4},{"row":4,"col":2}]}'
 
 ```
+
+If you're running the gateway, the app also serves an swagger schema. The [openapiv2 schema file](./proto/puzzle.swagger.json) is generated via `go generate ./...` and accessible via http for the port used above at [openapiv2.json](http://localhost:8080/openapiv2.json). We also serve the [swagger-ui](http://localhost:8080/swagger-ui/) locally on this port as well.
 
 
 # Disclaimer 

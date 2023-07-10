@@ -36,7 +36,7 @@ func NewRestGateway(restGatewayPort int, rpcAddr *net.TCPAddr) restgatewayserver
 	// now bring together the gateway and swagger into a new http.ServeMux
 	mux := http.NewServeMux()
 	mux.Handle("/", gwmux)
-	mux.HandleFunc("/openapiv3.json", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/openapiv2.json", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "proto/puzzle.swagger.json")
 	})
 	fileServer := http.FileServer(http.Dir("www/swagger-ui"))
