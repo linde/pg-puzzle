@@ -31,7 +31,7 @@ func NewSolveCmd() *cobra.Command {
 	cmd.Flags().IntVarP(&clientTimeoutSeconds, "timeout", "t", -1, "grpc client timeout (seconds)")
 
 	// TODO validate output formats
-	cmd.Flags().StringVarP(&outFormat, "out", "o", "color", "print solutions in one of:[json,color,text]")
+	cmd.Flags().StringVarP(&outFormat, "output", "o", "color", "print solutions in one of:[json,color,text]")
 
 	return cmd
 }
