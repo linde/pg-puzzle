@@ -3,9 +3,9 @@ package cmd
 import (
 	"fmt"
 
+	"pgpuzzle/grpc_solveserver"
 	"pgpuzzle/grpcservice"
-	"pgpuzzle/restserver"
-	"pgpuzzle/solveserver"
+	"pgpuzzle/rest_solveserver"
 
 	"github.com/spf13/cobra"
 )
@@ -36,7 +36,7 @@ func doServerRun(cmd *cobra.Command, args []string) error {
 		fmt.Fprintf(cmd.ErrOrStderr(), "failed to create server: %v", err)
 		return err
 	}
-	solveServer := solveserver.NewSolveServer()
+	solveServer := grpc_solveserver.NewSolveServer()
 	defer solveServer.Stop()
 
 	// if restPort is configured, add a rest gateway using the port
@@ -46,7 +46,7 @@ func doServerRun(cmd *cobra.Command, args []string) error {
 			fmt.Fprintf(cmd.ErrOrStderr(), "error getting RPC service address: %s", err)
 			return err
 		}
-		rgw := restserver.NewRestGateway(restPort, rpcAddr)
+		rgw := rest_solveserver.NewRestGateway(restPort, rpcAddr)
 		go rgw.Serve()
 	}
 

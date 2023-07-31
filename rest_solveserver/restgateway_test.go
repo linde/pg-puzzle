@@ -1,4 +1,4 @@
-package restserver
+package rest_solveserver
 
 import (
 	"bytes"
@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"pgpuzzle/grpc_solveserver"
 	"pgpuzzle/grpcservice"
 	"pgpuzzle/proto"
 	"pgpuzzle/puzzle"
-	"pgpuzzle/solveserver"
 	"testing"
 
 	a "github.com/stretchr/testify/assert"
@@ -34,7 +34,7 @@ func TestRestGateway(t *testing.T) {
 	assert.Nil(portErr)
 	assert.Greater(serverAssignedPort, 0)
 
-	solveServer := solveserver.NewSolveServer()
+	solveServer := grpc_solveserver.NewSolveServer()
 	defer solveServer.Stop()
 	go gs.Serve(solveServer)
 

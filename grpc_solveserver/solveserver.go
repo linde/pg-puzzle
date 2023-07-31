@@ -1,4 +1,4 @@
-package solveserver
+package grpc_solveserver
 
 import (
 	"context"
@@ -35,7 +35,8 @@ func (s *server) Solve(ctx context.Context, in *proto.SolveRequest) (*proto.Solv
 		return nil, err
 	}
 
-	solveResult := puzzle.SolveStopSet(ss)
+	ls := puzzle.NewLocalSolver()
+	solveResult := ls.SolveStopSet(ss)
 
 	solution := getStatesFromBoard(solveResult.Solution)
 

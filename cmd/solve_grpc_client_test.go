@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"pgpuzzle/grpc_solveserver"
 	"pgpuzzle/grpcservice"
-	"pgpuzzle/solveserver"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,7 +22,7 @@ func Test_ClientCommand(t *testing.T) {
 	assert.Nil(err)
 	assert.Positive(serverAssignedPort)
 
-	solveServer := solveserver.NewSolveServer()
+	solveServer := grpc_solveserver.NewSolveServer()
 	assert.NotNil(solveServer, "failed to create solveserver")
 	defer solveServer.Stop()
 
@@ -31,9 +31,10 @@ func Test_ClientCommand(t *testing.T) {
 	// now actually test the client command
 
 	// this are the default stops
-	clientCmd := NewClientCmd()
+	clientCmd := NewSolveCmd()
 
 	clientCmd.SetArgs([]string{
+		"--remote=true",
 		fmt.Sprintf("--port=%d", serverAssignedPort),
 	})
 	out := GenericCommandRunner(t, clientCmd)

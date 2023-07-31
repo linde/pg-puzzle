@@ -2,23 +2,28 @@ package puzzle
 
 import "math"
 
-type SolveResult struct {
-	StopSet  StopSet
-	Solved   bool
-	Solution *Board
+type LocalSolver struct {
 }
 
-func SolveStopSet(stops StopSet) (solveResult SolveResult) {
+func NewLocalSolver() LocalSolver {
+	return LocalSolver{}
+}
+
+func (ls LocalSolver) SolveStopSet(stops StopSet) (solveResult SolveResult) {
 
 	pieces := DefaultPieces()
 
 	boardToSolve := NewEmptyBoard().Set(Blocked, (stops[:])...)
-	boardSolved, resultBoard := Solve(boardToSolve, pieces)
+	boardSolved, resultBoard := solve(boardToSolve, pieces)
 
 	return SolveResult{stops, boardSolved, resultBoard}
 }
 
-func Solve(board *Board, pieces []Piece) (bool, *Board) {
+func (ls LocalSolver) Close() {
+	// no-op
+}
+
+func solve(board *Board, pieces []Piece) (bool, *Board) {
 
 	if len(pieces) == 0 {
 		return true, board
@@ -33,7 +38,7 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 					if cell == _Empty_ {
 						isSafe, resultBoard := IsSafePlacement(curPiece, board, Loc{rowIdx, colIdx})
 						if isSafe {
-							restSafe, restBoard := Solve(resultBoard, pieces[1:])
+							restSafe, restBoard := solve(resultBoard, pieces[1:])
 							if restSafe {
 								return true, restBoard
 							}
@@ -49,7 +54,7 @@ func Solve(board *Board, pieces []Piece) (bool, *Board) {
 	return false, nil
 }
 
-func SolveAllStops(workers int, cap int) (solved, unsolved []SolveResult) {
+func (ls LocalSolver) SolveAllStops(workers int, cap int) (solved, unsolved []SolveResult) {
 
 	path1, path2, path3 := DefaultStopPaths()
 
@@ -66,7 +71,7 @@ func SolveAllStops(workers int, cap int) (solved, unsolved []SolveResult) {
 
 	// launch our workers ensuring there is at least one
 	for workerId := 0; workerId < workers; workerId++ {
-		go solveWorker(workerId, stopSetJobs, stopSetJobResults)
+		go ls.solveWorker(workerId, stopSetJobs, stopSetJobResults)
 	}
 
 	stopSetsChecked := 0
@@ -94,10 +99,10 @@ func SolveAllStops(workers int, cap int) (solved, unsolved []SolveResult) {
 	return
 }
 
-func solveWorker(id int, stopSetJobs <-chan StopSet, stopSetJobResults chan<- SolveResult) {
+func (ls LocalSolver) solveWorker(id int, stopSetJobs <-chan StopSet, stopSetJobResults chan<- SolveResult) {
 
 	for stopSet := range stopSetJobs {
-		solveResult := SolveStopSet(stopSet)
+		solveResult := ls.SolveStopSet(stopSet)
 		stopSetJobResults <- solveResult
 	}
 }
