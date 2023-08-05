@@ -11,7 +11,7 @@ const BOARD_DIMENSION = 5
 
 // TODO fun exercise, port this to bitsets
 
-type State int
+type State int32
 type Board [][]State
 
 // TODO should Unspecified be the 0 value? we'd need to explicitly write empty in NewEmptyBoard
@@ -127,4 +127,18 @@ func ParallelBoardsString(boards ...*Board) string {
 	}
 
 	return b.String()
+}
+
+func BoardFromInt32Array(ia []int32) *Board {
+
+	b := NewEmptyBoard()
+
+	// TODO find some cooler way to turn the array to a matrix
+	for row := 0; row < BOARD_DIMENSION; row++ {
+		for col := 0; col < BOARD_DIMENSION; col++ {
+			idx := (row * BOARD_DIMENSION) + col
+			b.Set(State(ia[idx]), Loc{R: row, C: col})
+		}
+	}
+	return b
 }
