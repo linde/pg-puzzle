@@ -17,16 +17,16 @@ func Test_SolveCommand(t *testing.T) {
 	assert.NotNil(cmd)
 
 	// this are the default stops
-	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--out=text"})
+	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--output=text"})
 	GenericCommandRunner(t, cmd, "solved: [{0 0} {0 4} {4 2}]", "b 1 4 4 b")
 
 	// These stops require flipping to solve
-	cmd.SetArgs([]string{"--stops=0,3 1,2 3,2", "--out=text"})
+	cmd.SetArgs([]string{"--stops=0,3 1,2 3,2", "--output=text"})
 	GenericCommandRunner(t, cmd, "solved: [{0 3} {1 2} {3 2}]", "1 2 2 b 6")
 
 	capToTest := 2
 	capParam := fmt.Sprintf("--cap=%d", capToTest)
-	cmd.SetArgs([]string{"--all", capParam, "--out=text"})
+	cmd.SetArgs([]string{"--all", capParam, "--output=text"})
 	commandOutput := GenericCommandRunner(t, cmd)
 	assert.NotNil(commandOutput)
 
@@ -46,7 +46,7 @@ func Test_SolveCommandColor(t *testing.T) {
 	assert.NotNil(cmd)
 
 	// this are the default stops
-	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--out=color"})
+	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--output=color"})
 	// TODO run the command and make assertions about color in the output
 	// GenericCommandRunner(t, cmd, "solved: [{0 0} {0 4} {4 2}]", "b 1 4 4 b")
 }
@@ -60,7 +60,7 @@ func Test_SolveCommandJson(t *testing.T) {
 	// this are the default stops, make sure we can unmarshall
 	// something and assert correct values
 	stopStr := "0,0 0,4 4,2"
-	cmd.SetArgs([]string{"--stops=" + stopStr, "--out=json"})
+	cmd.SetArgs([]string{"--stops=" + stopStr, "--output=json"})
 	commandOutput := GenericCommandRunner(t, cmd)
 	assert.NotZero(len(commandOutput))
 
@@ -80,7 +80,7 @@ func Test_SolveCommandJson(t *testing.T) {
 	// try a run with --all and a cap and verify the length
 	capToTest := 2
 	capParam := fmt.Sprintf("--cap=%d", capToTest)
-	cmd.SetArgs([]string{"--all=true", capParam, "--out=json"})
+	cmd.SetArgs([]string{"--all=true", capParam, "--output=json"})
 	allCommandOutput := GenericCommandRunner(t, cmd)
 	assert.NotZero(len(allCommandOutput))
 
