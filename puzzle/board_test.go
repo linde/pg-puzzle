@@ -149,18 +149,9 @@ func TestBoardFromIntArray(t *testing.T) {
 	const totalBoardStates = BOARD_DIMENSION * BOARD_DIMENSION
 
 	empty := NewEmptyBoard()
-	statesArray := make([]int32, 0, totalBoardStates)
-
-	// TODO consider moving this stuff to util maybe?
-	castFunc := func(f State) int32 { return int32(f) }
-	for _, row := range *empty {
-		rowAsInt32 := Map[State, int32](row, castFunc)
-		statesArray = append(statesArray, rowAsInt32...)
-	}
-
-	assert.Len(statesArray, totalBoardStates)
-	boardFromArray := BoardFromInt32Array(statesArray)
-	assert.Equal(empty, boardFromArray, "empty board serialized/deserialed via array does not match")
+	statesArray := make([]int32, totalBoardStates)
+	emptyFromDefaultArray := BoardFromInt32Array(statesArray)
+	assert.Equal(empty, emptyFromDefaultArray, "empty board does not match")
 
 	const nwStateValue State = Blocked
 	statesArray[0] = int32(nwStateValue)

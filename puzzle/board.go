@@ -133,12 +133,9 @@ func BoardFromInt32Array(ia []int32) *Board {
 
 	b := NewEmptyBoard()
 
-	// TODO find some cooler way to turn the array to a matrix
-	for row := 0; row < BOARD_DIMENSION; row++ {
-		for col := 0; col < BOARD_DIMENSION; col++ {
-			idx := (row * BOARD_DIMENSION) + col
-			b.Set(State(ia[idx]), Loc{R: row, C: col})
-		}
+	for idx, val := range ia {
+		row, col := int(idx/BOARD_DIMENSION), idx%BOARD_DIMENSION
+		b.Set(State(val), Loc{row, col})
 	}
 	return b
 }
