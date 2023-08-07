@@ -158,4 +158,12 @@ func TestBoardFromIntArray(t *testing.T) {
 	nwBlockedBoard := BoardFromInt32Array(statesArray)
 	nwState := nwBlockedBoard.Get(Loc{0, 0})
 	assert.Equal(nwStateValue, nwState, "northwest corner set in array but didnt match in board")
+
+	boardMiddleState, boardMiddleLoc := Unknown, Loc{2, 2}
+	boardMiddleArray := make([]int32, totalBoardStates)
+	boardMiddleArray[BOARD_DIMENSION*boardMiddleLoc.R+boardMiddleLoc.R] = int32(boardMiddleState)
+	boardMiddle := BoardFromInt32Array(boardMiddleArray)
+	testState := boardMiddle.Get(boardMiddleLoc)
+	assert.Equal(boardMiddleState, testState, "value set in intarray didnt end up in the board as expected")
+
 }
