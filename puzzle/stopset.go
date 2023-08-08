@@ -28,7 +28,7 @@ func NewStopSet(stops string) (StopSet, error) {
 	for idx, l := range locs {
 		loc, ok := NewLoc(l.r, l.c)
 		if !ok {
-			err := fmt.Errorf("invalid stop #%d (%d,%d) in %s", idx, l.r, l.c, stops)
+			err := fmt.Errorf("invalid stop with index %d (%d,%d) in %s", idx, l.r, l.c, stops)
 			return StopSet{}, err
 		}
 		parsedLocs[idx] = loc
