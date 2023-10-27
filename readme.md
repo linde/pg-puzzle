@@ -67,3 +67,4 @@ I used this as an excuse to learn features of golang, lots can be improved in th
 
 * TODO change the name of some of the `solve.go` files all over
 * TODO have log levels for server stuff
+# TODO containerize the app for the server and rest server
