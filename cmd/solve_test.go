@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"pgpuzzle/puzzle"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -47,8 +48,17 @@ func Test_SolveCommandColor(t *testing.T) {
 
 	// this are the default stops
 	cmd.SetArgs([]string{"--stops=0,0 0,4 4,2", "--output=color"})
+
 	// TODO run the command and make assertions about color in the output
-	// GenericCommandRunner(t, cmd, "solved: [{0 0} {0 4} {4 2}]", "b 1 4 4 b")
+	cmdOutWithColor := GenericCommandRunner(t, cmd)
+
+	COLOR_REGEX := regexp.MustCompile(regexp.QuoteMeta(puzzle.ANSICOLOR_PRE))
+	colorizedStateMatches := COLOR_REGEX.FindAll([]byte(cmdOutWithColor), -1)
+
+	// TODO - treat return of puzzle.DefaultStopPaths() as array or tuple
+	// so we can use len() instead of hard coded 3
+	numberOfStatesMinusStops := (puzzle.BOARD_DIMENSION * puzzle.BOARD_DIMENSION) - 3
+	assert.Equal(len(colorizedStateMatches), numberOfStatesMinusStops)
 }
 
 func Test_SolveCommandJson(t *testing.T) {
