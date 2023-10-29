@@ -27,11 +27,11 @@ go build
 
 ```bash
 
-# using ko (ko.build) and GCP Artifact Registry
+# using ko (ko.build) locally
+ko build --base-import-paths --local
+docker run  --rm -p 8080:8080   ko.local/pgpuzzle:latest   server --rest 8080
 
-KO_DOCKER_REPO=${LOCATION}-docker.pkg.dev/${PROJECT}/pg-puzzle ko build --base-import-paths
-docker run  --rm -p 8080:8080   us-central1-docker.pkg.dev/oars-sites/pg-puzzle/pgpuzzle:latest   server --rest 8080
-
+# in a different terminal
 curl -X POST   http://localhost:8080/v1/puzzle/solve
 
 ```
