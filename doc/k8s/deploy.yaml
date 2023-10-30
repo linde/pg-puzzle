@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-puzzle
+spec:
+  selector:
+    matchLabels:
+      app: pg-puzzle
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pg-puzzle
+    spec:
+      containers:
+      - name: pg-puzzle
+        # image: kind.local/pgpuzzle
+        image: ko://pgpuzzle
+        imagePullPolicy: IfNotPresent
+        args: ["server","--port=10001","--rest=8080",]
+        ports:
+        - containerPort: 10001
+          name: grpc
+        - containerPort: 8080
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-puzzle
+spec:
+  selector:
+    app: pg-puzzle
+  ports:
+  - name: grpc
+    port: 10001
+  - name: http
+    port: 8080

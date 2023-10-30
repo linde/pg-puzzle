@@ -74,10 +74,11 @@ If you're running the gateway, the app also serves an swagger schema. The [opena
 
 
 
-# Notes on Generating Images
+# Notes on Images
 
-You can use [ko](ko.build), below is an example to build locally 
-using [distroless](https://github.com/GoogleContainerTools/distroless).
+You can use [ko](ko.build) to generate images based on this simple app out of the box. 
+There is an example to build locally using 
+[distroless](https://github.com/GoogleContainerTools/distroless) below.
 
 ```bash
 
@@ -90,19 +91,41 @@ curl -X POST   http://localhost:8080/v1/puzzle/solve
 
 ```
 
-If you want to push to a repository, set `KO_DOCKER_REPO` and don't use the `--local` flag.
-For example, with GCP's artifact registry, it woould be as follows:
+If you want to push to a remote repository, set `KO_DOCKER_REPO` and don't use 
+the `--local` flag. For example, with GCP's artifact registry, it would be as follows:
  
 ```bash
-
 KO_DOCKER_REPO=${LOCATION}-docker.pkg.dev/${PROJECT}/pg-puzzle 
 ko build --base-import-paths
+```
 
-# if you run this as a CloudRun job, be sure to select the networking option
-# to 'Use HTTP/2 end-to-end'.  You can reach it with grpcurl as follows:
+`ko` has [kind](https://kind.sigs.k8s.io/) support and will push images to make 
+them available to local kind clusters. Additionally, it can scan config and 
+generate and update `image` tags within the config to point to the newly built 
+image as well as deploy.  There is a sample [k8s config](doc/k8s/) to try this 
+with a local kind cluster. 
 
+```bash
+CLUSTER=pgpuzzle
+kind create cluster --name=${CLUSTER}
+KO_DOCKER_REPO=kind.local KIND_CLUSTER_NAME=${CLUSTER}  ko apply -f doc/k8s/ --base-import-paths
+
+# to verify, run a k8s proxy and hit it locally
+kubectl proxy 
+
+# and in a different terminal
+curl -X POST http://127.0.0.1:8001/api/v1/namespaces/default/services/pg-puzzle:8080/proxy/v1/puzzle/solve
+
+# clean up
+kind delete cluster --name=${CLUSTER}
+```
+
+Lastly, if you run this as a CloudRun job, be sure to select the networking option 
+to 'Use HTTP/2 end-to-end' if you want to serve the gRPC port.  You can then reach 
+it with grpcurl as follows:
+
+```bash
 grpcurl    ${ENDPOINT_WO_HTTP_PREFIX}:443    proto.Puzzle.Solve 
-
 ```
 
 
