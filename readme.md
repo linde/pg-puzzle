@@ -23,20 +23,6 @@ go build
 
 ```
 
-# Notes on images
-
-```bash
-
-# using ko (ko.build) locally
-ko build --base-import-paths --local
-docker run  --rm -p 8080:8080   ko.local/pgpuzzle:latest   server --rest 8080
-
-# in a different terminal
-curl -X POST   http://localhost:8080/v1/puzzle/solve
-
-```
-
-
 
 # Usage
 
@@ -85,6 +71,40 @@ grpcurl -plaintext -d '{"stopSet":[{"row":0,"col":1},{"row":0,"col":4},{"row":4,
 ```
 
 If you're running the gateway, the app also serves an swagger schema. The [openapiv2 schema file](./proto/puzzle.swagger.json) is generated via `go generate ./...` and accessible via http for the port used above at [openapiv2.json](http://localhost:8080/openapiv2.json). We also serve the [swagger-ui](http://localhost:8080/swagger-ui/) locally on this port as well.
+
+
+
+# Notes on Generating Images
+
+You can use [ko](ko.build), below is an example to build locally 
+using [distroless](https://github.com/GoogleContainerTools/distroless).
+
+```bash
+
+KO_DEFAULTBASEIMAGE=gcr.io/distroless/static:nonroot 
+ko build --base-import-paths --local
+docker run  --rm -p 8080:8080   ko.local/pgpuzzle:latest   server --rest 8080
+
+# in a different terminal
+curl -X POST   http://localhost:8080/v1/puzzle/solve
+
+```
+
+If you want to push to a repository, set `KO_DOCKER_REPO` and don't use the `--local` flag.
+For example, with GCP's artifact registry, it woould be as follows:
+ 
+```bash
+
+KO_DOCKER_REPO=${LOCATION}-docker.pkg.dev/${PROJECT}/pg-puzzle 
+ko build --base-import-paths
+
+# if you run this as a CloudRun job, be sure to select the networking option
+# to 'Use HTTP/2 end-to-end'.  You can reach it with grpcurl as follows:
+
+grpcurl    ${ENDPOINT_WO_HTTP_PREFIX}:443    proto.Puzzle.Solve 
+
+```
+
 
 
 # Disclaimer 
