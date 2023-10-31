@@ -110,6 +110,10 @@ CLUSTER=pgpuzzle
 kind create cluster --name=${CLUSTER}
 KO_DOCKER_REPO=kind.local KIND_CLUSTER_NAME=${CLUSTER}  ko apply -f doc/k8s/ --base-import-paths
 
+## same thing for gcp would be as above
+KO_DOCKER_REPO=${LOCATION}-docker.pkg.dev/${PROJECT}/${APP}  ko apply  --base-import-paths -f doc/k8s/
+
+
 # to verify, run a k8s proxy and hit it locally
 kubectl proxy 
 
@@ -139,4 +143,4 @@ I used this as an excuse to learn features of golang, lots can be improved in th
 
 * TODO change the name of some of the `solve.go` files all over
 * TODO have log levels for server stuff
-* TODO containerize the app for the server and rest server
+* TODO enable GET for the rest server instead of POST

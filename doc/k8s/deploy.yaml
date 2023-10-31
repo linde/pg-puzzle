@@ -14,7 +14,6 @@ spec:
     spec:
       containers:
       - name: pg-puzzle
-        # image: kind.local/pgpuzzle
         image: ko://pgpuzzle
         imagePullPolicy: IfNotPresent
         args: ["server","--port=10001","--rest=8080",]
