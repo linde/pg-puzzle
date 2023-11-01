@@ -21,6 +21,7 @@ pgpuzzle
 
 ## protocol buffer stuff
 *.pb.go
+*.pb.gw.go
 
 ## vscode workspace files
 *.code-workspace
