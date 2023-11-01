@@ -87,7 +87,7 @@ ko build --base-import-paths --local
 docker run  --rm -p 8080:8080   ko.local/pgpuzzle:latest   server --rest 8080
 
 # in a different terminal
-curl -X POST   http://localhost:8080/v1/puzzle/solve
+curl  http://localhost:8080/v1/puzzle/solve-default
 
 ```
 
@@ -118,7 +118,7 @@ KO_DOCKER_REPO=${LOCATION}-docker.pkg.dev/${PROJECT}/${APP}  ko apply  --base-im
 kubectl proxy 
 
 # and in a different terminal
-curl -X POST http://127.0.0.1:8001/api/v1/namespaces/default/services/pg-puzzle:8080/proxy/v1/puzzle/solve
+curl http://127.0.0.1:8001/api/v1/namespaces/default/services/pg-puzzle:8080/proxy/v1/puzzle/solve-default
 
 # clean up
 kind delete cluster --name=${CLUSTER}
@@ -143,5 +143,4 @@ I used this as an excuse to learn features of golang, lots can be improved in th
 
 * TODO change the name of some of the `solve.go` files all over
 * TODO have log levels for server stuff
-* TODO enable GET for the rest server instead of POST
 * TODO change the package name for the proto from `proto`

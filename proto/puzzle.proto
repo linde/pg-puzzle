@@ -12,8 +12,11 @@ service Puzzle {
     option (google.api.http) = {
       post: "/v1/puzzle/solve"
       body: "*"
-    };
-  }
+      additional_bindings {
+        get: "/v1/puzzle/solve-default"
+      }
+    }; 
+  };
 }
 
 message SolveRequest {
