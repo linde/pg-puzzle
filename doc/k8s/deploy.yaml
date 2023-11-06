@@ -22,6 +22,13 @@ spec:
           name: grpc
         - containerPort: 8080
           name: http
+        livenessProbe:
+          httpGet:
+            path: /v1/puzzle/solve-default
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 15
+
 ---
 apiVersion: v1
 kind: Service
